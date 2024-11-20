@@ -1,6 +1,7 @@
 package gr.nifitsas.dealsapp.model;
 
-import gr.nifitsas.dealsapp.core.enums.Category;
+
+import gr.nifitsas.dealsapp.model.static_data.Category;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,21 +15,27 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+
 public class Product extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(unique = true)
+    private String sku;
+    @Column(unique = true)
     private String name;
-    @Enumerated(EnumType.STRING)
-    private Category category;
     private String imageURL;
     private Double lowestPrice;
 
     @OneToMany(mappedBy = "product")
     private Set<Deal> deals = new HashSet<>();
+
+  @ManyToOne
+  @JoinColumn(name="category_id")
+  private Category category;
+
+
 
     public Set<Deal> getAllProductDeals(){
         if(deals == null) deals = new HashSet<>();
@@ -43,4 +50,6 @@ public class Product extends AbstractEntity {
         deals.remove(deal);
         deal.setProduct(null);
     }
+
+
 }

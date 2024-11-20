@@ -22,13 +22,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @DynamicInsert
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
-    @CreatedDate
-    @Column(name="created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+  @CreatedDate
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(name="updated_at")
-    private LocalDateTime updatedAt;
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 }
+

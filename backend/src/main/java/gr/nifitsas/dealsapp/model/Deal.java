@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,13 +19,10 @@ public class Deal extends AbstractEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String category;
     private String coupon;
     private String URL;
-    private Double price;
-    private String imageURL;
-    private Double lowestPrice;
+    private double price;
+
 
     @ManyToOne
     @JoinColumn(name="product_id")
