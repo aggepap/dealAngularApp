@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface IProductService {
 public Page<ProductRealOnlyDTO> getPaginatedProducts(int page, int size);
-Product saveProduct(ProductInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException;
+ProductRealOnlyDTO saveProduct(ProductInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException;
 public List<ProductRealOnlyDTO> getFilteredProductsOnSearch(String search) throws AppObjectInvalidArgumentException;
 public String deleteProduct(Long id) throws AppObjectNotFoundException;
 }

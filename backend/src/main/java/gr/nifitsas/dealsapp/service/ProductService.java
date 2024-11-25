@@ -33,12 +33,13 @@ public class ProductService implements IProductService {
 
   @Override
   @Transactional
-  public Product saveProduct(ProductInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
+  public ProductRealOnlyDTO saveProduct(ProductInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
    if(productRepository.findBySku(dto.getSku()).isPresent()){
      throw new AppObjectAlreadyExists("Product","Product with SKU " +dto.getSku() + " already exists");
    }
    Product product = mapper.mapToProductEntity(dto);
-   return productRepository.save(product);
+   Product savedProduct = productRepository.save(product);
+   return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
   @Override

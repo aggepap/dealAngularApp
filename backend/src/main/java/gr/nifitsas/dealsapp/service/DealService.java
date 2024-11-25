@@ -5,6 +5,7 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.DealInsertDTO;
+import gr.nifitsas.dealsapp.dto.DealReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Deal;
 import gr.nifitsas.dealsapp.repository.DealRepository;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +23,17 @@ private final DealRepository dealRepository;
 private final Mapper mapper;
 
   @Override
-  public List<Deal> getDealsByProduct(Long productid) throws AppObjectNotFoundException {
-   return dealRepository.findByProductId(productid);
+  public List<DealReadOnlyDTO> getDealsByProduct(Long productid) throws AppObjectNotFoundException {
+  List<Deal> productDeals = dealRepository.findByProductId(productid);
+  return productDeals.stream().map(mapper::mapToDealReadOnlyDTO).collect(Collectors.toList());
   }
 
   @Override
-  @Transactional
-  public Deal saveDeal(DealInsertDTO dto) throws AppObjectInvalidArgumentException {
+  @Transactional(rollbackOn = Exception.class)
+  public DealReadOnlyDTO saveDeal(DealInsertDTO dto) throws AppObjectInvalidArgumentException {
       Deal deal = mapper.mapToDealEntity(dto);
-      return dealRepository.save(deal);
+      Deal savedDeal = dealRepository.save(deal);
+      return mapper.mapToDealReadOnlyDTO(savedDeal);
   }
 
   @Override

@@ -1,4 +1,4 @@
-package gr.nifitsas.dealsapp.dto;
+package gr.nifitsas.dealsapp.dto.categoryDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryInsertDTO {
-
-  private String name;
-  private String icon;
+public class CategoryDeleteDTO {
+  private Long categoryId;
 }

@@ -1,6 +1,8 @@
 package gr.nifitsas.dealsapp.core.mapper;
 
 import gr.nifitsas.dealsapp.dto.*;
+import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
+import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Deal;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
