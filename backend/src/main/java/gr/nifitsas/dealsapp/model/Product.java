@@ -25,15 +25,19 @@ public class Product extends AbstractEntity {
     private String sku;
     @Column(unique = true)
     private String name;
-    private String imageURL;
+
     private Double lowestPrice;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Attachment image;
 
     @OneToMany(mappedBy = "product")
     private Set<Deal> deals = new HashSet<>();
 
-  @ManyToOne
-  @JoinColumn(name="category_id")
-  private Category category;
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
 
 
 

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 
-import type { Stores } from './shared/interfaces/stores';
-
 @Component({
   selector: 'app-root',
   standalone: true,

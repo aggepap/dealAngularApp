@@ -1,6 +1,5 @@
 package gr.nifitsas.dealsapp.model.static_data;
 
-import gr.nifitsas.dealsapp.model.AbstractEntity;
 import gr.nifitsas.dealsapp.model.Deal;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name="stores")
-public class Store extends AbstractEntity {
+public class Store{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class Store extends AbstractEntity {
     private String logoURL;
 
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     private Set<Deal> deals = new HashSet<>();
 
     public Set<Deal> getAllStoreDeals(){

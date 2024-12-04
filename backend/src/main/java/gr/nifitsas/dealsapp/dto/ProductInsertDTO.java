@@ -1,6 +1,7 @@
 package gr.nifitsas.dealsapp.dto;
 
 
+import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
@@ -21,8 +22,5 @@ public class ProductInsertDTO {
   private String name;
   @Column(unique = true)
   private String sku;
-  private Category category;
-  private String imageURL;
-  private Double lowestPrice;
 
 }

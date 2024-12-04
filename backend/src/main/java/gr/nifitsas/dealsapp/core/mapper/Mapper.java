@@ -25,12 +25,12 @@ public class Mapper {
 //Product Mappers
 //***************************
   public Product mapToProductEntity(ProductInsertDTO productInsertDTO){
-    return new Product(null, productInsertDTO.getSku(),productInsertDTO.getName(), productInsertDTO.getImageURL(),
-      productInsertDTO.getLowestPrice(), null, productInsertDTO.getCategory());
+    return new Product(null, productInsertDTO.getSku(),productInsertDTO.getName(), null,null,
+       null,null);
   }
-  public ProductRealOnlyDTO mapToProductReadOnlyDTO(Product product){
-    return new ProductRealOnlyDTO(product.getId(), product.getSku(), product.getName(),
-      product.getCategory(), product.getImageURL(), product.getLowestPrice());
+  public ProductReadOnlyDTO mapToProductReadOnlyDTO(Product product){
+    return new ProductReadOnlyDTO(product.getId(), product.getSku(), product.getName(),
+      product.getCategory(), product.getImage(), product.getLowestPrice());
   }
 
 //  Category Mappers
@@ -51,7 +51,7 @@ public class Mapper {
     return new Store(null, storeInsertDTO.getName(),storeInsertDTO.getSiteURL(), storeInsertDTO.getLogoURL(), null);
   }
   public StoreReadOnlyDTO mapToStoreReadOnlyDTO(Store store){
-    return new StoreReadOnlyDTO(store.getId(), store.getName(), store.getSiteURL(), store.getLogoURL());
+    return new StoreReadOnlyDTO(store.getId(), store.getName(), store.getSiteURL(), store.getLogoURL(),store.getAllStoreDeals());
   }
 
 }

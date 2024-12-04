@@ -20,7 +20,7 @@ export class CategoriesSectionComponent {
   ngOnInit() {
     let count = 0;
     this.categoriesService.getCategories().subscribe(
-      (data: DealCategories) => {
+      (data: DealCategories[]) => {
         console.log(data);
         data.forEach((item) => {
           if (count < 12) {

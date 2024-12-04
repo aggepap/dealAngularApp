@@ -7,10 +7,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CategoriesService } from '@/src/app/shared/services/categories.service';
-import type {
-  DealCategories,
-  newCategory,
-} from '@/src/app/shared/interfaces/deal-categories';
 
 @Component({
   selector: 'app-add-new-category',
@@ -34,7 +30,7 @@ export class AddNewCategoryComponent {
     newCategoryName: new FormControl('', Validators.required),
   });
 
-  onNewCategoryAdd(value: newCategory) {
+  onNewCategoryAdd(value: any) {
     this.categoriesService
       .addCategory(value.newCategoryIcon, value.newCategoryName)
       .subscribe(

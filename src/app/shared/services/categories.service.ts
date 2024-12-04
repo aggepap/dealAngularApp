@@ -13,7 +13,7 @@ export class CategoriesService {
   http: HttpClient = inject(HttpClient);
 
   getCategories() {
-    return this.http.get<DealCategories>(CATEGORIES_API_URL, {
+    return this.http.get<DealCategories[]>(CATEGORIES_API_URL, {
       headers: {
         Accept: 'application/json',
       },

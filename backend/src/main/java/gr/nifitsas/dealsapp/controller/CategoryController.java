@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+  private final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
   private final CategoryService categoryService;
 
 

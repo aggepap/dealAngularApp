@@ -1,0 +1,29 @@
+<div class="flex flex-col items-center">
+  <div class="inline-flex rounded-md shadow-sm py-5" role="group">
+    <button
+      (click)="enableStoreEdit()"
+      type="button"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+    >
+      <i class="fa-solid fa-pen-to-square pr-2"></i>
+      Edit Store
+    </button>
+
+    <button
+      (click)="onDeleteStoreClick(storeInfo!.id)"
+      type="button"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+    >
+      <i class="fa-solid fa-circle-minus pr-2"></i>
+      Delete Store {{ storeInfo?.name }}
+    </button>
+  </div>
+
+  @if(editStoreEnabled) {
+  <app-update-store-form
+    (cancelEdit)="onCancelClick($event)"
+    [storeInfo]="storeInfo"
+  >
+  </app-update-store-form>
+  }
+</div>

@@ -5,12 +5,20 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.dto.StoreInsertDTO;
+import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.StoreUpdateDTO;
 import gr.nifitsas.dealsapp.model.static_data.Store;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface IStoreService {
-  List<Store> findAllStores();
-  Store saveStore(StoreInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException;
-  String deleteStore(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
+  List<StoreReadOnlyDTO> findAllStores();
+  Optional<StoreReadOnlyDTO> findStoreById(long id);
+  StoreReadOnlyDTO updateStore(StoreUpdateDTO storeUpdateDTO) throws AppObjectNotFoundException, AppObjectAlreadyExists   ;
+  StoreReadOnlyDTO saveStore(StoreInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException;
+  StoreReadOnlyDTO deleteStore(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
+
 }

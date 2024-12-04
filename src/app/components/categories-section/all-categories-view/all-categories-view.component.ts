@@ -23,15 +23,11 @@ export class AllCategoriesViewComponent {
 
   ngOnInit() {
     this.categoriesService.getCategories().subscribe(
-      (data: DealCategories) => {
-        console.log(data);
-        data.forEach((item) => {
-          this.categoriesList.push(item);
-        });
+      (data: DealCategories[]) => {
+        this.categoriesList = data;
       },
       (error) => console.error('Error fetching categories', error)
     );
-    console.log(this.categoriesList);
   }
 
   onUpdateClick(id: string) {

@@ -6,7 +6,8 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.ProductInsertDTO;
-import gr.nifitsas.dealsapp.dto.ProductRealOnlyDTO;
+import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
+import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -15,8 +16,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +33,12 @@ public class ProductService implements IProductService {
   private final Mapper mapper;
 
   @Override
-  public Page<ProductRealOnlyDTO> getPaginatedProducts(int page, int size) {
+  public List<ProductReadOnlyDTO> getProducts() {
+   return productRepository.findAll().stream().map(mapper::mapToProductReadOnlyDTO).collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<ProductReadOnlyDTO> getPaginatedProducts(int page, int size) {
    Pageable pageable = PageRequest.of(page, size);
    Page<Product> products = productRepository.findAll(pageable);
    return products.map(mapper::mapToProductReadOnlyDTO);
@@ -33,17 +46,18 @@ public class ProductService implements IProductService {
 
   @Override
   @Transactional
-  public ProductRealOnlyDTO saveProduct(ProductInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
+  public ProductReadOnlyDTO saveProduct(ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
    if(productRepository.findBySku(dto.getSku()).isPresent()){
      throw new AppObjectAlreadyExists("Product","Product with SKU " +dto.getSku() + " already exists");
    }
    Product product = mapper.mapToProductEntity(dto);
+   saveImage(product, image);
    Product savedProduct = productRepository.save(product);
    return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
   @Override
-  public List<ProductRealOnlyDTO> getFilteredProductsOnSearch(String search) throws AppObjectInvalidArgumentException {
+  public List<ProductReadOnlyDTO> getFilteredProductsOnSearch(String search) throws AppObjectInvalidArgumentException {
     return productRepository.findByNameContaining(search);
   }
 
@@ -55,5 +69,36 @@ public class ProductService implements IProductService {
    String deletedProductName = productRepository.findById(id).get().getName();
    productRepository.deleteById(id);
    return deletedProductName;
+  }
+
+
+  @Transactional(rollbackOn = Exception.class)
+  public void saveImage(Product product, MultipartFile image) throws IOException {
+
+    if (image != null && !image.isEmpty()) {
+
+      String originalFileName = image.getOriginalFilename();
+      String savedName = UUID.randomUUID() + getFileExtension(originalFileName);
+      String uploadDir = "uploads/";
+      Path filepath = Paths.get(uploadDir + savedName);
+      Files.createDirectories(filepath.getParent());
+      Files.write(filepath, image.getBytes());
+
+      Attachment attachment = new Attachment();
+      attachment.setFilename(originalFileName);
+      attachment.setSavedName(savedName);
+      attachment.setFilePath(filepath.toString());
+      attachment.setContentType(image.getContentType());
+      attachment.setExtension(getFileExtension(originalFileName));
+
+      product.setImage(attachment);
+    }
+
+  }
+  public String getFileExtension(String filename) {
+    if (filename != null && filename.contains(".")) {
+      return filename.substring(filename.lastIndexOf("."));
+    }
+    return "";
   }
 }

@@ -1,0 +1,49 @@
+<div class="md:flex pt-10">
+  <ul
+    class="flex-column space-y space-y-1 text-sm font-medium bg-blue-700 rounded-md py-5 text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0"
+  >
+    <li class="text-center pb-2 text-white font-bold">Καταστήματα:</li>
+    @for (entry of storeList; track entry.id) {
+    <li>
+      <a
+        (click)="onStoreClick(entry.id)"
+        href="javascript:"
+        class="flex items-center justify-start pl-4 pr-10 py-3 text-white bg-blue-700 hover:bg-blue-900 active w-11/12 xl:w-full mx-auto dark:bg-blue-600 gap-2"
+        aria-current="page"
+      >
+        @if(entry.logoURL.length > 3){
+        <img
+          class="rounded-full border-2"
+          src="{{ apiURL }}/{{ entry.logoURL }}"
+          width="20px"
+          height="20px"
+          alt="{{ entry.name }} logo"
+        />
+        }@else{
+        <div class="px-[10px]"></div>
+        }
+        <span>{{ entry.name }}</span>
+      </a>
+    </li>
+    }
+  </ul>
+  <div
+    class="p-6 bg-gray-50 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full flex flex-col justify-between"
+  >
+    <div class="">
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+        {{ pickedStore?.name }}
+      </h3>
+      <p class="mb-2">
+        This is some placeholder content the Profile tab's associated content,
+        clicking another tab will toggle the visibility of this one for the
+        next.
+      </p>
+      <p>
+        The tab JavaScript swaps classes to control the content visibility and
+        styling.
+      </p>
+    </div>
+    <app-store-single-tab [storeInfo]="pickedStore" />
+  </div>
+</div>
