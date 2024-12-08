@@ -7,6 +7,7 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryUpdateDTO;
+import gr.nifitsas.dealsapp.model.static_data.Category;
 
 import java.util.List;
 import java.util.Optional;

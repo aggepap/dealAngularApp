@@ -14,9 +14,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
   List<Product> findByCategory(Category category);
-  Optional<Object> findBySku(String sku);
+  Optional<Product> findByName(String name);
   List<ProductReadOnlyDTO> findByNameContaining(String name);
-
-
+  List<ProductReadOnlyDTO> findByNameLike(String name);
 
 }

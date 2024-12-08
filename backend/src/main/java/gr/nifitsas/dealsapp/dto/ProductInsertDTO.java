@@ -18,9 +18,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class ProductInsertDTO {
 
+  @Column(unique = true)
   @NotNull(message = "Product's name cannot be empty")
   private String name;
-  @Column(unique = true)
-  private String sku;
-
+  private String description;
 }

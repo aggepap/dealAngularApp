@@ -4,17 +4,23 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
+import gr.nifitsas.dealsapp.core.filters.Paginated;
+import gr.nifitsas.dealsapp.core.filters.ProductFilters;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
+import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.repository.ProductRepository;
+import gr.nifitsas.dealsapp.service.specifications.ProductSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,12 +29,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
+  private final CategoryService categoryService;
   private final ProductRepository productRepository;
   private final Mapper mapper;
 
@@ -45,21 +53,28 @@ public class ProductService implements IProductService {
   }
 
   @Override
+  public Paginated<ProductReadOnlyDTO> getPaginatedFilteredProducts(ProductFilters filters) throws AppObjectInvalidArgumentException {
+    var filtered = productRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+    return new Paginated<>(filtered.map(mapper::mapToProductReadOnlyDTO));
+  }
+
+  @Override
   @Transactional
-  public ProductReadOnlyDTO saveProduct(ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
-   if(productRepository.findBySku(dto.getSku()).isPresent()){
-     throw new AppObjectAlreadyExists("Product","Product with SKU " +dto.getSku() + " already exists");
+  public ProductReadOnlyDTO saveProduct( Long categoryId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
+   if(productRepository.findByName(dto.getName()).isPresent()){
+     throw new AppObjectAlreadyExists("Product","Product with Name " +dto.getName() + " already exists");
    }
    Product product = mapper.mapToProductEntity(dto);
    saveImage(product, image);
    Product savedProduct = productRepository.save(product);
+   Optional<Category> category = categoryService.findCategoryById(categoryId);
+   if(category.isPresent()){
+     product.setCategory(category.get());
+   }
    return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
-  @Override
-  public List<ProductReadOnlyDTO> getFilteredProductsOnSearch(String search) throws AppObjectInvalidArgumentException {
-    return productRepository.findByNameContaining(search);
-  }
+
 
   @Override
   public String deleteProduct(Long id) throws AppObjectNotFoundException {
@@ -95,10 +110,21 @@ public class ProductService implements IProductService {
     }
 
   }
-  public String getFileExtension(String filename) {
+  private String getFileExtension(String filename) {
     if (filename != null && filename.contains(".")) {
       return filename.substring(filename.lastIndexOf("."));
     }
     return "";
+  }
+
+  private Specification<Product> getSpecsFromFilters(ProductFilters filters) {
+    Specification<Product> filter = Specification.where(ProductSpecification.productTitleIsLike("name", filters.getName()));
+
+
+    if (filters.getCategory() != null) {
+      filter = filter.and(ProductSpecification.productCategoryIs(filters.getCategory().getId()));
+    }
+
+    return filter;
   }
 }

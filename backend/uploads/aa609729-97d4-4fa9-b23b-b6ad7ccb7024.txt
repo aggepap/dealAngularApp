@@ -1,0 +1,96 @@
+
+namespace CodingFactory6Challenges
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine(CalculateSum(500515));
+            Console.WriteLine(EvenNumbersSum(10));
+            Console.WriteLine(FindFirstDigit(223532652));
+            Console.WriteLine(ReverseInteger(123456789));
+        }
+
+        /// <summary>
+        /// CHALLENGE 1
+        /// Calculates the sum of digits in an integer
+        /// </summary>
+        /// <param name="number"> Integer that contains digits to be summed</param>
+        /// <returns> The sum of integer's digits </returns>
+        public static int CalculateSum(int number)
+        {
+            int sum = 0;
+            int remainder;
+            int absoluteNumber = Math.Abs(number); // Absolute number in case a negative is inserted as a parameter
+
+            while (absoluteNumber > 0)
+            {
+                remainder = absoluteNumber % 10;
+                sum += remainder;
+                absoluteNumber = absoluteNumber / 10;
+            }
+
+            return sum;
+        }
+
+        /// <summary>
+        /// CHALLENGE 1
+        /// Sums the even numbers that are present between 2
+        /// and the number provided as parameter
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>sum of even numbers</returns>
+        public static int EvenNumbersSum(int number)
+        {
+            int absoluteNumber = Math.Abs(number); // Absolute number in case a negative is inserted as a parameter
+            int sum = 0;
+
+            for (int i = 2; i <= absoluteNumber; i += 2)
+            {
+                sum += i;
+
+            }
+            return sum;
+        }
+
+
+        /// <summary>
+        /// CHALLENGE 3
+        /// Finds the first -from the left- digit of an integer
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>The first digit</returns>
+        public static int FindFirstDigit(int number)
+        {
+            int absoluteNumber = Math.Abs(number); // Absolute number in case a negative is inserted as a parameter
+
+            while (absoluteNumber > 10) 
+            {
+                absoluteNumber /= 10;
+            }
+            return absoluteNumber;
+
+        }
+
+
+        /// <summary>
+        /// Reverses a provided integer
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns>inverted integer</returns>
+        public static int ReverseInteger (int number) 
+        {
+            int reversed = 0;
+
+            while (number != 0)
+            {
+                int digit = number % 10; 
+                reversed = reversed * 10 + digit; 
+                number /= 10; 
+            }
+
+            return reversed;
+        }
+
+    }
+}

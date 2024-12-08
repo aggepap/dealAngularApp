@@ -15,8 +15,9 @@ import lombok.Setter;
 public class ProductReadOnlyDTO {
 
   private Long id;
-  private String sku;
+
   private String name;
+  private String description;
   private Category category;
   private Attachment image;
   private Double lowestPrice;

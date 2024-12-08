@@ -1,0 +1,118 @@
+<form [formGroup]="addProductForm" class="max-w-sm mx-auto mt-10">
+  <h1 class="font-bold text-3xl mx-auto mb-10">Add New Product</h1>
+  <div class="mb-5">
+    <label
+      for="addProductCategory"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Choose a Category*</label
+    >
+    @if(addProductForm.get('addProductCategory')?.invalid &&
+    addProductForm.get('addProductCategory')?.touched){
+    <p class="text-xs text-red-900 mb-2 block">Product category is required.</p>
+    }
+    <select
+      id="addProductCategory"
+      formControlName="addProductCategory"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      required
+    >
+      @for (category of categoriesList; track category.id) {
+      <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+  <div class="mb-5">
+    <label
+      for="addProductName"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Product Title*</label
+    >
+    <input
+      required
+      type="text"
+      id="addProductName"
+      formControlName="addProductName"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="Product Title"
+      required
+    />
+    @if(addProductForm.get('addProductName')?.invalid &&
+    addProductForm.get('addProductName')?.touched){
+    <p class="text-xs text-red-900 mb-2 block">Product title is required.</p>
+    }
+  </div>
+  <div class="mb-5">
+    <label
+      for="addProductDescription"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Product description*</label
+    >
+    <textarea
+      id="addProductDescription"
+      rows="4"
+      formControlName="addProductDescription"
+      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="Product description"
+      required
+    ></textarea>
+    @if(addProductForm.get('addProductDescription')?.invalid &&
+    addProductForm.get('addProductDescription')?.touched){
+    <p class="text-xs text-red-900 mb-2 block">
+      Product description is required, please enter some info for the product
+    </p>
+    }
+  </div>
+  <div class="mb-5">
+    <label
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      for="user_avatar"
+      >Product image*</label
+    >
+    <input
+      formControlName="addProductImage"
+      (change)="checkFileType($event)"
+      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+      aria-describedby="product image"
+      id="addProductImage"
+      type="file"
+      accept="image/*"
+    />
+    <div
+      class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+      id="user_avatar_help"
+    >
+      Please upload an image of the product
+    </div>
+    @if(!fileSelected){
+    <p class="text-xs text-red-900 mb-2 block">
+      Product image is required, please select an image(Allowed types: images/*)
+    </p>
+    }
+  </div>
+  @if (addProductForm.get("addProductDescription")?.invalid ||
+  addProductForm.get("addProductName")?.invalid || !fileSelected) {
+  <button
+    type="submit"
+    class="text-gray-200 bg-gray-500 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-not-allowed"
+  >
+    Submit
+  </button>
+  }@else {
+  <button
+    (click)="onNewProductAdd(addProductForm.value)"
+    type="submit"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  >
+    Submit
+  </button>
+  }
+</form>
+
+@if (addProductSuccessMessage && !addProductForm.get('addProductName')?.touched)
+{
+<div class="mx-auto max-w-sm container mt-4 p-6 bg-blue-700 rounded-md">
+  <h3 class="text-center font-bold text-3xl text-white">
+    Product was inserted succesfully
+  </h3>
+</div>
+}

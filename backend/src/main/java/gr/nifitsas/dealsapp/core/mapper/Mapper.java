@@ -25,11 +25,11 @@ public class Mapper {
 //Product Mappers
 //***************************
   public Product mapToProductEntity(ProductInsertDTO productInsertDTO){
-    return new Product(null, productInsertDTO.getSku(),productInsertDTO.getName(), null,null,
+    return new Product(null,productInsertDTO.getName(), productInsertDTO.getDescription(),null,null,
        null,null);
   }
   public ProductReadOnlyDTO mapToProductReadOnlyDTO(Product product){
-    return new ProductReadOnlyDTO(product.getId(), product.getSku(), product.getName(),
+    return new ProductReadOnlyDTO(product.getId(),  product.getName(), product.getDescription(),
       product.getCategory(), product.getImage(), product.getLowestPrice());
   }
 

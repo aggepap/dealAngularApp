@@ -1,6 +1,7 @@
 package gr.nifitsas.dealsapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,16 +16,14 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Product extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    private String sku;
-    @Column(unique = true)
     private String name;
+    private String description;
 
     private Double lowestPrice;
 
@@ -37,6 +36,7 @@ public class Product extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name="category_id")
+    @JsonBackReference
     private Category category;
 
 

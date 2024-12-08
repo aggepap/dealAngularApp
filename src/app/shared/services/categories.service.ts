@@ -4,8 +4,11 @@ import type {
   DealCategories,
   newCategory,
 } from '../interfaces/deal-categories';
+import { environment } from '@/src/environments/environment.development';
 
-const CATEGORIES_API_URL = 'http://localhost:8080/category';
+const apiUrl = environment.apiURL;
+const CATEGORIES_API_URL = `${apiUrl}/category`;
+
 @Injectable({
   providedIn: 'root',
 })

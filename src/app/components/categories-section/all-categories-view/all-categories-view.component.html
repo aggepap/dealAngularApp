@@ -18,9 +18,7 @@
 
       <!-- Loop Item -->
       <div>
-        <div
-          class="category-item flex justify-between items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-        >
+        <div class="category-item">
           <div class="title-icon">
             <a href="#" class="flex items-center gap-2"
               ><i class="fa-solid {{ category.icon }}"></i>
@@ -34,7 +32,7 @@
             <button
               (click)="onUpdateClick(category.id)"
               type="button"
-              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
             >
               update
             </button>
@@ -42,7 +40,7 @@
             <button
               (click)="onDeleteClick(category.id)"
               type="button"
-              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
             >
               Delete
             </button>
@@ -84,7 +82,7 @@
                   type="text"
                   formControlName="cat-update-icon"
                   id="input-group-icon"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="form-update-input"
                   placeholder="fa-person"
                 />
               </div>
@@ -122,7 +120,7 @@
                   formControlName="cat-update-name"
                   name="cat-update-name"
                   id="input-group-name"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="form-update-input"
                   placeholder="Category"
                 />
               </div>
