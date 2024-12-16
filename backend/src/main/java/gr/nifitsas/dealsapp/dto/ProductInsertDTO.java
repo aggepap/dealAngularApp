@@ -22,4 +22,8 @@ public class ProductInsertDTO {
   @NotNull(message = "Product's name cannot be empty")
   private String name;
   private String description;
+  private String coupon;
+  private String url;
+  private double price;
+
 }

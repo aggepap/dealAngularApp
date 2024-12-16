@@ -11,6 +11,10 @@ export interface productFilteredPaginated {
   name: string | '';
   category: {
     id: number | undefined;
-    name: string | undefined;
   };
+}
+
+export interface filterSend {
+  name: string;
+  category: string;
 }

@@ -1,6 +1,7 @@
 package gr.nifitsas.dealsapp.model.static_data;
 
-import gr.nifitsas.dealsapp.model.Deal;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gr.nifitsas.dealsapp.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,20 +29,21 @@ public class Store{
 
 
     @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
-    private Set<Deal> deals = new HashSet<>();
+    @JsonManagedReference
+      private Set<Product> products = new HashSet<>();
 
-    public Set<Deal> getAllStoreDeals(){
-        if(deals == null) deals = new HashSet<>();
-        return Collections.unmodifiableSet(deals);
+    public Set<Product> getAllStoreProducts() {
+        if(products == null) products = new HashSet<>();
+        return Collections.unmodifiableSet(products);
     }
-    public void addStoreDeal(Deal deal){
-        if(deals == null) deals = new HashSet<>();
-        deals.add(deal);
-        deal.setStore(this);
+    public void addStoreProduct(Product product){
+        if(products == null) products = new HashSet<>();
+      products.add(product);
+        product.setStore(this);
     }
-    public void removeStoreDeal(Deal deal){
-        deals.remove(deal);
-        deal.setStore(null);
+    public void removeStoreDeal(Product product){
+      products.remove(product);
+        product.setStore(null);
     }
 
 }

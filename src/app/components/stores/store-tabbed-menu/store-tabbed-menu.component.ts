@@ -27,7 +27,7 @@ export class StoreTabbedMenuComponent {
     );
   }
 
-  onStoreClick(id: string) {
+  onStoreClick(id: number) {
     this.pickedStore = this.storeList.find((store) => store.id === id);
   }
 }

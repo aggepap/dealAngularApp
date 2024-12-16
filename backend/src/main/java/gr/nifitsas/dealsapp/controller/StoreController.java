@@ -5,12 +5,14 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.exceptions.AppServerException;
+import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreUpdateDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryUpdateDTO;
+import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.service.StoreService;
 import jakarta.validation.Valid;
@@ -55,6 +57,18 @@ public class StoreController {
       throw e;
     }
   }
+  @GetMapping("/{id}/products")
+  public ResponseEntity<List<Product>> getStoreProducts(@PathVariable("id") Long id) {
+    List<Product> storeProducts = storeService.findAllStoreDeals(id);
+    try {
+      return new ResponseEntity<>(storeProducts, HttpStatus.OK);
+    } catch (Exception e) {
+      LOGGER.error("ERROR: Could not get products for this store.", e);
+      throw e;
+    }
+  }
+
+
   @PostMapping("/add")
   public ResponseEntity<StoreReadOnlyDTO> addStore(@RequestBody StoreInsertDTO storeInsertDTO
 

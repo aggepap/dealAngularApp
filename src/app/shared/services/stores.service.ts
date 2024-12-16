@@ -20,7 +20,7 @@ export class StoresService {
     });
   }
 
-  getStoreById(id: string) {
+  getStoreById(id: number) {
     return this.http.get<Store>(`${STORES_API_URL}/find?id=${id}`, {
       headers: {
         Accept: 'application/json',
@@ -42,7 +42,7 @@ export class StoresService {
       },
     });
   }
-  updateStore(id: string, name: string, siteURL: string, logoURL: string) {
+  updateStore(id: number, name: string, siteURL: string, logoURL: string) {
     const body = {
       id: id,
       name: name,
@@ -58,7 +58,7 @@ export class StoresService {
     });
   }
 
-  deleteStore(id: string) {
+  deleteStore(id: number) {
     let storeName = '';
     this.getStoreById(id).subscribe({
       next: (data: Store) => {

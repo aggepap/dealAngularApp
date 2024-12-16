@@ -12,7 +12,10 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store, Long>, JpaSpecificationExecutor<Store> {
 
 
+
   Optional<Store> findByName(String storeName);
 
+  Optional<Store> findStoreByIdIs(Long id);
+  Optional<StoreReadOnlyDTO> findStoreById(Long id);
 
 }

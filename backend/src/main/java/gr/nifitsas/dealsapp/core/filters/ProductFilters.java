@@ -12,11 +12,12 @@ import org.springframework.lang.Nullable;
 @Builder
 public class ProductFilters extends GenericFilters {
 
-    @Nullable
-    private String name;
 
-    @Nullable
-    private Category category;
+    private String name;
+    private Long categoryId;
+    private int pageSize;
+    private int page;
+    private Long storeId;
 
 
 

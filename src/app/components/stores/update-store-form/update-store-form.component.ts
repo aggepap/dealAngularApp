@@ -22,7 +22,7 @@ export class UpdateStoreFormComponent {
   OnCancelClick() {
     this.cancelEdit.emit(false);
   }
-  onUpdateConfirm(id: string, value: any) {
+  onUpdateConfirm(id: number, value: any) {
     console.log(value);
     this.storeService
       .updateStore(

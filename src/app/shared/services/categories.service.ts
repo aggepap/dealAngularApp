@@ -23,7 +23,7 @@ export class CategoriesService {
     });
   }
 
-  getCategoryById(id: string) {
+  getCategoryById(id: number) {
     return this.http.get<DealCategories>(
       `${CATEGORIES_API_URL}/find?id=${id}`,
       {
@@ -47,7 +47,7 @@ export class CategoriesService {
     });
   }
 
-  deleteCategory(id: string) {
+  deleteCategory(id: number) {
     let categoryName = '';
     this.getCategoryById(id).subscribe(
       (data: DealCategories) => {
@@ -74,7 +74,7 @@ export class CategoriesService {
     }
   }
 
-  updateCategory(id: string, icon: string, name: string) {
+  updateCategory(id: number, icon: string, name: string) {
     const body = {
       id: id,
       icon: icon,

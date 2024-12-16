@@ -1,105 +1,126 @@
-<form class="max-w-lg mx-auto">
-  <div class="flex">
-    <select id="categories" class="select-dropdown">
-      <option selected>Category</option>
-      @for (category of categoriesList; track category.id) {
-      <option value="category.id">{{ category.name }}</option>
-      }
-    </select>
+@if (isLoading) {
+<app-loading-spinner />
+}@else {
 
-    <div class="relative w-full">
-      <input
-        type="search"
-        id="search-dropdown"
-        class="search-dropdown-input"
-        placeholder="Search for products"
-        required
-      />
-      <button type="submit" class="submit-button">
-        <svg
-          class="w-4 h-4"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 20 20"
+<div class="flex flex-col justify-between">
+  <form [formGroup]="searchForm" class="mt-5 mx-auto w-9/12 lg:w-1/3">
+    <div class="flex">
+      <select
+        formControlName="categoriesSelect"
+        id="categoriesSelect"
+        class="select-dropdown"
+      >
+        <option value="" selected>Category</option>
+        @for (category of categoriesList; track category.id) {
+        <option value="{{ category.id }}">
+          {{ category.name }}
+        </option>
+        }
+      </select>
+
+      <div class="relative w-full">
+        <input
+          type="search"
+          formControlName="searchField"
+          id="searchField"
+          class="search-dropdown-input"
+          placeholder="Search for products"
+          required
+        />
+        <button
+          (click)="generateSearchFilter(searchForm.value)"
+          type="submit"
+          class="submit-button"
         >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-          />
-        </svg>
-        <span class="sr-only">Search</span>
-      </button>
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+          <span class="sr-only">Search</span>
+        </button>
+      </div>
+    </div>
+  </form>
+  <!-- Products Grid -->
+  @if (dealsList.length>0) {
+  <div class="flex flex-col items-center px-10">
+    <app-products-grid
+      [productsList]="dealsList"
+      [categoriesList]="categoriesList"
+      [basicGridSize]="4"
+    />
+  </div>
+  }@else {
+  <div class="flex flex-col items-center my-16">
+    <h1 class="text-center text-3xl font-bold text-gray-900 dark:text-white">
+      No Deals Found
+    </h1>
+  </div>
+  }
+
+  <!-- Pagination -->
+  @if (dealsList.length>0) {
+  <div
+    class="flex items-center justify-center my-5 w-full bg-slate-100 p-4 rounded-lg"
+  >
+    <nav aria-label="pagination" class="flex-grow flex justify-center">
+      <ul class="inline-flex -space-x-px text-base h-10">
+        <!-- Previous Button -->
+        <li>
+          <button
+            (click)="onPageChange(pagesNumber - 1)"
+            [disabled]="pagesNumber === 0"
+            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+          >
+            Previous
+          </button>
+        </li>
+
+        <!-- Page Numbers -->
+        <li *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            [ngClass]="{
+              'bg-blue-500': pagesNumber === i,
+              'text-white': pagesNumber === i
+            }"
+            (click)="onPageChange(i)"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            {{ i + 1 }}
+          </button>
+        </li>
+
+        <!-- Next Button -->
+        <li>
+          <button
+            (click)="onPageChange(pagesNumber + 1)"
+            [disabled]="pagesNumber === totalPages - 1"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+    <div class="ml-auto pr-16">
+      <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option value="12" selected>12</option>
+        <option value="24">24</option>
+        <option value="50">50</option>
+      </select>
     </div>
   </div>
-</form>
-<!-- Products Grid -->
-<div class="flex flex-col items-center">
-  <app-products-grid />
+  }
 </div>
-<!-- Pagination -->
-
-<div class="flex flex-col items-center">
-  <!-- Help text -->
-  <span class="text-sm text-gray-700 dark:text-gray-400">
-    Showing
-    <span class="font-semibold text-gray-900 dark:text-white"
-      >{{ pagesNumber }}1</span
-    >
-    to
-    <span class="font-semibold text-gray-900 dark:text-white"
-      >{{ pagesNumber + 1 }}0</span
-    >
-    of
-    <span class="font-semibold text-gray-900 dark:text-white">{{ 46 }}</span>
-    Entries
-  </span>
-  <div class="inline-flex mt-2 xs:mt-0">
-    <!-- Buttons -->
-    <button
-      (click)="decreasePage()"
-      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    >
-      <svg
-        class="w-3.5 h-3.5 me-2 rtl:rotate-180"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 14 10"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M13 5H1m0 0 4 4M1 5l4-4"
-        />
-      </svg>
-      Prev
-    </button>
-    <button
-      (click)="increasePage()"
-      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    >
-      Next
-      <svg
-        class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 14 10"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M1 5h12m0 0L9 1m4 4L9 9"
-        />
-      </svg>
-    </button>
-  </div>
-</div>
+}

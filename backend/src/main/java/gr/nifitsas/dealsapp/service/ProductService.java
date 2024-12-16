@@ -9,9 +9,11 @@ import gr.nifitsas.dealsapp.core.filters.ProductFilters;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
+import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.ProductRepository;
 import gr.nifitsas.dealsapp.service.specifications.ProductSpecification;
 import jakarta.transaction.Transactional;
@@ -38,11 +40,17 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService {
   private final CategoryService categoryService;
   private final ProductRepository productRepository;
+  private final StoreService storeService;
   private final Mapper mapper;
 
   @Override
   public List<ProductReadOnlyDTO> getProducts() {
    return productRepository.findAll().stream().map(mapper::mapToProductReadOnlyDTO).collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<ProductReadOnlyDTO> findProductById(Long id) {
+    return productRepository.findById(id).map(mapper::mapToProductReadOnlyDTO);
   }
 
   @Override
@@ -60,7 +68,7 @@ public class ProductService implements IProductService {
 
   @Override
   @Transactional
-  public ProductReadOnlyDTO saveProduct( Long categoryId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
+  public ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
    if(productRepository.findByName(dto.getName()).isPresent()){
      throw new AppObjectAlreadyExists("Product","Product with Name " +dto.getName() + " already exists");
    }
@@ -68,9 +76,10 @@ public class ProductService implements IProductService {
    saveImage(product, image);
    Product savedProduct = productRepository.save(product);
    Optional<Category> category = categoryService.findCategoryById(categoryId);
-   if(category.isPresent()){
-     product.setCategory(category.get());
-   }
+   Optional<Store> store = storeService.findStoreEntintyById(storeId);
+    category.ifPresent(product::setCategory);
+    store.ifPresent(product::setStore);
+
    return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
@@ -94,7 +103,7 @@ public class ProductService implements IProductService {
 
       String originalFileName = image.getOriginalFilename();
       String savedName = UUID.randomUUID() + getFileExtension(originalFileName);
-      String uploadDir = "uploads/";
+      String uploadDir = "./uploads/";
       Path filepath = Paths.get(uploadDir + savedName);
       Files.createDirectories(filepath.getParent());
       Files.write(filepath, image.getBytes());
@@ -119,12 +128,12 @@ public class ProductService implements IProductService {
 
   private Specification<Product> getSpecsFromFilters(ProductFilters filters) {
     Specification<Product> filter = Specification.where(ProductSpecification.productTitleIsLike("name", filters.getName()));
-
-
-    if (filters.getCategory() != null) {
-      filter = filter.and(ProductSpecification.productCategoryIs(filters.getCategory().getId()));
+    if (filters.getCategoryId() != null) {
+      filter = filter.and(ProductSpecification.productCategoryIs(filters.getCategoryId()));
     }
-
+    if (filters.getStoreId() != null) {
+      filter = filter.and(ProductSpecification.productStoreIs(filters.getStoreId()));
+    }
     return filter;
   }
 }

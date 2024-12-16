@@ -4,11 +4,14 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
+import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreUpdateDTO;
 import gr.nifitsas.dealsapp.model.Attachment;
+import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Store;
+import gr.nifitsas.dealsapp.repository.ProductRepository;
 import gr.nifitsas.dealsapp.repository.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 public class StoreService implements IStoreService {
   private final StoreRepository storeRepository;
   private final Mapper mapper;
+  private final ProductRepository productRepository;
 
 
   @Override
@@ -37,8 +41,18 @@ public class StoreService implements IStoreService {
   }
 
   @Override
-  public Optional<StoreReadOnlyDTO> findStoreById(long id) {
+  public List<Product> findAllStoreDeals(Long id) {
+   return productRepository.findByStoreId(id);
+  }
+
+  @Override
+  public Optional<StoreReadOnlyDTO> findStoreById(Long id) {
     return storeRepository.findById(id).map(mapper::mapToStoreReadOnlyDTO);
+  }
+
+  @Override
+  public Optional<Store> findStoreEntintyById(Long id) {
+    return storeRepository.findStoreByIdIs(id);
   }
 
   @Override
@@ -82,28 +96,6 @@ public class StoreService implements IStoreService {
       throw new AppObjectNotFoundException("Store", "Store with id: " + id + " not found");
     }
   }
-//  @Transactional(rollbackOn = Exception.class)
-//  @Override
-//  public void saveLogoFile(Store store, MultipartFile logoFile) throws IOException {
-//    if (logoFile != null && !logoFile.isEmpty()) {
-//
-//      String originalFileName = logoFile.getOriginalFilename();
-//      String savedName = UUID.randomUUID() + getFileExtension(originalFileName);
-//      String uploadDir = "uploads/storelogos";
-//      Path filepath = Paths.get(uploadDir + savedName);
-//      Files.createDirectories(filepath.getParent());
-//      Files.write(filepath, logoFile.getBytes());
-//
-//      Attachment attachment = new Attachment();
-//      attachment.setFilename(originalFileName);
-//      attachment.setSavedName(savedName);
-//      attachment.setFilePath(filepath.toString());
-//      attachment.setContentType(logoFile.getContentType());
-//      attachment.setExtension(getFileExtension(originalFileName));
-//
-////      store.setLogo(attachment);
-//    }
-//  }
   public String getFileExtension(String filename) {
     if (filename != null && filename.contains(".")) {
       return filename.substring(filename.lastIndexOf("."));

@@ -3,6 +3,7 @@ package gr.nifitsas.dealsapp.service.specifications;
 
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
+import gr.nifitsas.dealsapp.model.static_data.Store;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -24,6 +25,18 @@ public class ProductSpecification {
 
         });
     }
+  public static Specification<Product>productStoreIs(Long storeId){
+    return ((root, query, criteriaBuilder) ->{
+
+      if (storeId == null) {
+        return criteriaBuilder.conjunction();
+      }
+
+      Join<Product, Store> product = root.join("store");
+      return criteriaBuilder.equal(product.get("id"), storeId);
+
+    });
+  }
 
 
     public static Specification<Product> productTitleIsLike(String field, String value){
@@ -31,9 +44,9 @@ public class ProductSpecification {
             if (value == null || value.trim().isEmpty()){
                 return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
             }
-//            return criteriaBuilder.like(root.get(field), "%" + value + "%");
-            return criteriaBuilder.like(criteriaBuilder.upper(root.get(field)), "%" +
-                    value.toUpperCase() + "%");
+
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(field)), "%" +
+                    value.toLowerCase() + "%");
         });
     }
 }

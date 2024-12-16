@@ -1,7 +1,6 @@
 package gr.nifitsas.dealsapp.dto;
 
-import gr.nifitsas.dealsapp.model.Attachment;
-import gr.nifitsas.dealsapp.model.Deal;
+import gr.nifitsas.dealsapp.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,5 @@ public class StoreReadOnlyDTO {
   private String name;
   private String siteURL;
   private String logoURL;
-  private Set<Deal> deals;
+  private Set<Product> products;
 }

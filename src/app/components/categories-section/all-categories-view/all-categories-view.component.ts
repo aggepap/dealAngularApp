@@ -30,15 +30,15 @@ export class AllCategoriesViewComponent {
     );
   }
 
-  onUpdateClick(id: string) {
+  onUpdateClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.toggle('hidden');
   }
 
-  onDeleteClick(id: string) {
+  onDeleteClick(id: number) {
     this.categoriesService.deleteCategory(id);
   }
-  onUpdateConfirm(id: string, value: any) {
+  onUpdateConfirm(id: number, value: any) {
     console.log(value);
     const icon = value['cat-update-icon'];
     const name = value['cat-update-name'];
@@ -56,7 +56,7 @@ export class AllCategoriesViewComponent {
         }
       );
   }
-  OnCancelClick(id: string) {
+  OnCancelClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.add('hidden');
   }
