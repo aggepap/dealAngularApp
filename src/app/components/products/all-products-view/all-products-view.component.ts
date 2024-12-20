@@ -14,6 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { LoadingSpinnerComponent } from '@/src/app/shared/loading-spinner/loading-spinner.component';
+import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 @Component({
   selector: 'app-all-products-view',
   standalone: true,
@@ -23,6 +24,7 @@ import { LoadingSpinnerComponent } from '@/src/app/shared/loading-spinner/loadin
     ReactiveFormsModule,
     FormsModule,
     LoadingSpinnerComponent,
+    ErrorMessageComponent,
   ],
   templateUrl: './all-products-view.component.html',
   styleUrl: './all-products-view.component.css',
@@ -41,6 +43,7 @@ export class AllProductsViewComponent {
   sortDirection = 'ASC';
   sortBy = 'name';
   isLoading = true;
+  hasError = false;
 
   @ViewChild('dropdownButton', { static: false }) dropdownButton!: ElementRef;
   @ViewChild('dropdownMainButton', { static: false })
@@ -109,7 +112,7 @@ export class AllProductsViewComponent {
             lowestPrice: deal.lowestPrice,
           }));
 
-          console.log('Mapped DealList:', this.dealsList); // Debug final mapping
+          console.log(this.filter);
           this.totalPages = data.totalPages;
           this.pageSize = data.pageSize;
           this.totalElements = data.totalElements;

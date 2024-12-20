@@ -1,3 +1,8 @@
+@if (isLoading) {
+<app-loading-spinner />
+}@else { @if(hasError) {
+<app-error-message message="Failed to load Store Deals" />
+}@else{
 <div class="flex flex-col items-center">
   <div class="inline-flex rounded-md shadow-sm py-5" role="group">
     <button
@@ -35,10 +40,62 @@
     [basicGridSize]="3"
   />
 </div>
-}@else {
+<!-- Pagination -->
+@if (dealsList.length>0) {
+<div
+  class="flex items-center justify-center my-5 w-full bg-slate-100 p-4 rounded-lg"
+>
+  <nav aria-label="pagination" class="flex-grow flex justify-center">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <!-- Previous Button -->
+      <li>
+        <button
+          (click)="onPageChange(pagesNumber - 1)"
+          [disabled]="pagesNumber === 0"
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Previous
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          [ngClass]="{
+            'bg-blue-500': pagesNumber === i,
+            'text-white': pagesNumber === i
+          }"
+          (click)="onPageChange(i)"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          {{ i + 1 }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li>
+        <button
+          (click)="onPageChange(pagesNumber + 1)"
+          [disabled]="pagesNumber === totalPages - 1"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+  <div class="ml-auto pr-16">
+    <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option value="9" selected>9</option>
+      <option value="18">18</option>
+      <option value="30">30</option>
+    </select>
+  </div>
+</div>
+} }@else {
 <div class="shadow-sm py-5 text-center">
   <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
     No Deals Found for {{ storeInfo.name }}
   </h1>
 </div>
-}
+} }}

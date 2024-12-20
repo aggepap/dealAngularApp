@@ -1,6 +1,8 @@
 package gr.nifitsas.dealsapp.model.static_data;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gr.nifitsas.dealsapp.model.Attachment;
+import gr.nifitsas.dealsapp.model.ImageAttachable;
 import gr.nifitsas.dealsapp.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,17 +20,24 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name="stores")
-public class Store{
+public class Store implements ImageAttachable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String siteURL;
-    private String logoURL;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "image_id")
+  private Attachment logo;
+
+  @Override
+  public void setImage(Attachment attachment) {
+    this.logo = attachment;
+  }
 
 
-    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
       private Set<Product> products = new HashSet<>();
 

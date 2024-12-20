@@ -9,6 +9,34 @@ import { environment } from '@/src/environments/environment.development';
 const apiUrl = environment.apiURL;
 const CATEGORIES_API_URL = `${apiUrl}/category`;
 
+export const fontAwIcons = [
+  'fa-star',
+  'fa-mobile-screen',
+  'fa-laptop',
+  'fa-tablet-screen-button',
+  'fa-tv',
+  'fa-gift',
+  'fa-shirt',
+  'fa-futbol',
+  'fa-camera',
+  'fa-film',
+  'fa-video',
+  'fa-headphones',
+  'fa-gamepad',
+  'fa-mouse',
+  'fa-wrench',
+  'fa-gear',
+  'fa-truck',
+  'fa-clock',
+  'fa-book',
+  'fa-house',
+  'fa-pencil',
+  'fa-cube',
+  'fa-car',
+  'fa-bicycle',
+  'fa-person-biking',
+];
+
 @Injectable({
   providedIn: 'root',
 })

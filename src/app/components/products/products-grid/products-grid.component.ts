@@ -10,20 +10,27 @@ import {
   Input,
   type SimpleChanges,
 } from '@angular/core';
+import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
+import { ErrorMessageComponent } from '@/src/app/shared/components/error-message/error-message.component';
 
 @Component({
   selector: 'app-products-grid',
   standalone: true,
-  imports: [],
+  imports: [LoadingSpinnerComponent, ErrorMessageComponent],
   templateUrl: './products-grid.component.html',
   styleUrl: './products-grid.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsGridComponent {
   productService = inject(ProductsService);
   storeService = inject(StoresService);
   apiUrl = environment.apiURL;
+  hasError = false;
+  isLoading = true;
+
+  ngAfterViewInit() {
+    this.isLoading = false;
+  }
   @Input({ required: true }) productsList: ImportedDeal[] = [];
-  @Input({ required: true }) categoriesList: DealCategories[] = [];
+  @Input() categoriesList?: DealCategories[] = [];
   @Input() basicGridSize: number | undefined;
 }

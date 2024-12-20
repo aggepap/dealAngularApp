@@ -7,7 +7,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { fileTypeValidator } from '@/src/app/shared/services/fileTypeValidator';
+import { fileTypeValidator } from '@/src/app/shared/services/customValidators';
 import { ProductsService } from '@/src/app/shared/services/products.service';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import type { Store } from '@/src/app/shared/interfaces/stores';
@@ -67,14 +67,14 @@ export class AddProductFormComponent {
   //==============================================================================
   onNewProductAdd(value: any) {
     const product = {
-      name: value.addProductName,
-      description: value.addProductDescription,
-      url: value.AddDealURL,
-      coupon: value.AddDealCoupon,
+      name: value.addProductName.trim(),
+      description: value.addProductDescription.trim(),
+      url: value.AddDealURL.trim(),
+      coupon: value.AddDealCoupon.trim(),
       price: value.AddDealPrice,
     };
-    const category = value.addProductCategory;
-    const store = value.addDealStore;
+    const category = value.addProductCategory.trim();
+    const store = value.addDealStore.trim();
 
     const imageInput = document.getElementById(
       'addProductImage'

@@ -28,6 +28,7 @@
           formControlName="addStoreName"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-11/12 md:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="New Store Name"
+          required
         />
       </div>
       @if(addStoreForm.get('addStoreName')?.invalid &&
@@ -65,6 +66,7 @@
           formControlName="addStoreUrl"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="https://www.example.com"
+          required
         />
       </div>
       @if(addStoreForm.get('addStoreUrl')?.invalid &&
@@ -86,16 +88,27 @@
         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
       ></div>
       <input
-        type="text"
+        type="file"
         id="addStoreLogo"
         formControlName="addStoreLogo"
+        (change)="checkFileType($event)"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="New Store logo"
+        accept="image/*"
+        required
       />
+      @if(!fileSelected){
+      <p class="text-xs text-red-900 mb-2 block">
+        Product image is required, please select an image(Allowed types:
+        images/*)
+      </p>
+      }
     </div>
   </div>
   <div class="add-buttons mt-5 flex justify-around">
-    @if(addStoreForm.invalid) {
+    @if(addStoreForm.get("addStoreName")?.invalid ||
+    addStoreForm.get("addStoreUrl")?.invalid ||
+    addStoreForm.get("addStoreLogo")?.invalid) {
     <button
       type="submit"
       class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 md:w-[200px]"

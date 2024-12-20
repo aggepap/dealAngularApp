@@ -1,7 +1,7 @@
 package gr.nifitsas.dealsapp.repository;
 
 
-import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

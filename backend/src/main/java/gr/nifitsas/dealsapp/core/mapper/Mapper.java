@@ -1,8 +1,11 @@
 package gr.nifitsas.dealsapp.core.mapper;
 
-import gr.nifitsas.dealsapp.dto.*;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.model.static_data.Store;
@@ -37,10 +40,10 @@ public class Mapper {
   //  Store Mappers
 //***************************
   public Store mapToStoreEntity(StoreInsertDTO storeInsertDTO){
-    return new Store(null, storeInsertDTO.getName(),storeInsertDTO.getSiteURL(), storeInsertDTO.getLogoURL(), null);
+    return new Store(null, storeInsertDTO.getName(),storeInsertDTO.getSiteURL(),null, null);
   }
   public StoreReadOnlyDTO mapToStoreReadOnlyDTO(Store store){
-    return new StoreReadOnlyDTO(store.getId(), store.getName(), store.getSiteURL(), store.getLogoURL(), store.getAllStoreProducts());
+    return new StoreReadOnlyDTO(store.getId(), store.getName(), store.getSiteURL(), store.getLogo(), store.getAllStoreProducts());
   }
 
 }

@@ -1,0 +1,90 @@
+@if (isLoading) {
+<app-loading-spinner />
+}@else { @if(hasError) {
+<app-error-message message="Failed to load products" />
+}@else{ @if (dealsList && dealsList.length > 0) {
+<div class="shadow-sm py-5 text-center">
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-white my-10">
+    {{ categoryName }}
+  </h1>
+  <a href="void:"
+    ><button
+      (click)="back()"
+      type="button"
+      class="px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    >
+      Go Back
+    </button></a
+  >
+</div>
+<div class="flex rounded-md shadow-sm py-5">
+  <app-products-grid [productsList]="dealsList" [basicGridSize]="4" />
+</div>
+<!-- Pagination -->
+@if (dealsList.length>0) {
+<div
+  class="flex items-center justify-center my-5 w-full bg-slate-100 p-4 rounded-lg"
+>
+  <nav aria-label="pagination" class="flex-grow flex justify-center">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <!-- Previous Button -->
+      <li>
+        <button
+          (click)="onPageChange(pagesNumber - 1)"
+          [disabled]="pagesNumber === 0"
+          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Previous
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          [ngClass]="{
+            'bg-blue-500': pagesNumber === i,
+            'text-white': pagesNumber === i
+          }"
+          (click)="onPageChange(i)"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          {{ i + 1 }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li>
+        <button
+          (click)="onPageChange(pagesNumber + 1)"
+          [disabled]="pagesNumber === totalPages - 1"
+          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+  <div class="ml-auto pr-16">
+    <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option value="12" selected>12</option>
+      <option value="24">24</option>
+      <option value="50">50</option>
+    </select>
+  </div>
+</div>
+} }@else {
+<div class="shadow-sm py-5 text-center">
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-white my-10">
+    No Deals Found for {{ categoryName }}
+  </h1>
+  <a href="void:"
+    ><button
+      (click)="back()"
+      type="button"
+      class="px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    >
+      Go back
+    </button></a
+  >
+</div>
+} } }

@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product extends AbstractEntity {
+public class Product extends AbstractEntity implements ImageAttachable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,11 @@ public class Product extends AbstractEntity {
     @JoinColumn(name = "image_id")
     private Attachment image;
 
+  @Override
+  public void setImage(Attachment attachment) {
+    this.image = attachment;
+  }
+
 
     @ManyToOne
     @JoinColumn(name="category_id")
@@ -43,7 +48,7 @@ public class Product extends AbstractEntity {
 
   @ManyToOne
   @JsonBackReference
-  @JoinColumn(name="store_id")
+  @JoinColumn(name="store_id", nullable = false)
   private Store store;
 
 

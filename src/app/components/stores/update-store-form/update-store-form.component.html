@@ -84,16 +84,23 @@
         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
       ></div>
       <input
-        type="text"
+        type="file"
         formControlName="updatedStoreLogo"
+        (change)="checkFileType($event)"
         id="updatedStoreLogo"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="New store Logo"
       />
+      @if(!fileSelected){
+      <p class="text-xs text-red-900 mb-2 block">
+        Only image types allowed(Allowed types: images/*)
+      </p>
+      }
     </div>
   </div>
   <div class="update-buttons mt-5 flex justify-around">
-    @if (!updateStoreForm.invalid) {
+    @if (!updateStoreForm.get("updatedStoreName")?.invalid &&
+    !updateStoreForm.get("updatedStoreUrl")?.invalid) {
     <button
       (click)="onUpdateConfirm(storeInfo!.id, updateStoreForm.value)"
       type="submit"

@@ -3,12 +3,12 @@ package gr.nifitsas.dealsapp.controller;
 import gr.nifitsas.dealsapp.core.exceptions.*;
 import gr.nifitsas.dealsapp.core.filters.Paginated;
 import gr.nifitsas.dealsapp.core.filters.ProductFilters;
-import gr.nifitsas.dealsapp.dto.ProductInsertDTO;
-import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 
-import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
 import gr.nifitsas.dealsapp.service.ProductService;
-import gr.nifitsas.dealsapp.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,16 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -66,10 +60,7 @@ public class ProductController {
     System.out.println("requested filters: " + filters);
     try {
       if (filters == null) filters = ProductFilters.builder().build();
-      var products = productService.getPaginatedFilteredProducts(filters);
-
-      System.out.println("filtered products: " + products);
-      return ResponseEntity.ok(products);
+      return ResponseEntity.ok( productService.getPaginatedFilteredProducts(filters));
     } catch (Exception e) {
       LOGGER.error("ERROR: Could not get Products.", e);
       throw e;
@@ -92,4 +83,35 @@ public class ProductController {
 
     }
   }
+
+
+  @PutMapping("/update/{productId}")
+  public ResponseEntity<ProductReadOnlyDTO> updateProduct(
+    @PathVariable("productId") Long productId,
+    @RequestParam(name = "category", required = false) Long categoryId,
+    @RequestParam(name = "store", required = false) Long storeId,
+    @RequestPart(name = "product") @Valid ProductUpdateDTO productUpdateDTO,
+    @RequestPart(name = "image", required = false) MultipartFile image)
+    throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExists {
+
+    try {
+      ProductReadOnlyDTO updatedProduct = productService.updateProduct(productId, categoryId, storeId, productUpdateDTO, image);
+      return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    } catch (AppObjectNotFoundException | AppObjectInvalidArgumentException | IOException | AppObjectAlreadyExists e) {
+      LOGGER.error("Error updating product: {}", e.getMessage());
+      throw e;
+    }
+  }
+
+  @DeleteMapping("/remove/{productId}")
+  public ResponseEntity<ProductReadOnlyDTO>deleteStore(@PathVariable("productId")Long productId) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+    try{
+      ProductReadOnlyDTO deletedProduct = productService.deleteProduct(productId);
+      return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
+    }catch (AppObjectInvalidArgumentException | AppObjectNotFoundException e){
+      LOGGER.error("ERROR: Could not delete Store.", e);
+      throw e;
+    }
+  }
+
 }

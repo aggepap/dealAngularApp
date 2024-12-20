@@ -11,10 +11,10 @@
         class="flex items-center justify-start pl-4 pr-10 py-3 text-white bg-blue-700 hover:bg-blue-900 active w-11/12 xl:w-full mx-auto dark:bg-blue-600 gap-2"
         aria-current="page"
       >
-        @if(entry.logoURL.length > 3){
+        @if(entry.logo){
         <img
           class="rounded-full border-2"
-          src="{{ apiURL }}/{{ entry.logoURL }}"
+          src="{{ apiURL }}/uploads/{{ entry.logo.savedName }}"
           width="20px"
           height="20px"
           alt="{{ entry.name }} logo"

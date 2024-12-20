@@ -1,0 +1,233 @@
+<div
+  class="mx-auto"
+  [ngClass]="{
+    'border-8 p-4 border-green-700': updateProductSuccessMessage  &&
+    !updateProductForm.get('addProductName')?.touched,
+   
+  }"
+>
+  <form [formGroup]="updateProductForm" class="mx-auto my-10">
+    @if (addProductSuccessMessage &&
+    !updateProductForm.get('addProductName')?.touched) {
+    <div class="mx-auto max-w-sm container mt-4 p-6 bg-green-700 rounded-md">
+      <h3 class="text-center font-bold text-3xl text-white">
+        Product was inserted succesfully
+      </h3>
+    </div>
+    }@else {
+    <h1 class="font-bold text-3xl mx-auto mb-10">Update Deal</h1>
+    }
+    <div class="update-form-container w-[800px] flex justify-start">
+      <fieldset class="border-2 border-gray-300 p-4 rounded-lg">
+        <legend
+          class="text-lg font-medium text-gray-700 px-2 py-1 bg-white rounded-lg border border-gray-300 shadow-sm"
+        >
+          Product:
+        </legend>
+        <div class="mb-5">
+          <label
+            for="updateProductCategory"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Choose a Category*</label
+          >
+          @if(updateProductForm.get('updateProductCategory')?.invalid &&
+          updateProductForm.get('updateProductCategory')?.touched){
+          <p class="text-xs text-red-900 mb-2 block">
+            Product category is required.
+          </p>
+          }
+          <select
+            id="updateProductCategory"
+            formControlName="updateProductCategory"
+            class="form-select"
+            required
+          >
+            @for (category of categoriesList; track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-5">
+          <label
+            for="updateProductName"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Product Title*</label
+          >
+          <input
+            required
+            type="text"
+            id="updateProductName"
+            formControlName="updateProductName"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="{{ product?.name }}"
+            required
+          />
+          @if(updateProductForm.get('updateProductName')?.invalid &&
+          updateProductForm.get('updateProductName')?.touched){
+          <p class="text-xs text-red-900 mb-2 block">
+            Product title is required.
+          </p>
+          }
+        </div>
+        <div class="mb-5">
+          <label
+            for="updateProductDescription"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Product description*</label
+          >
+          <textarea
+            id="updateProductDescription"
+            rows="4"
+            formControlName="updateProductDescription"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Product description"
+            required
+          ></textarea>
+          @if(updateProductForm.get('updateProductDescription')?.invalid &&
+          updateProductForm.get('updateProductDescription')?.touched){
+          <p class="text-xs text-red-900 mb-2 block">
+            Product description is required, please enter some info for the
+            product
+          </p>
+          }
+        </div>
+        <div class="mb-5">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="user_avatar"
+            >Product image*</label
+          >
+          <input
+            formControlName="updateProductImage"
+            (change)="checkFileType($event)"
+            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            aria-describedby="product image"
+            id="updateProductImage"
+            type="file"
+            accept="image/*"
+          />
+          <div
+            class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+            id="user_avatar_help"
+          >
+            Please upload an image of the product
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="border-2 border-gray-300 p-4 rounded-lg">
+        <legend
+          class="text-lg font-medium text-gray-700 px-2 py-1 bg-white rounded-lg border border-gray-300 shadow-sm"
+        >
+          Deal:
+        </legend>
+        <div class="mb-5">
+          <label
+            for="updateDealStore"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Choose a Store*</label
+          >
+          @if(updateProductForm.get('updateDealStore')?.invalid &&
+          updateProductForm.get('updateDealStore')?.touched){
+          <p class="text-xs text-red-900 mb-2 block">
+            Deal's store is required.
+          </p>
+          }
+          <select
+            id="updateDealStore"
+            formControlName="updateDealStore"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+          >
+            @for (store of storesList; track store.id) {
+            <option [value]="store.id">{{ store.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-5">
+          <label
+            for="updateDealURL"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >URL*</label
+          >
+          <input
+            required
+            type="url"
+            id="updateDealURL"
+            formControlName="updateDealURL"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="URL Link for deal"
+          />
+          @if(updateProductForm.get('updateDealURL')?.invalid &&
+          updateProductForm.get('updateDealURL')?.touched){
+          <p class="text-xs text-red-900 mb-2 block">Deal URL is required.</p>
+          }
+        </div>
+        <div class="flex">
+          <div class="mb-5 w-3/4">
+            <label
+              for="updateDealCoupon"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Coupon</label
+            >
+            <input
+              required
+              type="text"
+              id="updateDealCoupon"
+              formControlName="updateDealCoupon"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Leave empty if no coupons is needed"
+            />
+          </div>
+
+          <div class="mb-5 w-1/4">
+            <label
+              for="updateDealPrice"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Price in €*</label
+            >
+            <input
+              required
+              type="number"
+              min="1"
+              step="any"
+              id="updateDealPrice"
+              formControlName="updateDealPrice"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="0"
+              required
+            />
+
+            @if(updateProductForm.get('updateDealPrice')?.invalid &&
+            updateProductForm.get('updateDealPrice')?.touched){
+            <p class="text-xs text-red-900 mb-2 block">
+              Deal Price is required.
+            </p>
+            }
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="mt-5">
+      @if (updateProductForm.get("updateProductDescription")?.invalid ||
+      updateProductForm.get("updateProductName")?.invalid ||
+      updateProductForm.get("updateDealPrice")?.invalid) {
+
+      <button
+        type="submit"
+        class="text-gray-200 bg-gray-500 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-not-allowed"
+      >
+        Submit
+      </button>
+      }@else {
+      <button
+        *ngIf="product"
+        (click)="onUpdateProduct(getFormValue(), product.id)"
+        type="submit"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Submit
+      </button>
+      }
+    </div>
+  </form>
+</div>

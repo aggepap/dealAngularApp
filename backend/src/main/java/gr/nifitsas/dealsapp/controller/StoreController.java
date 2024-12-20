@@ -5,15 +5,11 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.exceptions.AppServerException;
-import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
-import gr.nifitsas.dealsapp.dto.StoreInsertDTO;
-import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
-import gr.nifitsas.dealsapp.dto.StoreUpdateDTO;
-import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
-import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
-import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryUpdateDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreUpdateDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
 import gr.nifitsas.dealsapp.model.Product;
-import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +53,7 @@ public class StoreController {
       throw e;
     }
   }
+
   @GetMapping("/{id}/products")
   public ResponseEntity<List<Product>> getStoreProducts(@PathVariable("id") Long id) {
     List<Product> storeProducts = storeService.findAllStoreDeals(id);
@@ -70,22 +67,28 @@ public class StoreController {
 
 
   @PostMapping("/add")
-  public ResponseEntity<StoreReadOnlyDTO> addStore(@RequestBody StoreInsertDTO storeInsertDTO
+  public ResponseEntity<StoreReadOnlyDTO> addStore(
+    @RequestPart(name = "store") @Valid StoreInsertDTO storeInsertDTO,
+    @RequestPart(name = "logo", required = true) MultipartFile logo
 
-  ) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
+  ) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, IOException {
     try {
-      StoreReadOnlyDTO store = storeService.saveStore(storeInsertDTO);
+      StoreReadOnlyDTO store = storeService.saveStore(storeInsertDTO, logo);
       return new ResponseEntity<>(store, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExists | AppObjectInvalidArgumentException e) {
+    } catch (AppObjectAlreadyExists | AppObjectInvalidArgumentException | IOException e) {
       LOGGER.error("ERROR: Could not add Store.", e);
       throw e;
     }
 
   }
-  @PatchMapping("/update")
-  public ResponseEntity<StoreReadOnlyDTO> updateStore(@RequestBody StoreUpdateDTO storeUpdateDTO) throws AppObjectAlreadyExists, AppObjectNotFoundException {
+  @PutMapping("/update/{storeId}")
+  public ResponseEntity<StoreReadOnlyDTO> updateStore(
+    @PathVariable("storeId") Long storeId,
+    @RequestPart(name = "store") @Valid StoreUpdateDTO storeUpdateDTO,
+    @RequestPart(name = "image", required = false) MultipartFile image
+  ) throws AppObjectAlreadyExists, AppObjectNotFoundException, IOException {
     try {
-      StoreReadOnlyDTO category = storeService.updateStore(storeUpdateDTO);
+      StoreReadOnlyDTO category = storeService.updateStore(storeId,storeUpdateDTO, image);
       return new ResponseEntity<>(category, HttpStatus.CREATED);
     } catch (AppObjectAlreadyExists | AppObjectNotFoundException e) {
       LOGGER.error("ERROR: Could not update Store." + storeUpdateDTO.getName(), e);

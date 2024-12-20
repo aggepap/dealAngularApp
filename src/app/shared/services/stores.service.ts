@@ -27,35 +27,15 @@ export class StoresService {
       },
     });
   }
-  addStore(name: string, siteURL: string, logoURL: string) {
-    const body = {
-      name: name,
-      siteURL: siteURL,
-      logoURL: logoURL,
-    };
-    console.log(body);
-
-    return this.http.post<Store>(`${STORES_API_URL}/add`, body, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+  addStore(formData: FormData) {
+    console.log(formData);
+    return this.http.post<Store>(`${STORES_API_URL}/add`, formData);
   }
-  updateStore(id: number, name: string, siteURL: string, logoURL: string) {
-    const body = {
-      id: id,
-      name: name,
-      siteURL: siteURL,
-      logoURL: logoURL,
-    };
-
-    return this.http.patch<Store>(`${STORES_API_URL}/update`, body, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+  updateStore(storeId: number, formData: FormData) {
+    return this.http.put<Store>(
+      `${STORES_API_URL}/update/${storeId}`,
+      formData
+    );
   }
 
   deleteStore(id: number) {

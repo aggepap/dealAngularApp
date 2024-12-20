@@ -1,3 +1,15 @@
 <app-hero></app-hero>
 <app-categories-section></app-categories-section>
-<app-deal-cards></app-deal-cards>
+<div class="py-5 bg-gray-200">
+  <app-deal-filters
+    (searchFilter)="generateSearchFilter($event)"
+    [categoryList]="categoriesList"
+    [storesList]="storesList"
+  ></app-deal-filters>
+</div>
+<div class="mx-20 min-h-[800px]">
+  <app-products-grid
+    [productsList]="dealsList"
+    [basicGridSize]="4"
+  ></app-products-grid>
+</div>

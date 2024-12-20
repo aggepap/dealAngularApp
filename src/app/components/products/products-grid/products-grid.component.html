@@ -1,7 +1,13 @@
+@if (isLoading) {
+<app-loading-spinner />
+}@else { @if (hasError) {
+<app-error-message message="Failed to load products" />
+}@else {
+
 <div
   class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-{{
     basicGridSize
-  }} gap-4 pt-10"
+  }} gap-4 pt-2"
 >
   @for (deal of productsList; track deal.id) {
 
@@ -9,14 +15,16 @@
     class="w-full max-w-sm flex flex-col justify-between bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="deal-title">
-      <h3
-        class="text-center drop-shadow-sm m-2 rounded-md bg-blue-500 text-white py-2"
+      <a href="./categories/{{ deal.categoryId }}">
+        <h3
+          class="text-center drop-shadow-sm m-2 rounded-md bg-blue-500 text-white py-2"
+        >
+          {{ deal.categoryName }}
+        </h3></a
       >
-        {{ deal.categoryName }}
-      </h3>
     </div>
     <div class="text-center">
-      <a href="./products/{{ deal.id }}">
+      <a href="./deals/{{ deal.id }}">
         <h5
           class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white"
         >
@@ -53,7 +61,7 @@
           {{ deal.price }}€ }@else { Free }
         </span>
         <a
-          href="./products/{{ deal.id }}"
+          href="./deals/{{ deal.id }}"
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >Get it now!</a
         >
@@ -63,3 +71,4 @@
 
   }
 </div>
+} }

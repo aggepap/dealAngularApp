@@ -7,9 +7,10 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.filters.Paginated;
 import gr.nifitsas.dealsapp.core.filters.ProductFilters;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
-import gr.nifitsas.dealsapp.dto.ProductInsertDTO;
-import gr.nifitsas.dealsapp.dto.ProductReadOnlyDTO;
-import gr.nifitsas.dealsapp.dto.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
 import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
@@ -22,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService {
   private final CategoryService categoryService;
   private final ProductRepository productRepository;
+  private final AttachmentService attachmentService;
   private final StoreService storeService;
   private final Mapper mapper;
 
@@ -73,7 +74,8 @@ public class ProductService implements IProductService {
      throw new AppObjectAlreadyExists("Product","Product with Name " +dto.getName() + " already exists");
    }
    Product product = mapper.mapToProductEntity(dto);
-   saveImage(product, image);
+   attachmentService.saveImage(product, image);
+
    Product savedProduct = productRepository.save(product);
    Optional<Category> category = categoryService.findCategoryById(categoryId);
    Optional<Store> store = storeService.findStoreEntintyById(storeId);
@@ -83,48 +85,74 @@ public class ProductService implements IProductService {
    return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
+  @Override
+  @Transactional
+  public ProductReadOnlyDTO updateProduct(
+    Long productId,
+    Long categoryId,
+    Long storeId,
+    ProductUpdateDTO dto,
+    MultipartFile image
+  ) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExists {
+    // Fetch existing product by ID
+    Product product = productRepository.findById(productId)
+      .orElseThrow(() -> new AppObjectNotFoundException("Product", "Product with ID " + productId + " not found"));
+
+    // Update product fields from the DTO
+    if (!product.getName().equals(dto.getName())) {
+      // Check for duplicate product name
+      if (productRepository.findByName(dto.getName()).isPresent()) {
+        throw new AppObjectAlreadyExists("Product", "Product with Name " + dto.getName() + " already exists");
+      }
+      product.setName(dto.getName());
+    }
+
+    product.setDescription(dto.getDescription());
+    product.setPrice(dto.getPrice());
+    product.setURL(dto.getUrl());
+    product.setCoupon(dto.getCoupon());
+
+    // Update image if provided
+    if (image != null && !image.isEmpty()) {
+      attachmentService.saveImage(product, image);
+    }
+
+    // Update category if provided
+    if (categoryId != null) {
+      Category category = categoryService.findCategoryById(categoryId)
+        .orElseThrow(() -> new AppObjectNotFoundException("Category", "Category with ID " + categoryId + " not found"));
+      product.setCategory(category);
+    }
+
+    // Update store if provided
+    if (storeId != null) {
+      Store store = storeService.findStoreEntintyById(storeId)
+        .orElseThrow(() -> new AppObjectNotFoundException("Store", "Store with ID " + storeId + " not found"));
+      product.setStore(store);
+    }
+
+    // Save the updated product to the repository
+    Product updatedProduct = productRepository.save(product);
+
+    // Map and return the updated product DTO
+    return mapper.mapToProductReadOnlyDTO(updatedProduct);
+  }
 
 
   @Override
-  public String deleteProduct(Long id) throws AppObjectNotFoundException {
-   if(productRepository.findById(id).isEmpty()){
-     throw new AppObjectNotFoundException("Product","Product with id " + id + " not found");
-   }
-   String deletedProductName = productRepository.findById(id).get().getName();
-   productRepository.deleteById(id);
-   return deletedProductName;
-  }
-
-
   @Transactional(rollbackOn = Exception.class)
-  public void saveImage(Product product, MultipartFile image) throws IOException {
-
-    if (image != null && !image.isEmpty()) {
-
-      String originalFileName = image.getOriginalFilename();
-      String savedName = UUID.randomUUID() + getFileExtension(originalFileName);
-      String uploadDir = "./uploads/";
-      Path filepath = Paths.get(uploadDir + savedName);
-      Files.createDirectories(filepath.getParent());
-      Files.write(filepath, image.getBytes());
-
-      Attachment attachment = new Attachment();
-      attachment.setFilename(originalFileName);
-      attachment.setSavedName(savedName);
-      attachment.setFilePath(filepath.toString());
-      attachment.setContentType(image.getContentType());
-      attachment.setExtension(getFileExtension(originalFileName));
-
-      product.setImage(attachment);
+  public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
+    Optional<Product> optionalProduct = productRepository.findById(id);
+    if (optionalProduct.isPresent()) {
+      Product product = optionalProduct.get();
+      productRepository.delete(product);
+      return mapper.mapToProductReadOnlyDTO(product);
+    } else {
+      throw new AppObjectNotFoundException("Product", "Product with id: " + id + " not found");
     }
+  }
 
-  }
-  private String getFileExtension(String filename) {
-    if (filename != null && filename.contains(".")) {
-      return filename.substring(filename.lastIndexOf("."));
-    }
-    return "";
-  }
+
 
   private Specification<Product> getSpecsFromFilters(ProductFilters filters) {
     Specification<Product> filter = Specification.where(ProductSpecification.productTitleIsLike("name", filters.getName()));

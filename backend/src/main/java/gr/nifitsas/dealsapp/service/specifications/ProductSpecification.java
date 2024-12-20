@@ -16,7 +16,7 @@ public class ProductSpecification {
     public static Specification<Product>productCategoryIs(Long categoryId){
         return ((root, query, criteriaBuilder) ->{
 
-          if (categoryId == null) {
+          if (categoryId == -1) {
             return criteriaBuilder.conjunction();
           }
 
@@ -28,7 +28,7 @@ public class ProductSpecification {
   public static Specification<Product>productStoreIs(Long storeId){
     return ((root, query, criteriaBuilder) ->{
 
-      if (storeId == null) {
+      if (storeId == -1) {
         return criteriaBuilder.conjunction();
       }
 
