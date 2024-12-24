@@ -52,8 +52,8 @@ export class ProductsService {
         complete: () => {
           console.log('Product update completed.');
           setTimeout(() => {
-            // location.reload();
-          }, 1000);
+            location.reload();
+          }, 500);
         },
       });
   }

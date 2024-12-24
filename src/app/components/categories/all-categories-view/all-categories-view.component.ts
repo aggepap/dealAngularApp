@@ -11,21 +11,35 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { UsersService } from '@/src/app/shared/services/users.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-all-categories-view',
   standalone: true,
-  imports: [ReactiveFormsModule, AddNewCategoryComponent],
+  imports: [ReactiveFormsModule, AddNewCategoryComponent, RouterLink],
   templateUrl: './all-categories-view.component.html',
   styleUrl: './all-categories-view.component.css',
 })
 export class AllCategoriesViewComponent {
+  //==============================================
+  //  Services injection
+  //==============================================
   categoriesService = inject(CategoriesService);
+  userService = inject(UsersService);
+  user = this.userService.user;
+
+  //==============================================
+  //  Properties
+  //==============================================
   categoriesList: DealCategories[] = [];
   addIsEnabled = false;
   fontAwIcons = fontAwIcons;
   selectedIcon = '';
 
+  //==============================================
+  //  Get Categories from DB on init
+  //==============================================
   ngOnInit() {
     this.categoriesService.getCategories().subscribe(
       (data: DealCategories[]) => {
@@ -34,15 +48,30 @@ export class AllCategoriesViewComponent {
       (error) => console.error('Error fetching categories', error)
     );
   }
-
+  //==============================================
+  //  Update Category when button is clicked
+  //==============================================
   onUpdateClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.toggle('hidden');
   }
-
+  //==============================================
+  //  Delete Category when button is clicked
+  //==============================================
   onDeleteClick(id: number) {
     this.categoriesService.deleteCategory(id);
   }
+
+  //==============================================
+  //  Gets icon name to show in the form
+  //==============================================
+  onIconChange($event: Event) {
+    this.selectedIcon = ($event.target as HTMLInputElement).value;
+  }
+
+  //==============================================
+  //  Updated category with new data
+  //==============================================
   onUpdateConfirm(id: number, value: any) {
     console.log(value);
     const icon = value['cat-update-icon'];
@@ -61,11 +90,17 @@ export class AllCategoriesViewComponent {
         }
       );
   }
+  //==============================================
+  //  Cancel Update Category when button is clicked
+  //==============================================
   OnCancelClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.add('hidden');
   }
 
+  //==============================================
+  //  Update Category Form
+  //==============================================
   updateForm = new FormGroup({
     'cat-update-icon': new FormControl('', [
       Validators.required,
@@ -77,6 +112,9 @@ export class AllCategoriesViewComponent {
   onAddNewClick() {
     this.addIsEnabled = !this.addIsEnabled;
   }
+  //==============================================
+  // Show/hides add new category form
+  //==============================================
   handleAddIsEnabledChange(value: boolean) {
     this.addIsEnabled = value;
   }

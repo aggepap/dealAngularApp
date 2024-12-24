@@ -9,7 +9,7 @@
       </h2>
     </div>
     <!-- End Title -->
-
+    @if (user()?.role === "ADMIN") {
     <!-- "Add a Category" Button -->
     <div
       (click)="onAddNewClick()"
@@ -25,6 +25,7 @@
       </div>
     </div>
     <!--END "Add a Category" Button -->
+    }
     <!-- Add new category form -->
 
     @if(addIsEnabled){
@@ -46,7 +47,7 @@
         <div class="category-item">
           <div class="title-icon">
             <a
-              href="/categories/{{ category.id }}"
+              routerLink="/categories/{{ category.id }}"
               class="flex items-center gap-2"
               ><i class="fa-solid {{ category.icon }}"></i>
               <span class="text-sm font-medium text-gray-900 dark:text-white">{{
@@ -54,6 +55,7 @@
               }}</span>
             </a>
           </div>
+          @if (user()?.role === "ADMIN") {
           <!-- Update/Delete Buttons -->
           <div class="crud">
             <button
@@ -74,7 +76,9 @@
           </div>
 
           <!-- END Update/Delete Buttons -->
+          }
         </div>
+
         <!-- UPDATE FORM -->
         <form
           [formGroup]="updateForm"
@@ -108,7 +112,7 @@
                 </div>
 
                 <select
-                  [(ngModel)]="selectedIcon"
+                  (change)="onIconChange($event)"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   name="cat-update-icon"
                   id="cat-update-icon"

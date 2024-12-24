@@ -12,11 +12,12 @@ import { ProductsService } from '@/src/app/shared/services/products.service';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import type { Store } from '@/src/app/shared/interfaces/stores';
 import { CommonModule } from '@angular/common';
+import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-add-product-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './add-product-form.component.html',
   styleUrl: './add-product-form.component.css',
 })
@@ -35,15 +36,19 @@ export class AddProductFormComponent {
     'image/jpg',
     'image/webp',
   ];
-
+  isLoading = true;
+  //==============================================
+  //  ngOnInit
+  //==============================================
   ngOnInit() {
     this.addProductSuccessMessage = false;
     this.getCategories();
     this.getStores();
+    this.isLoading = false;
   }
-
+  //==============================================
   //Add Product Form
-  //==============================================================================
+  //==============================================
   addProductForm = new FormGroup({
     addProductCategory: new FormControl(1, Validators.required),
     addProductName: new FormControl('', Validators.required),
@@ -113,6 +118,9 @@ export class AddProductFormComponent {
     this.addProductSuccessMessage = true;
     this.fileSelected = false;
   }
+  //==============================================================================
+  //Check File Type
+  //==============================================================================
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {

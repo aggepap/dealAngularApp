@@ -15,7 +15,7 @@
   >
     <li class="inline-flex items-center">
       <a
-        href="/"
+        routerLink="/"
         class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
       >
         <svg
@@ -50,7 +50,7 @@
           />
         </svg>
         <a
-          href="./deals"
+          routerLink="/deals"
           class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
           >Deals</a
         >
@@ -83,6 +83,7 @@
 </nav>
 
 <!-- Breadcrumbs -->
+@if (user()?.role === "ADMIN") {
 
 <!-- Admin Menu -->
 <div class="flex flex-col items-center justify-center">
@@ -113,7 +114,7 @@
   }
 </div>
 <!-- Admin Menu -->
-
+}
 <section class="mb-6 pt-4 bg-white dark:bg-gray-900 antialiased">
   <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
     <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
@@ -133,41 +134,56 @@
         }
       </div>
       <div>
-        <div class="mt-6 sm:mt-8 lg:mt-0 text-center flex gap-4">
+        <div
+          class="mt-6 sm:mt-8 lg:mt-0 text-center md:justify-start justify-center flex gap-4"
+        >
           <a
-            href="./categories/{{ product.category.id }}"
+            routerLink="/categories/{{ product.category.id }}"
             class="bg-black text-white px-4 py-2 rounded-md"
           >
             {{ product.category.name }}
           </a>
-          <p class="bg-blue-600 text-white px-4 py-2 rounded-md">
-            {{ product.store.name }}
-          </p>
+          <a routerLink="/stores">
+            <p class="bg-blue-600 text-white px-4 py-2 rounded-md">
+              {{ product.store.name }}
+            </p>
+          </a>
         </div>
         <hr class="mb-4 mt-1 border-gray-200 dark:border-gray-800" />
         <div class="mt-6 sm:mt-8 lg:mt-0">
-          <h1
-            class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
-          >
+          <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">
             {{ product.name }}
           </h1>
           <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
-            <p
-              class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white"
-            >
-              {{ product.price }}€
+            <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+              @if (product.price !== 0) {
+              {{ product.price }}€ }@else { Free }
             </p>
           </div>
 
           <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
-            <p class="text-lg text-gray-900">Κουπόνι: {{ product.coupon }}</p>
+            @if(product.coupon){
+            <span
+              (click)="onCouponClick(product.coupon)"
+              class="text-lg text-gray-900 border-2 border-dashed border-green-500 rounded-md px-3 py-2 cursor-pointer"
+            >
+              {{ product.coupon }}
+            </span>
+            @if(couponClicked){
+            <span class="italic text-sm text-green-900"
+              >Coupon code copied!</span
+            >
+            } } @else {
+
+            <p class="text-lg text-gray-900">No Coupon Needed</p>
+            }
           </div>
 
           <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
             <a
               href="{{ product.url }}"
               title=""
-              class="text-white mt-4 sm:mt-0 bg-blue-600 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
+              class="text-white mt-4 sm:mt-0 bg-blue-600 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none flex items-center justify-center"
               role="button"
             >
               <svg
@@ -192,9 +208,9 @@
             </a>
           </div>
 
-          <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+          <hr class="my-6 md:my-8 border-gray-200" />
 
-          <p class="mb-6 text-gray-500 dark:text-gray-400">
+          <p class="mb-6 text-gray-500">
             {{ product.description }}
           </p>
         </div>

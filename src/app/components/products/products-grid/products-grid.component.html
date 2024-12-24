@@ -12,10 +12,10 @@
   @for (deal of productsList; track deal.id) {
 
   <div
-    class="w-full max-w-sm flex flex-col justify-between bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    class="w-full max-w-sm flex flex-col justify-between bg-white border border-gray-200 rounded-lg shadow"
   >
     <div class="deal-title">
-      <a href="./categories/{{ deal.categoryId }}">
+      <a routerLink="/categories/{{ deal.categoryId }}">
         <h3
           class="text-center drop-shadow-sm m-2 rounded-md bg-blue-500 text-white py-2"
         >
@@ -24,16 +24,14 @@
       >
     </div>
     <div class="text-center">
-      <a href="./deals/{{ deal.id }}">
-        <h5
-          class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white"
-        >
+      <a routerLink="/deals/{{ deal.id }}">
+        <h5 class="text-lg font-semibold tracking-tight text-gray-900">
           {{ deal.name }}
         </h5>
       </a>
     </div>
     <div class="w-9/12 h-[200px] overflow-hidden mx-auto">
-      <a class="w-full object-cover h-full" href="./deals/{{ deal.id }}">
+      <a class="w-full object-cover h-full" routerLink="/deals/{{ deal.id }}">
         <img
           class="p-8 rounded-t-lg pb-5"
           [src]="apiUrl + '/uploads/' + deal.image.savedName"
@@ -47,22 +45,30 @@
       </div> -->
     </div>
 
-    <div class="bg-green-200 text-gray-800 px-4 py-2 mx-auto text-center my-4">
+    <div class="mx-auto text-center my-4">
       @if (deal.coupon) {
-      <p>{{ deal.coupon }}</p>
+      <p
+        (click)="onCouponClick(deal.coupon, deal.id)"
+        class="text-gray-800 font-semibold border-2 border-green-800 border-dashed cursor-pointer px-4 py-2"
+      >
+        @if(couponClicked && deal.id == couponClickedId){
+        <p class="italic text-sm text-green-900">Coupon code copied!</p>
+        }
+        {{ deal.coupon }}
+      </p>
       }@else {
       <p>No Coupon needed</p>
       }
     </div>
     <div class="px-5 pb-5">
       <div class="flex items-center justify-between">
-        <span class="text-3xl font-bold text-gray-900 dark:text-white">
+        <span class="text-3xl font-bold text-gray-900">
           @if (deal.price > 0) {
           {{ deal.price }}€ }@else { Free }
         </span>
         <a
-          href="./deals/{{ deal.id }}"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          routerLink="/deals/{{ deal.id }}"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >Get it now!</a
         >
       </div>

@@ -8,29 +8,50 @@ import {
   Component,
   inject,
   Input,
-  type SimpleChanges,
 } from '@angular/core';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '@/src/app/shared/components/error-message/error-message.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-products-grid',
   standalone: true,
-  imports: [LoadingSpinnerComponent, ErrorMessageComponent],
+  imports: [LoadingSpinnerComponent, ErrorMessageComponent, RouterLink],
   templateUrl: './products-grid.component.html',
   styleUrl: './products-grid.component.css',
 })
 export class ProductsGridComponent {
+  //==============================================
+  //  Service Injections
+  //==============================================
   productService = inject(ProductsService);
   storeService = inject(StoresService);
+
+  //==============================================
+  //  Properties
+  //==============================================
   apiUrl = environment.apiURL;
   hasError = false;
   isLoading = true;
+  couponClicked = false;
+  couponClickedId: number | null = null;
 
-  ngAfterViewInit() {
-    this.isLoading = false;
+  // Hide the loading spinner after the view is initialized
+  ngOnInit() {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 100);
   }
+  //==============================================
+  //  Inputs
+  //==============================================
   @Input({ required: true }) productsList: ImportedDeal[] = [];
   @Input() categoriesList?: DealCategories[] = [];
   @Input() basicGridSize: number | undefined;
+
+  onCouponClick(coupon: string, dealId: number) {
+    navigator.clipboard.writeText(coupon);
+    this.couponClicked = true;
+    this.couponClickedId = dealId;
+  }
 }

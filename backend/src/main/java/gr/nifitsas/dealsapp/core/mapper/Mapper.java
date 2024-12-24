@@ -2,17 +2,30 @@ package gr.nifitsas.dealsapp.core.mapper;
 
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.UserDTOs.UserInsertDTO;
+import gr.nifitsas.dealsapp.dto.UserDTOs.UserReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.Product;
+import gr.nifitsas.dealsapp.model.User;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Mapper {
+
+//User Mappers
+//***************************
+
+  public User mapToUserEntity(UserInsertDTO userInsertDTO) {
+    return new User(null, null, userInsertDTO.getUsername(), userInsertDTO.getPassword(),true, null);
+  }
+  public UserReadOnlyDTO mapToUserReadOnlyDTO(User user) {
+    return new UserReadOnlyDTO(user.getUuid(), user.getUsername(), user.getRole());
+  }
 
 //Product Mappers
 //***************************

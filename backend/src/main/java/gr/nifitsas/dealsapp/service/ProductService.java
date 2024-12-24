@@ -1,17 +1,15 @@
 package gr.nifitsas.dealsapp.service;
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
 import gr.nifitsas.dealsapp.core.filters.Paginated;
 import gr.nifitsas.dealsapp.core.filters.ProductFilters;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
-import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
-import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.model.static_data.Store;
@@ -27,12 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,9 +63,9 @@ public class ProductService implements IProductService {
 
   @Override
   @Transactional
-  public ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
+  public ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException {
    if(productRepository.findByName(dto.getName()).isPresent()){
-     throw new AppObjectAlreadyExists("Product","Product with Name " +dto.getName() + " already exists");
+     throw new AppObjectAlreadyExistsException("Product","Product with Name " +dto.getName() + " already exists");
    }
    Product product = mapper.mapToProductEntity(dto);
    attachmentService.saveImage(product, image);
@@ -93,7 +87,7 @@ public class ProductService implements IProductService {
     Long storeId,
     ProductUpdateDTO dto,
     MultipartFile image
-  ) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExists {
+  ) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException {
     // Fetch existing product by ID
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new AppObjectNotFoundException("Product", "Product with ID " + productId + " not found"));
@@ -102,7 +96,7 @@ public class ProductService implements IProductService {
     if (!product.getName().equals(dto.getName())) {
       // Check for duplicate product name
       if (productRepository.findByName(dto.getName()).isPresent()) {
-        throw new AppObjectAlreadyExists("Product", "Product with Name " + dto.getName() + " already exists");
+        throw new AppObjectAlreadyExistsException("Product", "Product with Name " + dto.getName() + " already exists");
       }
       product.setName(dto.getName());
     }

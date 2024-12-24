@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AllCategoriesViewComponent } from '../all-categories-view/all-categories-view.component';
+
 import {
   FormControl,
   FormGroup,
@@ -19,6 +19,9 @@ import {
   styleUrl: './add-new-category.component.css',
 })
 export class AddNewCategoryComponent {
+  onIconChange($event: Event) {
+    this.selectedIcon = ($event.target as HTMLInputElement).value;
+  }
   fontAwIcons = fontAwIcons;
   selectedIcon = '';
   categoriesService = inject(CategoriesService);
@@ -28,10 +31,7 @@ export class AddNewCategoryComponent {
   }
 
   insertNewForm = new FormGroup({
-    newCategoryIcon: new FormControl('', [
-      Validators.required,
-      Validators.pattern('^fa-[a-z]+(?:-[a-z]+)*$'),
-    ]),
+    newCategoryIcon: new FormControl('', Validators.required),
     newCategoryName: new FormControl('', Validators.required),
   });
 

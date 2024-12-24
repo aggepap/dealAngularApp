@@ -4,6 +4,7 @@
 <app-error-message message="Failed to load Store Deals" />
 }@else{
 <div class="flex flex-col items-center">
+  @if (user()?.role === "ADMIN") {
   <div class="inline-flex rounded-md shadow-sm py-5" role="group">
     <button
       (click)="enableStoreEdit()"
@@ -23,8 +24,7 @@
       Delete Store {{ storeInfo.name }}
     </button>
   </div>
-
-  @if(editStoreEnabled) {
+  } @if(editStoreEnabled) {
   <app-update-store-form
     (cancelEdit)="onCancelClick($event)"
     [storeInfo]="storeInfo"

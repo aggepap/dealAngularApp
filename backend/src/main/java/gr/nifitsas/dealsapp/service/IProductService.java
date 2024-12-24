@@ -1,7 +1,7 @@
 package gr.nifitsas.dealsapp.service;
 
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.filters.Paginated;
@@ -21,9 +21,9 @@ public interface IProductService {
 public List<ProductReadOnlyDTO> getProducts();
 Optional<ProductReadOnlyDTO> findProductById(Long id);
 public Page<ProductReadOnlyDTO> getPaginatedProducts(int page, int size);
-ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException;
+ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException;
 public ProductReadOnlyDTO updateProduct(Long productId, Long categoryId, Long storeId, ProductUpdateDTO dto, MultipartFile image
-) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExists;
+) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException;
 public Paginated<ProductReadOnlyDTO> getPaginatedFilteredProducts(ProductFilters filters) throws AppObjectInvalidArgumentException;
 public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
 }

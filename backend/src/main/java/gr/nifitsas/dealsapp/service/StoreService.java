@@ -1,13 +1,12 @@
 package gr.nifitsas.dealsapp.service;
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreUpdateDTO;
-import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.ProductRepository;
@@ -18,12 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,10 +52,10 @@ public class StoreService implements IStoreService {
 
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExists, IOException {
+  public StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, IOException {
     Optional<Store> existingStore = storeRepository.findByName(storeUpdateDTO.getName());
     if (existingStore.isPresent() && !existingStore.get().getId().equals(storeId)) {
-      throw new AppObjectAlreadyExists("Store", "Store with name '" + storeUpdateDTO.getName() + "' already exists.");
+      throw new AppObjectAlreadyExistsException("Store", "Store with name '" + storeUpdateDTO.getName() + "' already exists.");
     }
 
     Store selectedStore = storeRepository.findById(storeId)
@@ -75,9 +70,9 @@ public class StoreService implements IStoreService {
 
   @Transactional(rollbackOn = Exception.class)
   @Override
-  public StoreReadOnlyDTO saveStore(StoreInsertDTO dto, MultipartFile logo) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException, IOException {
+  public StoreReadOnlyDTO saveStore(StoreInsertDTO dto, MultipartFile logo) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException {
    if(storeRepository.findByName(dto.getName()).isPresent()){
-     throw new AppObjectAlreadyExists("Store", "Store named " + dto.getName() + " already exists");
+     throw new AppObjectAlreadyExistsException("Store", "Store named " + dto.getName() + " already exists");
    }
    Store store = mapper.mapToStoreEntity(dto);
    attachmentService.saveImage(store, logo);

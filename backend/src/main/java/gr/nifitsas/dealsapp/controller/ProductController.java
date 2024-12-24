@@ -3,7 +3,6 @@ package gr.nifitsas.dealsapp.controller;
 import gr.nifitsas.dealsapp.core.exceptions.*;
 import gr.nifitsas.dealsapp.core.filters.Paginated;
 import gr.nifitsas.dealsapp.core.filters.ProductFilters;
-import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 
@@ -72,18 +71,17 @@ public class ProductController {
     @RequestPart(name = "category") Long categoryId,
     @RequestPart(name = "store") Long storeId,
     @Valid @RequestPart(name = "product") ProductInsertDTO productInsertDTO,
-    @RequestPart("image") MultipartFile image) throws  AppObjectInvalidArgumentException, AppObjectAlreadyExists, IOException {
+    @RequestPart("image") MultipartFile image) throws  AppObjectInvalidArgumentException, AppObjectAlreadyExistsException, IOException {
     try {
       ProductReadOnlyDTO productReadOnlyDTO = productService.saveProduct(categoryId, storeId, productInsertDTO, image);
       return new ResponseEntity<>(productReadOnlyDTO, HttpStatus.OK);
-    } catch (AppObjectAlreadyExists | AppObjectInvalidArgumentException | IOException e) {
+    } catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException | IOException e) {
       LOGGER.error("Attachment", "image can not get uploaded", e);
       throw e;
 
 
     }
   }
-
 
   @PutMapping("/update/{productId}")
   public ResponseEntity<ProductReadOnlyDTO> updateProduct(
@@ -92,12 +90,13 @@ public class ProductController {
     @RequestParam(name = "store", required = false) Long storeId,
     @RequestPart(name = "product") @Valid ProductUpdateDTO productUpdateDTO,
     @RequestPart(name = "image", required = false) MultipartFile image)
-    throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExists {
+    throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException {
 
     try {
       ProductReadOnlyDTO updatedProduct = productService.updateProduct(productId, categoryId, storeId, productUpdateDTO, image);
       return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-    } catch (AppObjectNotFoundException | AppObjectInvalidArgumentException | IOException | AppObjectAlreadyExists e) {
+    } catch (AppObjectNotFoundException | AppObjectInvalidArgumentException | IOException |
+             AppObjectAlreadyExistsException e) {
       LOGGER.error("Error updating product: {}", e.getMessage());
       throw e;
     }

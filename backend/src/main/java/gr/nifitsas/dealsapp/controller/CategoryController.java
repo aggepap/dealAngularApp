@@ -1,7 +1,7 @@
 package gr.nifitsas.dealsapp.controller;
 
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
@@ -49,22 +49,22 @@ public class CategoryController {
 
   }
   @PatchMapping("/update")
-  public ResponseEntity<CategoryReadOnlyDTO> updateCategory(@RequestBody CategoryUpdateDTO categoryUpdateDTO) throws AppObjectAlreadyExists, AppObjectNotFoundException {
+  public ResponseEntity<CategoryReadOnlyDTO> updateCategory(@RequestBody CategoryUpdateDTO categoryUpdateDTO) throws AppObjectAlreadyExistsException, AppObjectNotFoundException {
     try {
       CategoryReadOnlyDTO category = categoryService.updateCategory(categoryUpdateDTO);
       return new ResponseEntity<>(category, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExists | AppObjectNotFoundException e) {
+    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException e) {
       LOGGER.error("ERROR: Could not update category." + categoryUpdateDTO.getName(), e);
       throw e;
     }
 
   }
    @PostMapping("/add")
-   public ResponseEntity<CategoryReadOnlyDTO> addCategory(@RequestBody CategoryInsertDTO categoryInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists {
+   public ResponseEntity<CategoryReadOnlyDTO> addCategory(@RequestBody CategoryInsertDTO categoryInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExistsException {
      try {
         CategoryReadOnlyDTO category = categoryService.saveCategory(categoryInsertDTO);
        return new ResponseEntity<>(category, HttpStatus.CREATED);
-     } catch (AppObjectAlreadyExists | AppObjectInvalidArgumentException e) {
+     } catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException e) {
        LOGGER.error("ERROR: Could not add category.", e);
        throw e;
      }

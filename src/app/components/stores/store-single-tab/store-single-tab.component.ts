@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
+import { UsersService } from '@/src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-store-single-tab',
@@ -31,6 +32,8 @@ export class StoreSingleTabComponent {
   categoriesList: DealCategories[] = [];
   storeService = inject(StoresService);
   productService = inject(ProductsService);
+  userService = inject(UsersService);
+  user = this.userService.user;
   isLoading = true;
   hasError = false;
   editStoreEnabled = false;

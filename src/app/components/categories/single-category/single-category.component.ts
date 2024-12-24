@@ -6,7 +6,7 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriesService } from '@/src/app/shared/services/categories.service';
-import { filterSend } from '@/src/app/shared/interfaces/products';
+import type { filterSend } from '@/src/app/shared/interfaces/products';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 
@@ -24,12 +24,17 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
   styleUrl: './single-category.component.css',
 })
 export class SingleCategoryComponent {
-  dealsList: ImportedDeal[] = [];
+  //==============================================
+  //  Services injection
+  //==============================================
   route = inject(ActivatedRoute);
   categoryService = inject(CategoriesService);
   location = inject(Location);
-
   productService = inject(ProductsService);
+  //==============================================
+  //  Properties
+  //==============================================
+  dealsList: ImportedDeal[] = [];
   editStoreEnabled = false;
   totalElements = 0;
   pagesNumber = 0;
@@ -41,19 +46,23 @@ export class SingleCategoryComponent {
   hasError = false;
   category: any = null;
 
+  //==============================================
+  //  Search Filter
+  //==============================================
   filter = {
     name: '',
     category: '',
     page: 0,
     size: this.pageSize,
   };
-
+  //==============================================
+  //  Gets category id from params and fetches category data
+  //==============================================
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       const categoryId = params.get('id');
       if (categoryId !== null) {
         this.categoryId = categoryId;
-        console.log('ID from address bar:', this.categoryId);
 
         this.categoryService.getCategoryById(+this.categoryId).subscribe({
           next: (category) => {
@@ -73,6 +82,9 @@ export class SingleCategoryComponent {
     });
   }
 
+  //==============================================
+  //  Pagination handles page change
+  //==============================================
   onPageChange(newPage: number): void {
     if (newPage < 0 || newPage >= this.totalPages) {
       return;
@@ -84,7 +96,9 @@ export class SingleCategoryComponent {
     this.getProductsFromSearch(this.filter);
   }
 
-  // Handle page size change
+  //==============================================
+  //  Pagination handles page size change
+  //==============================================
   onPageSizeChange(): void {
     this.filter.size = this.pageSize;
     this.pagesNumber = 0;
@@ -92,6 +106,10 @@ export class SingleCategoryComponent {
     console.log(`Page size changed to: ${this.pageSize}`);
     this.getProductsFromSearch(this.filter);
   }
+
+  //==============================================
+  //  Gets products from search
+  //==============================================
   getProductsFromSearch(filters: filterSend) {
     this.productService
       .getProductsPaginatedFiltered(filters, this.filter.page, this.filter.size)
@@ -123,6 +141,9 @@ export class SingleCategoryComponent {
       });
   }
 
+  //==============================================
+  //  Navigates to previous page
+  //==============================================
   back() {
     this.location.back();
   }

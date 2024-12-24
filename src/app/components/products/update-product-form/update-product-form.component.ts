@@ -1,5 +1,5 @@
 import type { DealCategories } from '@/src/app/shared/interfaces/deal-categories';
-import {
+import type {
   ProductData,
   ProductUpdate,
 } from '@/src/app/shared/interfaces/products';
@@ -25,11 +25,17 @@ import {
   styleUrl: './update-product-form.component.css',
 })
 export class UpdateProductFormComponent {
+  //==============================================================================
+  //Input/ Outputs / Service injections
+  //==============================================================================
   @Input() product?: ProductData;
   productService = inject(ProductsService);
   categoriesService = inject(CategoriesService);
-
   storeService = inject(StoresService);
+
+  //==============================================================================
+  // Properties
+  //==============================================================================
   categoriesList: DealCategories[] = [];
   storesList: Store[] = [];
   fileSelected = false;
@@ -42,7 +48,9 @@ export class UpdateProductFormComponent {
     'image/webp',
   ];
   updateProductSuccessMessage = false;
-
+  //==============================================================================
+  //ngOnInit to get categories and stores on page load
+  //==============================================================================
   ngOnInit() {
     this.addProductSuccessMessage = false;
     this.getCategories();
@@ -62,7 +70,7 @@ export class UpdateProductFormComponent {
       });
     }
   }
-
+  //==============================================================================
   //Add Product Form
   //==============================================================================
   updateProductForm = new FormGroup({
@@ -83,7 +91,7 @@ export class UpdateProductFormComponent {
     updateDealCoupon: new FormControl<string>(''),
     updateDealPrice: new FormControl<number>(0, Validators.required),
   });
-
+  //==============================================================================
   //Add Product
   //==============================================================================
   onUpdateProduct(value: ProductUpdate, productId: number) {
@@ -124,11 +132,14 @@ export class UpdateProductFormComponent {
     }
 
     this.productService.updateProduct(productId, formData);
-
     this.updateProductForm.reset();
     this.updateProductSuccessMessage = true;
     this.fileSelected = false;
   }
+
+  //==============================================================================
+  //File Type Validator
+  //==============================================================================
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {

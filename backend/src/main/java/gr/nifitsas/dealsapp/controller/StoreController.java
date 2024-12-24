@@ -1,14 +1,12 @@
 package gr.nifitsas.dealsapp.controller;
 
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
-import gr.nifitsas.dealsapp.core.exceptions.AppServerException;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreUpdateDTO;
-import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.service.StoreService;
 import jakarta.validation.Valid;
@@ -71,11 +69,11 @@ public class StoreController {
     @RequestPart(name = "store") @Valid StoreInsertDTO storeInsertDTO,
     @RequestPart(name = "logo", required = true) MultipartFile logo
 
-  ) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, IOException {
+  ) throws AppObjectInvalidArgumentException, AppObjectAlreadyExistsException, IOException {
     try {
       StoreReadOnlyDTO store = storeService.saveStore(storeInsertDTO, logo);
       return new ResponseEntity<>(store, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExists | AppObjectInvalidArgumentException | IOException e) {
+    } catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException | IOException e) {
       LOGGER.error("ERROR: Could not add Store.", e);
       throw e;
     }
@@ -86,11 +84,11 @@ public class StoreController {
     @PathVariable("storeId") Long storeId,
     @RequestPart(name = "store") @Valid StoreUpdateDTO storeUpdateDTO,
     @RequestPart(name = "image", required = false) MultipartFile image
-  ) throws AppObjectAlreadyExists, AppObjectNotFoundException, IOException {
+  ) throws AppObjectAlreadyExistsException, AppObjectNotFoundException, IOException {
     try {
       StoreReadOnlyDTO category = storeService.updateStore(storeId,storeUpdateDTO, image);
       return new ResponseEntity<>(category, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExists | AppObjectNotFoundException e) {
+    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException e) {
       LOGGER.error("ERROR: Could not update Store." + storeUpdateDTO.getName(), e);
       throw e;
     }

@@ -1,7 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import type { DealCategories } from '@/src/app/shared/interfaces/deal-categories';
 import { CategoriesService } from '@/src/app/shared/services/categories.service';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 
 @Component({

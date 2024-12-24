@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { StoreTabbedMenuComponent } from '../store-tabbed-menu/store-tabbed-menu.component';
 import { AddStoreFormComponent } from '../add-store-form/add-store-form.component';
+import { UsersService } from '@/src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-all-store-view',
@@ -10,6 +11,9 @@ import { AddStoreFormComponent } from '../add-store-form/add-store-form.componen
   styleUrl: './all-store-view.component.css',
 })
 export class AllStoreViewComponent {
+  userservice = inject(UsersService);
+
+  user = this.userservice.user;
   addIsEnabled = false;
   onCancelClick(value: boolean) {
     this.addIsEnabled = value;

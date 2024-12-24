@@ -1,0 +1,134 @@
+<section class="bg-gray-50 flex items-center justify-center px-4 md:px-0">
+  <div class="mx-auto w-full max-w-lg mt-8">
+    <div>
+      <div
+        class="w-full p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800"
+      >
+        <div class="register-form mt-10">
+          @if(showSuccess){
+          <h3
+            class="text-center text-green-800 border-green-900 border-2 p-4 text-3xl my-4"
+          >
+            User created Successfully
+          </h3>
+          }@else {
+          <h3 class="text-center text-3xl my-4">Create a new Account</h3>
+          }
+
+          <form [formGroup]="registerForm" class="max-w-md mx-auto">
+            @if (errorMessages) {
+            <p class="mt-2 mb-4 text-red-900 font-light italic">
+              {{ errorMessages.description }}
+            </p>
+            }
+
+            <div class="relative z-0 w-full mb-5 group">
+              <input
+                formControlName="username"
+                type="email"
+                name="username"
+                id="username"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                required
+              />
+              @if(registerForm.get('username')?.invalid &&
+              registerForm.get('username')?.touched){
+              <label
+                for="username"
+                class="peer-focus:font-medium absolute text-sm text-red-900 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Email address is Required</label
+              >
+              }@else {
+              <label
+                for="username"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Email address</label
+              >
+              }
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+              <input
+                formControlName="password"
+                type="password"
+                name="password"
+                id="password"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                required
+              />
+              @if(registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched){
+              <label
+                for="floating_password"
+                class="peer-focus:font-medium absolute text-sm text-red-900 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Password is required</label
+              >
+              }@else {
+              <label
+                for="floating_password"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Password*</label
+              >
+              }
+            </div>
+            <div class="relative z-0 w-full mb-5 group">
+              <input
+                formControlName="confirmPassword"
+                type="password"
+                name="confirmPassword"
+                id="floating_confirmPassword"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                required
+              />
+              @if(registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched){
+              <label
+                for="floating_confirmPassword"
+                class="peer-focus:font-medium absolute text-sm text-red-900 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Confirm password must match the password</label
+              >
+              }@else {
+              <label
+                for="floating_confirmPassword"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Confirm password</label
+              >
+              }
+            </div>
+            @if (!passwordMatch) {
+            <p class="mt-2 mb-4 text-red-900 font-light italic">
+              Password and Confirm password must be the same
+            </p>
+            } @if(!registerForm.get('password')?.invalid){
+            <p class="mt-2 mb-4 text-green-900 font-light italic">
+              Password meets complexity requirements.
+            </p>
+            }@else {
+            <p class="mt-2 mb-4 text-red-900 font-light italic">
+              Passwords must be at least 8 characters long and contain at least
+              one uppercase letter, one lowercase letter, one number, and one
+              special character.
+            </p>
+            } @if(!registerForm.invalid){
+            <button
+              (click)="onNewUserAdd(registerForm.value)"
+              type="submit"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Create account
+            </button>
+            }@else {
+            <button
+              class="text-gray-500 bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center cursor-not-allowed"
+            >
+              Create account
+            </button>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

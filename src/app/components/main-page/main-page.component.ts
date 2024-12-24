@@ -1,8 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DealCardsComponent } from '../deal-cards/deal-cards.component';
-import { CategoriesSectionComponent } from './categories-grid/categories-section.component';
 import { HeroComponent } from './hero/hero.component';
-import { RouterLink } from '@angular/router';
 import { ProductsGridComponent } from '../products/products-grid/products-grid.component';
 import { DealFiltersComponent } from './deal-filters/deal-filters.component';
 import type { DealCategories } from '../../shared/interfaces/deal-categories';
@@ -11,24 +8,38 @@ import { ProductsService } from '../../shared/services/products.service';
 import type { ImportedDeal } from '../../shared/interfaces/deals';
 import type { filterSend } from '../../shared/interfaces/products';
 import { StoresService } from '../../shared/services/stores.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ErrorMessageComponent } from '../../shared/components/error-message/error-message.component';
+import { CategoriesSectionComponent } from './categories-grid/categories-section.component';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
   imports: [
-    CategoriesSectionComponent,
     HeroComponent,
     ProductsGridComponent,
+    ReactiveFormsModule,
     DealFiltersComponent,
+    CommonModule,
+    FormsModule,
+    ErrorMessageComponent,
+    CategoriesSectionComponent,
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent {
+  //==============================================
+  //  Services injection
+  //==============================================
   productService = inject(ProductsService);
   categoriesService = inject(CategoriesService);
   storesService = inject(StoresService);
 
+  //==============================================
+  //  Properties
+  //==============================================
   categoriesList: DealCategories[] = [];
   dealsList: ImportedDeal[] = [];
   storesList: any = [];
@@ -39,10 +50,18 @@ export class MainPageComponent {
   pageSize = 12;
   sortDirection = 'ASC';
   sortBy = 'name';
+  StoreId = -1;
+  errorMessage = '';
+
+  //==============================================
+  //  Boolean checks for loading and errors
+  //==============================================
   isLoading = true;
   hasError = false;
-  StoreId = -1;
 
+  //==============================================
+  //  Seach Filter
+  //==============================================
   filter = {
     name: '',
     category: '',
@@ -57,19 +76,40 @@ export class MainPageComponent {
         this.categoriesList = data;
       },
       (error) => {
-        console.error('Error fetching categories', error);
         this.hasError = true;
+        this.errorMessage = 'Error fetching categories';
       }
     );
+
     this.storesService.getStores().subscribe({
       next: (data) => {
         this.storesList = data;
       },
       error: (error) => {
-        console.log('Error while fetching stores', error);
         this.hasError = true;
+        this.errorMessage = 'Error fetching stores';
       },
     });
+  }
+
+  //==============================================
+  //  Changes page number on pagination
+  //==============================================
+  onPageChange(newPage: number): void {
+    if (newPage < 0 || newPage > this.totalPages) {
+      return; // Prevent invalid page numbers
+    }
+
+    this.pagesNumber = newPage;
+    this.getProductsFromSearch(this.filter);
+  }
+  //==============================================
+  //  Changes page size on pagination and gets products
+  //==============================================
+
+  onPageSizeChange() {
+    this.pagesNumber = 0;
+    this.getProductsFromSearch(this.filter);
   }
 
   //Get products from search form
@@ -99,16 +139,14 @@ export class MainPageComponent {
             lowestPrice: deal.lowestPrice,
           }));
 
-          console.log(this.filter);
           this.totalPages = data.totalPages;
           this.pageSize = data.pageSize;
           this.totalElements = data.totalElements;
-          console.log(this.totalPages);
-          console.log(this.pagesNumber);
         },
         error: (error) => {
-          console.error('Error fetching products', error);
           this.isLoading = false;
+          this.hasError = true;
+          this.errorMessage = 'Error fetching Deals';
         },
         complete: () => {
           this.isLoading = false;
@@ -120,14 +158,9 @@ export class MainPageComponent {
     if (filter[0] !== null) {
       this.StoreId = Number(filter[0]);
     }
-
-    console.log('STORE ID', this.StoreId);
-
     this.filter.category = String(filter[1]);
     this.filter.name = String(filter[2]);
-
-    console.log('Received filter data:', filter);
-    console.log(this.filter);
+    this.pagesNumber = 0;
     this.getProductsFromSearch(this.filter);
   }
 }

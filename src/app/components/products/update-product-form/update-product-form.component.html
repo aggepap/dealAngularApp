@@ -17,7 +17,9 @@
     }@else {
     <h1 class="font-bold text-3xl mx-auto mb-10">Update Deal</h1>
     }
-    <div class="update-form-container w-[800px] flex justify-start">
+    <div
+      class="update-form-container w-3/4 lg:w-[800px] flex flex-col md:flex-row justify-start"
+    >
       <fieldset class="border-2 border-gray-300 p-4 rounded-lg">
         <legend
           class="text-lg font-medium text-gray-700 px-2 py-1 bg-white rounded-lg border border-gray-300 shadow-sm"
@@ -27,7 +29,7 @@
         <div class="mb-5">
           <label
             for="updateProductCategory"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="block mb-2 text-sm font-medium text-gray-900"
             >Choose a Category*</label
           >
           @if(updateProductForm.get('updateProductCategory')?.invalid &&
@@ -39,7 +41,7 @@
           <select
             id="updateProductCategory"
             formControlName="updateProductCategory"
-            class="form-select"
+            class="bg-gray-50 form-select"
             required
           >
             @for (category of categoriesList; track category.id) {
@@ -50,7 +52,7 @@
         <div class="mb-5">
           <label
             for="updateProductName"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="block mb-2 text-sm font-medium text-gray-900"
             >Product Title*</label
           >
           <input
@@ -58,7 +60,7 @@
             type="text"
             id="updateProductName"
             formControlName="updateProductName"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="{{ product?.name }}"
             required
           />
@@ -79,7 +81,7 @@
             id="updateProductDescription"
             rows="4"
             formControlName="updateProductDescription"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Product description"
             required
           ></textarea>
@@ -93,23 +95,20 @@
         </div>
         <div class="mb-5">
           <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="block mb-2 text-sm font-medium text-gray-900"
             for="user_avatar"
             >Product image*</label
           >
           <input
             formControlName="updateProductImage"
             (change)="checkFileType($event)"
-            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
             aria-describedby="product image"
             id="updateProductImage"
             type="file"
             accept="image/*"
           />
-          <div
-            class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-            id="user_avatar_help"
-          >
+          <div class="mt-1 text-sm text-gray-500" id="user_avatar_help">
             Please upload an image of the product
           </div>
         </div>
@@ -123,7 +122,7 @@
         <div class="mb-5">
           <label
             for="updateDealStore"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="block mb-2 text-sm font-medium text-gray-900"
             >Choose a Store*</label
           >
           @if(updateProductForm.get('updateDealStore')?.invalid &&
@@ -135,7 +134,7 @@
           <select
             id="updateDealStore"
             formControlName="updateDealStore"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             required
           >
             @for (store of storesList; track store.id) {
@@ -146,7 +145,7 @@
         <div class="mb-5">
           <label
             for="updateDealURL"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="block mb-2 text-sm font-medium text-gray-900"
             >URL*</label
           >
           <input
@@ -154,7 +153,7 @@
             type="url"
             id="updateDealURL"
             formControlName="updateDealURL"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="URL Link for deal"
           />
           @if(updateProductForm.get('updateDealURL')?.invalid &&
@@ -166,7 +165,7 @@
           <div class="mb-5 w-3/4">
             <label
               for="updateDealCoupon"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Coupon</label
             >
             <input
@@ -174,7 +173,7 @@
               type="text"
               id="updateDealCoupon"
               formControlName="updateDealCoupon"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Leave empty if no coupons is needed"
             />
           </div>
@@ -182,17 +181,17 @@
           <div class="mb-5 w-1/4">
             <label
               for="updateDealPrice"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900"
               >Price in €*</label
             >
             <input
               required
               type="number"
-              min="1"
+              min="0"
               step="any"
               id="updateDealPrice"
               formControlName="updateDealPrice"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="0"
               required
             />
@@ -214,7 +213,7 @@
 
       <button
         type="submit"
-        class="text-gray-200 bg-gray-500 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-not-allowed"
+        class="text-gray-200 bg-gray-500 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center cursor-not-allowed"
       >
         Submit
       </button>
@@ -223,7 +222,7 @@
         *ngIf="product"
         (click)="onUpdateProduct(getFormValue(), product.id)"
         type="submit"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
       >
         Submit
       </button>

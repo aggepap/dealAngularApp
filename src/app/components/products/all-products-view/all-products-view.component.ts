@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { LoadingSpinnerComponent } from '@/src/app/shared/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-all-products-view',
   standalone: true,
@@ -25,16 +26,24 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     FormsModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent,
+    RouterLink,
   ],
   templateUrl: './all-products-view.component.html',
   styleUrl: './all-products-view.component.css',
 })
 export class AllProductsViewComponent {
+  //==============================================
+  //  Service Injections
+  //==============================================
   productService = inject(ProductsService);
   categoriesService = inject(CategoriesService);
 
+  //==============================================
+  //  Properties
+  //==============================================
   categoriesList: DealCategories[] = [];
   dealsList: ImportedDeal[] = [];
+  errorMessage = '';
   totalElements = 0;
   totalPages = 0;
   textFiltered = '';
@@ -42,56 +51,71 @@ export class AllProductsViewComponent {
   pageSize = 12;
   sortDirection = 'ASC';
   sortBy = 'name';
+  //Boolean checks for loading and error
   isLoading = true;
   hasError = false;
 
+  //==============================================
+  //  Form
+  //==============================================
   @ViewChild('dropdownButton', { static: false }) dropdownButton!: ElementRef;
   @ViewChild('dropdownMainButton', { static: false })
   dropdownMainButton!: ElementRef;
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
 
+  //==============================================
+  //  Search Filter
+  //==============================================
   filter = {
     name: '',
     category: '',
     page: this.pagesNumber,
     size: this.pageSize,
   };
-
+  //==============================================
+  // ngOnInit
+  //==============================================
   ngOnInit() {
     this.getProductsFromSearch(this.filter);
-    this.categoriesService.getCategories().subscribe(
-      (data: DealCategories[]) => {
+    this.categoriesService.getCategories().subscribe({
+      next: (data: DealCategories[]) => {
         this.categoriesList = data;
       },
-      (error) => console.error('Error fetching categories', error)
-    );
+      error: (error) => {
+        this.hasError = true;
+        this.errorMessage = 'Failed to get Categories';
+      },
+    });
   }
-
+  //==============================================
+  //  Changes page number on pagination
+  //==============================================
   onPageChange(newPage: number): void {
     if (newPage < 0 || newPage > this.totalPages) {
       return; // Prevent invalid page numbers
     }
 
     this.pagesNumber = newPage;
-    console.log(`Page changed to: ${this.pagesNumber}`);
     this.getProductsFromSearch(this.filter);
   }
+  //==============================================
   //Search Form
-  //==============================================================================
+  //==============================================
   searchForm = new FormGroup({
     categoriesSelect: new FormControl('', Validators.required),
     searchField: new FormControl('', [Validators.required]),
   });
 
+  //==============================================
   //Change category name on select at dropdown list click
-  //==============================================================================
+  //==============================================
   pickCategoryFromDropdown(categoryName: DealCategories) {
     const mainButton: HTMLElement = this.dropdownMainButton.nativeElement;
     mainButton.innerText = categoryName.name;
   }
-
+  //==============================================
   //Get products from search form
-  //==============================================================================
+  //==============================================
   getProductsFromSearch(filters: filterSend) {
     this.productService
       .getProductsPaginatedFiltered(filters, this.pagesNumber, this.pageSize)
@@ -111,17 +135,14 @@ export class AllProductsViewComponent {
             image: deal.image,
             lowestPrice: deal.lowestPrice,
           }));
-
-          console.log(this.filter);
           this.totalPages = data.totalPages;
           this.pageSize = data.pageSize;
           this.totalElements = data.totalElements;
-          console.log(this.totalPages);
-          console.log(this.pagesNumber);
         },
         error: (error) => {
-          console.error('Error fetching products', error);
           this.isLoading = false;
+          this.hasError = true;
+          this.errorMessage = 'Failed to load products';
         },
         complete: () => {
           this.isLoading = false;
@@ -133,6 +154,9 @@ export class AllProductsViewComponent {
     this.getProductsFromSearch(this.filter);
   }
 
+  //==============================================
+  //  Generates new filter on changes and make a new search
+  //==============================================
   generateSearchFilter(value: any) {
     this.filter = {
       name: value.searchField,

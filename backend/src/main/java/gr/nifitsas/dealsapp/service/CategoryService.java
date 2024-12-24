@@ -1,6 +1,6 @@
 package gr.nifitsas.dealsapp.service;
 
-import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExists;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
@@ -36,9 +36,9 @@ public class CategoryService implements ICategoryService {
 
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public CategoryReadOnlyDTO saveCategory(CategoryInsertDTO dto) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
+  public CategoryReadOnlyDTO saveCategory(CategoryInsertDTO dto) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
     if (categoryRepository.findByName(dto.getName()).isPresent()) {
-      throw new AppObjectAlreadyExists("Category", "Category with name " + dto.getName() + " already exists");
+      throw new AppObjectAlreadyExistsException("Category", "Category with name " + dto.getName() + " already exists");
     }
     Category category = mapper.mapToCategoryEntity(dto);
     Category savedCategory = categoryRepository.save(category);
@@ -47,10 +47,10 @@ public class CategoryService implements ICategoryService {
 
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public CategoryReadOnlyDTO updateCategory(CategoryUpdateDTO categoryUpdateDTO) throws AppObjectNotFoundException, AppObjectAlreadyExists {
+  public CategoryReadOnlyDTO updateCategory(CategoryUpdateDTO categoryUpdateDTO) throws AppObjectNotFoundException, AppObjectAlreadyExistsException {
     Optional<Category> existingCategory = categoryRepository.findByName(categoryUpdateDTO.getName());
     if (existingCategory.isPresent() && !existingCategory.get().getId().equals(categoryUpdateDTO.getId())) {
-      throw new AppObjectAlreadyExists("Category", "Category with name '" + categoryUpdateDTO.getName() + "' already exists.");
+      throw new AppObjectAlreadyExistsException("Category", "Category with name '" + categoryUpdateDTO.getName() + "' already exists.");
     }
 
     Category selectedCategory = categoryRepository.findById(categoryUpdateDTO.getId())
