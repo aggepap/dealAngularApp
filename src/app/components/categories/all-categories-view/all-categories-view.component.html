@@ -61,7 +61,7 @@
             <button
               (click)="onUpdateClick(category.id)"
               type="button"
-              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               update
             </button>
@@ -69,7 +69,7 @@
             <button
               (click)="onDeleteClick(category.id)"
               type="button"
-              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Delete
             </button>
@@ -90,7 +90,7 @@
             <div>
               <label
                 for="input-group-icon"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                class="block mb-2 text-sm font-medium text-gray-900"
                 >font-Awesome Icon <i class="fa-solid {{ selectedIcon }}"></i>
               </label>
 
@@ -101,7 +101,7 @@
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
-                    class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                    class="w-4 h-4 text-gray-500"
                     viewBox="0 0 512 512"
                   >
                     <!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -113,7 +113,7 @@
 
                 <select
                   (change)="onIconChange($event)"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                   name="cat-update-icon"
                   id="cat-update-icon"
                   formControlName="cat-update-icon"
@@ -135,7 +135,7 @@
             <div class="">
               <label
                 for="input-group-name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                class="block mb-2 text-sm font-medium text-gray-900"
                 >New category name</label
               >
               <div class="relative mb-2">
@@ -184,7 +184,7 @@
             <button
               (click)="onUpdateConfirm(category.id, updateForm.value)"
               type="submit"
-              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               update
             </button>
@@ -193,7 +193,7 @@
             <button
               (click)="OnCancelClick(category.id)"
               type="button"
-              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+              class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Cancel
             </button>

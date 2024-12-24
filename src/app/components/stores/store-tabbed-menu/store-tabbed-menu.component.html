@@ -1,6 +1,9 @@
+@if(isError){
+<app-error-message [message]="errorMessage"></app-error-message>
+}@else{
 <div class="md:flex pt-10">
   <ul
-    class="flex-column space-y space-y-1 text-sm font-medium bg-blue-700 rounded-md py-5 text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0"
+    class="flex-column space-y space-y-1 text-sm font-medium bg-blue-700 rounded-md py-5 text-gray-500 md:me-4 mb-4 md:mb-0"
   >
     <li class="text-center pb-2 text-white font-bold">Καταστήματα:</li>
     @for (entry of storeList; track entry.id) {
@@ -8,7 +11,7 @@
       <a
         (click)="onStoreClick(entry.id)"
         href="javascript:"
-        class="flex items-center justify-start pl-4 pr-10 py-3 text-white bg-blue-700 hover:bg-blue-900 active w-11/12 xl:w-full mx-auto dark:bg-blue-600 gap-2"
+        class="flex items-center justify-start pl-4 pr-10 py-3 text-white bg-blue-700 hover:bg-blue-900 active w-11/12 xl:w-full mx-auto gap-2"
         aria-current="page"
       >
         @if(entry.logo){
@@ -20,7 +23,13 @@
           alt="{{ entry.name }} logo"
         />
         }@else{
-        <div class="px-[10px]"></div>
+        <img
+          class="rounded-full border-2"
+          src="store.png"
+          width="20px"
+          height="20px"
+          alt="{{ entry.name }} logo"
+        />
         }
         <span>{{ entry.name }}</span>
       </a>
@@ -28,7 +37,7 @@
     }
   </ul>
   <div
-    class="p-6 bg-gray-50 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full flex flex-col"
+    class="p-6 bg-gray-50 text-medium text-gray-500 rounded-lg w-full flex flex-col"
   >
     @if (pickedStore){
     <div class="text-center">
@@ -42,10 +51,11 @@
     <app-store-single-tab [storeInfo]="pickedStore" />
     }@else {
     <div class="text-center">
-      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+      <h3 class="text-lg font-bold text-gray-900 mb-2">
         Please select a store
       </h3>
     </div>
     }
   </div>
 </div>
+}

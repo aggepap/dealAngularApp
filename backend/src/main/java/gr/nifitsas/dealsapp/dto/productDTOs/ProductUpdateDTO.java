@@ -18,6 +18,5 @@ public class ProductUpdateDTO {
   private String coupon;
   private String url;
   private Double price;
-  private Long categoryId;
-  private Long storeId;
+
 }

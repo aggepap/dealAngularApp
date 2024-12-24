@@ -11,11 +11,18 @@ import { RouterLink } from '@angular/router';
   styleUrl: './categories-section.component.css',
 })
 export class CategoriesSectionComponent {
+  //======================================================================
+  // Service Injection and Inputs
+  //======================================================================
   @Input() dealCategory: DealCategories | undefined;
-
   categoriesService = inject(CategoriesService);
+
+  //======================================================================
+  //  Properties
+  //======================================================================
   categoriesList: DealCategories[] = [];
 
+  //Get Categories from API and store in categoriesList on page load
   ngOnInit() {
     let count = 0;
     this.categoriesService.getCategories().subscribe(

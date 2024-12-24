@@ -91,7 +91,7 @@
     <button
       (click)="enableProductEdit()"
       type="button"
-      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
     >
       <i class="fa-solid fa-pen-to-square pr-2"></i>
       Edit Product
@@ -100,7 +100,7 @@
     <button
       (click)="onDeleteProductClick()"
       type="button"
-      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white"
     >
       <i class="fa-solid fa-circle-minus pr-2"></i>
       Delete Product
@@ -115,19 +115,19 @@
 </div>
 <!-- Admin Menu -->
 }
-<section class="mb-6 pt-4 bg-white dark:bg-gray-900 antialiased">
+<section class="mb-6 pt-4 bg-white antialiased">
   <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
     <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
       <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">
         @if (product.image.savedName != null) {
         <img
-          class="w-full dark:hidden"
+          class="w-full"
           [src]="apiUrl + '/uploads/' + product.image.savedName"
           alt=""
         />
         }@else{
         <img
-          class="w-full dark:hidden"
+          class="w-full"
           src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
           alt=""
         />
@@ -149,7 +149,7 @@
             </p>
           </a>
         </div>
-        <hr class="mb-4 mt-1 border-gray-200 dark:border-gray-800" />
+        <hr class="mb-4 mt-1 border-gray-200" />
         <div class="mt-6 sm:mt-8 lg:mt-0">
           <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">
             {{ product.name }}

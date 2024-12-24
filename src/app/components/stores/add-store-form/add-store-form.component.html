@@ -3,7 +3,7 @@
     <div class="update-form-item mb-5 w-full">
       <label
         for="addStoreName"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        class="block mb-2 text-sm font-medium text-gray-900"
         >New Store Name</label
       >
       <div class="relative">
@@ -11,7 +11,7 @@
           class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
         >
           <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            class="w-4 h-4 text-gray-500"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 448 512"
@@ -26,7 +26,7 @@
           id="addStoreName"
           name="addStoreName"
           formControlName="addStoreName"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-11/12 md:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
           placeholder="New Store Name"
           required
         />
@@ -42,7 +42,7 @@
     <div class="update-form-item mb-5 w-full">
       <label
         for="addStoreUrl"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        class="block mb-2 text-sm font-medium text-gray-900"
         >New Store URL</label
       >
       <div class="relative">
@@ -50,7 +50,7 @@
           class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
         >
           <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            class="w-4 h-4 text-gray-500"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
           >
@@ -64,7 +64,7 @@
           id="addStoreUrl"
           name="addStoreUrl"
           formControlName="addStoreUrl"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
           placeholder="https://www.example.com"
           required
         />
@@ -80,7 +80,7 @@
   <div class="update-form-item">
     <label
       for="addStoreLogo"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      class="block mb-2 text-sm font-medium text-gray-900"
       >New Store Logo</label
     >
     <div class="relative">
@@ -92,7 +92,7 @@
         id="addStoreLogo"
         formControlName="addStoreLogo"
         (change)="checkFileType($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
         placeholder="New Store logo"
         accept="image/*"
         required
@@ -107,11 +107,10 @@
   </div>
   <div class="add-buttons mt-5 flex justify-around">
     @if(addStoreForm.get("addStoreName")?.invalid ||
-    addStoreForm.get("addStoreUrl")?.invalid ||
-    addStoreForm.get("addStoreLogo")?.invalid) {
+    addStoreForm.get("addStoreUrl")?.invalid ) {
     <button
       type="submit"
-      class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 md:w-[200px]"
+      class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"
     >
       Add
     </button>
@@ -119,7 +118,7 @@
     <button
       (click)="onNewStoreAdd(addStoreForm.value)"
       type="submit"
-      class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 md:w-[200px]"
+      class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"
     >
       Add
     </button>
@@ -128,7 +127,7 @@
     <button
       (click)="OnCancelClick()"
       type="button"
-      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 md:w-[200px]"
+      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"
     >
       Cancel
     </button>

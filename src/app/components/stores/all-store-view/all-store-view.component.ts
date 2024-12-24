@@ -12,12 +12,23 @@ import { UsersService } from '@/src/app/shared/services/users.service';
 })
 export class AllStoreViewComponent {
   userservice = inject(UsersService);
-
   user = this.userservice.user;
   addIsEnabled = false;
+
+  /**
+   * Handles the cancel event for the "add" form.
+   * Sets the `addIsEnabled` flag based on the provided boolean value.
+   *
+   * @param value A boolean value indicating whether the "add" functionality should be enabled.
+   */
   onCancelClick(value: boolean) {
     this.addIsEnabled = value;
   }
+
+  /**
+   * Handles the click event on an "add" button.
+   * Toggles the `addIsEnabled` flag, which  controls the visibility of an "add" form or related UI elements.
+   */
   onAddButtonClick() {
     this.addIsEnabled = !this.addIsEnabled;
   }

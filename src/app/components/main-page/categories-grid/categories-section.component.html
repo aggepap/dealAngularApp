@@ -1,9 +1,7 @@
-<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-16">
+<section class="bg-gray-50 py-8 antialiased md:py-16">
   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
     <div class="mb-4 flex items-center justify-between gap-4 md:mb-8">
-      <h2
-        class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl"
-      >
+      <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">
         Deals by category
       </h2>
 
@@ -11,7 +9,7 @@
         routerLink="/categories"
         href="#"
         title=""
-        class="flex items-center text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
+        class="flex items-center text-base font-medium text-primary-700 hover:underline"
       >
         See more categories
         <svg
@@ -40,9 +38,9 @@
       } @else { @for (category of categoriesList; track category.id) {
       <a
         routerLink="/categories/{{ category.id }}"
-        class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+        class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50"
         ><i class="fa-solid {{ category.icon }}"></i>
-        <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+        <span class="text-sm font-medium text-gray-900">{{
           category.name
         }}</span>
       </a>

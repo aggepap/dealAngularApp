@@ -19,8 +19,15 @@ import { UsersService } from './users.service';
  */
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
+  //======================================================
+  //  Inject Services
+  //======================================================
   router = inject(Router);
   userService = inject(UsersService);
+
+  //======================================================
+  //  Properties
+  //======================================================
   user = this.userService.user;
   sessionExpired = this.userService.sessionExpired;
 
@@ -32,6 +39,7 @@ export class AuthInterceptorService implements HttpInterceptor {
    * @description Intercepts the HTTP request and adds the Authorization header if a token is present in local storage.
    * Handles 401/403 errors by removing the token, setting sessionExpired flag and redirecting to the login page.
    */
+
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authToken = localStorage.getItem('access_token');
     if (authToken) {

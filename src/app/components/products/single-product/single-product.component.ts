@@ -42,7 +42,6 @@ export class SingleProductComponent {
   product?: ProductData;
   couponClicked = false;
 
-  // constructor(private route: ActivatedRoute) {}
   //==============================================================================
   //  ngOnInit
   //==============================================================================
@@ -60,24 +59,33 @@ export class SingleProductComponent {
     this.getProductById(this.productId);
   }
 
-  // Calls delete products service when delete button is clicked
+  /**
+   * Calls the `deleteProduct` service method when the delete button is clicked.
+   */
   onDeleteProductClick() {
     this.productService.deleteProduct(this.productId);
   }
 
-  //Show edit product form when button is clicked
+  /**
+   * Toggles the visibility of the product edit form.
+   */
   enableProductEdit() {
     this.editProductIsEnabled = !this.editProductIsEnabled;
   }
 
+  /**
+   * Handles the click event on a coupon. Copies the coupon text to the clipboard and sets the `couponClicked` flag.
+   * @param coupon The coupon code to copy.
+   */
   onCouponClick(coupon: string) {
     navigator.clipboard.writeText(coupon);
     this.couponClicked = true;
   }
 
-  /*
-    Uses productService to find product with provided id
-  */
+  /**
+   * Uses `productService` to find product with provided ID.
+   * @param id The ID of the product to retrieve.
+   */
   getProductById(id: number) {
     this.productService.getProductById(id).subscribe({
       next: (data: ProductData) => {

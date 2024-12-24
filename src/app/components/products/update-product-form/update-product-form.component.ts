@@ -48,6 +48,7 @@ export class UpdateProductFormComponent {
     'image/webp',
   ];
   updateProductSuccessMessage = false;
+
   //==============================================================================
   //ngOnInit to get categories and stores on page load
   //==============================================================================
@@ -91,9 +92,14 @@ export class UpdateProductFormComponent {
     updateDealCoupon: new FormControl<string>(''),
     updateDealPrice: new FormControl<number>(0, Validators.required),
   });
-  //==============================================================================
-  //Add Product
-  //==============================================================================
+
+  /**
+   * Handles the form submission for updating a product.
+   * Creates a FormData object and sends it to the `productService` for updating the product.
+   *
+   * @param value The updated product data from the form.
+   * @param productId The ID of the product to update.
+   */
   onUpdateProduct(value: ProductUpdate, productId: number) {
     console.log('Updated value', value);
 
@@ -121,25 +127,27 @@ export class UpdateProductFormComponent {
     if (categoryId) {
       formData.append('categoryId', categoryId.toString());
     }
-
-    formData.append('storeId', storeId.toString());
-
+    if (storeId) {
+      formData.append('storeId', storeId.toString());
+    }
     // Check if an image was selected and send it
     if (imageInput?.files?.[0]) {
       const imageFile = imageInput.files[0];
       formData.append('image', imageFile);
       console.log(imageFile);
     }
+    console.log('FORMDATA', formData);
 
     this.productService.updateProduct(productId, formData);
     this.updateProductForm.reset();
     this.updateProductSuccessMessage = true;
     this.fileSelected = false;
   }
-
-  //==============================================================================
-  //File Type Validator
-  //==============================================================================
+  /**
+   * Checks the selected file type against the allowed file types.
+   *
+   * @param event The file input change event.
+   */
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -154,9 +162,9 @@ export class UpdateProductFormComponent {
     }
   }
 
-  //==============================================================================
-  //Get Categories for dropdown
-  //==============================================================================
+  /**
+   * Retrieves categories from the `categoriesService` and sorts them alphabetically.
+   */
   getCategories() {
     this.categoriesService.getCategories().subscribe({
       next: (data: DealCategories[]) => {
@@ -177,9 +185,9 @@ export class UpdateProductFormComponent {
     });
   }
 
-  //==============================================================================
-  //Get Stores for dropdown
-  //==============================================================================
+  /**
+   * Retrieves stores from the `storeService` and sorts them alphabetically.
+   */
   getStores() {
     this.storeService.getStores().subscribe({
       next: (data: Store[]) => {

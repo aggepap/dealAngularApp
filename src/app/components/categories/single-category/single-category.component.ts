@@ -68,7 +68,6 @@ export class SingleCategoryComponent {
           next: (category) => {
             this.filter.category = String(category.id);
             this.categoryName = category.name;
-            console.log('Category filter set:', this.filter.category);
             this.getProductsFromSearch(this.filter);
           },
           error: (error) => {
@@ -82,9 +81,11 @@ export class SingleCategoryComponent {
     });
   }
 
-  //==============================================
-  //  Pagination handles page change
-  //==============================================
+  /**
+   * Handles the event when the user changes the current page number for pagination.
+   *
+   * @param newPage The new page number to navigate to (starting from 0).
+   */
   onPageChange(newPage: number): void {
     if (newPage < 0 || newPage >= this.totalPages) {
       return;
@@ -96,9 +97,9 @@ export class SingleCategoryComponent {
     this.getProductsFromSearch(this.filter);
   }
 
-  //==============================================
-  //  Pagination handles page size change
-  //==============================================
+  /**
+   * Handles the event when the user changes the number of items displayed per page.
+   */
   onPageSizeChange(): void {
     this.filter.size = this.pageSize;
     this.pagesNumber = 0;
@@ -107,9 +108,11 @@ export class SingleCategoryComponent {
     this.getProductsFromSearch(this.filter);
   }
 
-  //==============================================
-  //  Gets products from search
-  //==============================================
+  /**
+   * Retrieves a filtered and paginated list of products from the backend using the `productService`.
+   *
+   * @param filters An object containing search filters to be applied.
+   */
   getProductsFromSearch(filters: filterSend) {
     this.productService
       .getProductsPaginatedFiltered(filters, this.filter.page, this.filter.size)
@@ -141,9 +144,9 @@ export class SingleCategoryComponent {
       });
   }
 
-  //==============================================
-  //  Navigates to previous page
-  //==============================================
+  /**
+   * Navigates back to the previous page using the Angular `location` service.
+   */
   back() {
     this.location.back();
   }

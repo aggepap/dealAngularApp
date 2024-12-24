@@ -19,6 +19,12 @@ export class ProductsService {
 
   // Get latest Store products
   //==============================================================================
+
+  /**
+   * Retrieves a list of the latest products from the backend API.
+   *
+   * @returns Observable of an array of `ImportedDeal` objects.
+   */
   getLatestProducts() {
     return this.http.get<ImportedDeal[]>(`${PRODUCTS_API_URL}/all`, {
       headers: {
@@ -28,6 +34,15 @@ export class ProductsService {
   }
 
   // Add a new product
+  //==============================================================================
+
+  /**
+   * Creates a new product on the backend API using FormData.
+   *
+   * @param formData An object containing product data in FormData format.
+   *
+   * @returns Subscription object (for advanced error handling if needed).
+   */
   addProduct(formData: FormData) {
     return this.http.post(`${PRODUCTS_API_URL}/add`, formData).subscribe({
       next: (response) => {
@@ -39,6 +54,14 @@ export class ProductsService {
     });
   }
 
+  /**
+   * Updates an existing product on the backend API using FormData.
+   *
+   * @param productId The ID of the product to update.
+   * @param formData An object containing updated product data in FormData format.
+   *
+   * @returns Subscription object (for advanced error handling if needed).
+   */
   updateProduct(productId: number, formData: FormData) {
     return this.http
       .put(`${PRODUCTS_API_URL}/update/${productId}`, formData)
@@ -60,6 +83,16 @@ export class ProductsService {
 
   //Get products paginated and filtered by name and category
   //==============================================================================
+
+  /**
+   * Retrieves a paginated and filtered list of products from the backend API.
+   *
+   * @param filter An object containing filtering criteria (name and category).
+   * @param page The current page number for pagination.
+   * @param size The number of products to retrieve per page.
+   *
+   * @returns Observable of an array of `ProductData` objects.
+   */
   getProductsPaginatedFiltered(filter: filterSend, page: number, size: number) {
     const params = new HttpParams()
       .set('name', filter.name)
@@ -70,8 +103,14 @@ export class ProductsService {
     return this.http.get(`${PRODUCTS_API_URL}/results`, { params });
   }
 
-  //Get products paginated and filtered by name and category
-  //==============================================================================
+  /**
+   * Retrieves a paginated and filtered list of products from a specific store.
+   * @param filter An object containing filtering criteria (name and category).
+   * @param page The current page number for pagination.
+   * @param size The number of products to retrieve per page.
+   * @param storeId The ID of the store to filter products by.
+   * @returns Observable of an array of `ProductData` objects.
+   */
   getStoreProductsPaginatedFiltered(
     filter: filterSend,
     page: number,
@@ -90,6 +129,11 @@ export class ProductsService {
     return this.http.get(`${PRODUCTS_API_URL}/results`, { params });
   }
 
+  /**
+   * Retrieves a specific product by its ID.
+   * @param id The ID of the product to retrieve.
+   * @returns Observable of a single `ProductData` object.
+   */
   getProductById(id: number) {
     return this.http.get<ProductData>(`${PRODUCTS_API_URL}/find?id=${id}`, {
       headers: {
@@ -98,6 +142,10 @@ export class ProductsService {
     });
   }
 
+  /**
+   * Deletes a product by its ID.
+   * @param id The ID of the product to delete.
+   */
   deleteProduct(id: number) {
     let productName = '';
     this.getProductById(id).subscribe({

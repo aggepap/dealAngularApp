@@ -7,6 +7,7 @@ import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreUpdateDTO;
+import gr.nifitsas.dealsapp.model.Attachment;
 import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.ProductRepository;
@@ -80,12 +81,35 @@ public class StoreService implements IStoreService {
    return mapper.mapToStoreReadOnlyDTO(savedStore);
   }
 
+  /**
+   * Deletes a store with provided id. If the store has products, products are moved to default store named "Other".
+   * If "Other store does not already exist, it is created automatically,
+   * @param id
+   * @return A readonlyDTO with the details of deleted store
+   * @throws AppObjectNotFoundException
+   * @throws AppObjectInvalidArgumentException
+   */
   @Override
   @Transactional(rollbackOn = Exception.class)
   public StoreReadOnlyDTO deleteStore(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
     Optional<Store> optionalStore = storeRepository.findById(id);
 
+    if(optionalStore.orElseThrow().getName().equals("Other")){
+      throw new AppObjectInvalidArgumentException("Store", "Store 'Other' cannot be deleted");
+    }
+
     if (optionalStore.isPresent()) {
+      Optional<Store> defaultStore = storeRepository.findByName("Other");
+
+      Store resolvedDefaultStore;
+      if (defaultStore.isEmpty()) {
+        var defaultStoreDTO = new StoreInsertDTO("Other", "https://localhost4200.com/stores");
+         resolvedDefaultStore = mapper.mapToStoreEntity(defaultStoreDTO);
+        storeRepository.save(resolvedDefaultStore);
+      } else{
+        resolvedDefaultStore = defaultStore.get();
+    }
+        optionalStore.get().getAllStoreProducts().forEach(resolvedDefaultStore::addStoreProduct);
       Store store = optionalStore.get();
       storeRepository.delete(store);
       return mapper.mapToStoreReadOnlyDTO(store);
@@ -93,6 +117,12 @@ public class StoreService implements IStoreService {
       throw new AppObjectNotFoundException("Store", "Store with id: " + id + " not found");
     }
   }
+
+  /**
+   * Gets the file extension of provided file
+   * @param filename
+   * @return The extension of the file. "" if now "." is present in filename
+   */
   public String getFileExtension(String filename) {
     if (filename != null && filename.contains(".")) {
       return filename.substring(filename.lastIndexOf("."));

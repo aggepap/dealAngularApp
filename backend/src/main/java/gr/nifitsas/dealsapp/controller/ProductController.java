@@ -86,8 +86,8 @@ public class ProductController {
   @PutMapping("/update/{productId}")
   public ResponseEntity<ProductReadOnlyDTO> updateProduct(
     @PathVariable("productId") Long productId,
-    @RequestParam(name = "category", required = false) Long categoryId,
-    @RequestParam(name = "store", required = false) Long storeId,
+    @RequestParam(name = "categoryId", required = false) Long categoryId,
+    @RequestParam(name = "storeId", required = false) Long storeId,
     @RequestPart(name = "product") @Valid ProductUpdateDTO productUpdateDTO,
     @RequestPart(name = "image", required = false) MultipartFile image)
     throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException {

@@ -49,6 +49,12 @@ export class ProductsGridComponent {
   @Input() categoriesList?: DealCategories[] = [];
   @Input() basicGridSize: number | undefined;
 
+  /**
+   * Handles the click event on a coupon. Copies the coupon text to the clipboard and sets a flag to indicate that a coupon has been clicked.
+   *
+   * @param coupon The coupon code (string) to be copied to the clipboard.
+   * @param dealId The ID of the deal associated with the clicked coupon.
+   */
   onCouponClick(coupon: string, dealId: number) {
     navigator.clipboard.writeText(coupon);
     this.couponClicked = true;

@@ -40,11 +40,10 @@ public class Product extends AbstractEntity implements ImageAttachable {
     this.image = attachment;
   }
 
-
-    @ManyToOne
-    @JoinColumn(name="category_id")
-    @JsonBackReference
-    private Category category;
+  @ManyToOne
+  @JoinColumn(name="category_id")
+  @JsonBackReference
+  private Category category;
 
   @ManyToOne
   @JsonBackReference

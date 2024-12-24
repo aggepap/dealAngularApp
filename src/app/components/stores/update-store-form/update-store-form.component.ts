@@ -17,12 +17,16 @@ import {
   styleUrl: './update-store-form.component.css',
 })
 export class UpdateStoreFormComponent {
+  //==============================================================================
+  // Inputs / Outputs / Service injections
+  //==============================================================================
   storeService = inject(StoresService);
   @Input() storeInfo?: Store;
   @Output() cancelEdit = new EventEmitter<boolean>();
-  OnCancelClick() {
-    this.cancelEdit.emit(false);
-  }
+
+  //==============================================================================
+  // Properties
+  //==============================================================================
   fileSelected = false;
   allowedFileTypes = [
     'image/gif',
@@ -32,6 +36,9 @@ export class UpdateStoreFormComponent {
     'image/webp',
   ];
 
+  /**
+   * If `storeInfo` is provided, pre-populates the form with the store name and URL.
+   */
   ngOnInit() {
     if (this.storeInfo) {
       this.updateStoreForm.patchValue({
@@ -40,6 +47,19 @@ export class UpdateStoreFormComponent {
       });
     }
   }
+  /**
+   * Handles the click event on the cancel button.
+   * Emits a `false` value through the `cancelEdit` output event to indicate cancellation.
+   */
+  OnCancelClick() {
+    this.cancelEdit.emit(false);
+  }
+
+  /**
+   * Handles the confirmation of store update.
+   * @param storeId The numeric ID of the store to be updated.
+   * @param value The form data containing the updated store name and URL.
+   */
   onUpdateConfirm(storeId: number, value: any) {
     console.log(value);
     const store = {
@@ -78,6 +98,9 @@ export class UpdateStoreFormComponent {
     });
   }
 
+  /**
+   * The reactive form group for the store update form.
+   */
   updateStoreForm = new FormGroup({
     updatedStoreName: new FormControl<string>('', Validators.required),
     updatedStoreUrl: new FormControl<string>('', Validators.required),
@@ -87,6 +110,14 @@ export class UpdateStoreFormComponent {
     ),
   });
 
+  /**
+   * Handles the change event of the file input.
+   * @param event The change event object.
+   * Sets the `fileSelected` property to `true` if a file is selected and its type is allowed.
+   * If the file type is not allowed, clears the input value and sets `fileSelected` to `false`.
+   * @param event The change event object.
+   * @returns void
+   */
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {

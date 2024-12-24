@@ -57,7 +57,7 @@
   <!-- "Add a deal" Button -->
   <a
     routerLink="/deals/add"
-    class="flex justify-between items-center rounded-lg w-3/4 mx-auto border-4 bg-blue-600 p-4 text-white hover:bg-blue-800 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer my-2 transition-colors duration-300 ease-in-out"
+    class="flex justify-between items-center rounded-lg w-3/4 mx-auto border-4 bg-blue-600 p-4 text-white hover:bg-blue-800 cursor-pointer my-2 transition-colors duration-300 ease-in-out"
   >
     <div class="title-icon mx-auto">
       <span class="flex items-center gap-2"
@@ -79,9 +79,7 @@
   </div>
   }@else {
   <div class="flex flex-col items-center my-16">
-    <h1 class="text-center text-3xl font-bold text-gray-900 dark:text-white">
-      No Deals Found
-    </h1>
+    <h1 class="text-center text-3xl font-bold text-gray-900">No Deals Found</h1>
   </div>
   }
 
@@ -99,7 +97,7 @@
           <button
             (click)="onPageChange(pagesNumber - 1)"
             [disabled]="pagesNumber === 0"
-            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:pointer-events-none"
           >
             Previous
           </button>
@@ -113,7 +111,7 @@
               'text-white': pagesNumber === i
             }"
             (click)="onPageChange(i)"
-            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           >
             {{ i + 1 }}
           </button>
@@ -124,7 +122,7 @@
           <button
             (click)="onPageChange(pagesNumber + 1)"
             [disabled]="pagesNumber === totalPages - 1"
-            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
+            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:pointer-events-none"
           >
             Next
           </button>

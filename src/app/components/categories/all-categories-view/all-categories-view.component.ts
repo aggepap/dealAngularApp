@@ -27,7 +27,6 @@ export class AllCategoriesViewComponent {
   //==============================================
   categoriesService = inject(CategoriesService);
   userService = inject(UsersService);
-  user = this.userService.user;
 
   //==============================================
   //  Properties
@@ -36,6 +35,7 @@ export class AllCategoriesViewComponent {
   addIsEnabled = false;
   fontAwIcons = fontAwIcons;
   selectedIcon = '';
+  user = this.userService.user;
 
   //==============================================
   //  Get Categories from DB on init
@@ -48,30 +48,43 @@ export class AllCategoriesViewComponent {
       (error) => console.error('Error fetching categories', error)
     );
   }
-  //==============================================
-  //  Update Category when button is clicked
-  //==============================================
+
+  /**
+   * Handles the click event on the "Update" button for a specific category.
+   * Toggles the visibility of the update form associated with that category ID.
+   *
+   * @param id The ID of the category to update.
+   */
   onUpdateClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.toggle('hidden');
   }
-  //==============================================
-  //  Delete Category when button is clicked
-  //==============================================
+
+  /**
+   * Handles the click event on the "Delete" button for a specific category.
+   * Calls the `categoriesService` to delete the category using its ID.
+   *
+   * @param id The ID of the category to delete.
+   */
   onDeleteClick(id: number) {
     this.categoriesService.deleteCategory(id);
   }
 
-  //==============================================
-  //  Gets icon name to show in the form
-  //==============================================
+  /**
+   * Handles the event when the user changes the new category icon selection.
+   *
+   * @param event The event object triggered by the icon selection change.
+   */
   onIconChange($event: Event) {
     this.selectedIcon = ($event.target as HTMLInputElement).value;
   }
 
-  //==============================================
-  //  Updated category with new data
-  //==============================================
+  /**
+   * Handles the confirmation event when the user submits the updated category information.
+   *
+   * @param id The ID of the category to update.
+   * @param value An object containing the updated category data (extracted from the form).
+   */
   onUpdateConfirm(id: number, value: any) {
     console.log(value);
     const icon = value['cat-update-icon'];
@@ -90,17 +103,21 @@ export class AllCategoriesViewComponent {
         }
       );
   }
-  //==============================================
-  //  Cancel Update Category when button is clicked
-  //==============================================
+
+  /**
+   * Handles the click event on the "Cancel" button for a specific category update form.
+   * Hides the update form associated with that category ID.
+   *
+   * @param id The ID of the category whose update form needs to be hidden.
+   */
   OnCancelClick(id: number) {
     const el = document.getElementById(`update-form-${id}`);
     el?.classList.add('hidden');
   }
 
-  //==============================================
-  //  Update Category Form
-  //==============================================
+  /**
+   * FormGroup instance containing form controls for updating category icon and name.
+   */
   updateForm = new FormGroup({
     'cat-update-icon': new FormControl('', [
       Validators.required,
@@ -109,12 +126,19 @@ export class AllCategoriesViewComponent {
     'cat-update-name': new FormControl('', Validators.required),
   });
 
+  /**
+   * Toggles the value of `addIsEnabled` to control the visibility of the "Add New Category" form.
+   */
   onAddNewClick() {
     this.addIsEnabled = !this.addIsEnabled;
   }
-  //==============================================
-  // Show/hides add new category form
-  //==============================================
+
+  /**
+   * Handles the change event emitted by the `addIsEnabledChanged` component output.
+   * Updates the local `addIsEnabled` flag based on the emitted value.
+   *
+   * @param value A boolean value indicating whether "Add New Category" functionality should be enabled.
+   */
   handleAddIsEnabledChange(value: boolean) {
     this.addIsEnabled = value;
   }

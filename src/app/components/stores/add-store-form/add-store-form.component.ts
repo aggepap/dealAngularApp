@@ -1,4 +1,4 @@
-import type { Store, StoreInsert } from '@/src/app/shared/interfaces/stores';
+import type { Store } from '@/src/app/shared/interfaces/stores';
 import { fileTypeValidator } from '@/src/app/shared/services/customValidators';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
@@ -18,7 +18,15 @@ import {
   styleUrl: './add-store-form.component.css',
 })
 export class AddStoreFormComponent {
+  //==============================================================================
+  //Input/ Outputs / Service injections
+  //==============================================================================
   @Output() cancelAdd = new EventEmitter<boolean>();
+  storeService = inject(StoresService);
+
+  //==============================================================================
+  // Properties
+  //==============================================================================
   fileSelected = false;
   allowedFileTypes = [
     'image/gif',
@@ -28,14 +36,17 @@ export class AddStoreFormComponent {
     'image/webp',
   ];
 
+  /**
+   * Handles the user clicking the cancel button.
+   * Emits the `cancelAdd` event with `false` to indicate cancellation.
+   */
   OnCancelClick() {
     this.cancelAdd.emit(false);
   }
-  onAddConfirm() {
-    throw new Error('Method not implemented.');
-  }
-  storeService = inject(StoresService);
 
+  /**
+   * Reactive form group for adding a new store.
+   */
   addStoreForm = new FormGroup({
     addStoreName: new FormControl<string>('', [
       Validators.required,
@@ -53,6 +64,12 @@ export class AddStoreFormComponent {
     ]),
   });
 
+  /**
+   * Handles form submission for adding a new store.
+   * Creates a FormData object with store data and logo (if selected) and sends it to the `storeService` for adding the store.
+   *
+   * @param value The form data containing store name and URL.
+   */
   onNewStoreAdd(value: any) {
     const store = {
       name: value.addStoreName,
@@ -88,6 +105,12 @@ export class AddStoreFormComponent {
     });
   }
 
+  /**
+   * Checks the selected file type against the allowed file types.
+   * Clears the file input if the selected file type is not allowed.
+   *
+   * @param event The file input change event.
+   */
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {

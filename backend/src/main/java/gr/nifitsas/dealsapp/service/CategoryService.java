@@ -5,10 +5,13 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
+import gr.nifitsas.dealsapp.dto.StoreDTOs.StoreInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryUpdateDTO;
+import gr.nifitsas.dealsapp.model.Product;
 import gr.nifitsas.dealsapp.model.static_data.Category;
+import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,12 +70,33 @@ public class CategoryService implements ICategoryService {
   public CategoryReadOnlyDTO deleteCategory(Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException {
     Optional<Category> optionalCategory = categoryRepository.findById(id);
 
+    if(optionalCategory.orElseThrow().getName().equals("Other")){
+      throw new AppObjectInvalidArgumentException("Category", "Category 'Other' cannot be deleted");
+    }
+
     if (optionalCategory.isPresent()) {
+      Optional<Category> defaultCategory = categoryRepository.findByName("Other");
+
+      Category resolvedDefaultCategory;
+      if (defaultCategory.isEmpty()) {
+        var defaultCategoryDTO = new CategoryInsertDTO("Other", "fa-circle-info");
+       Category defaultCategoryToSave = mapper.mapToCategoryEntity(defaultCategoryDTO);
+        categoryRepository.save(defaultCategoryToSave);
+        resolvedDefaultCategory = defaultCategoryToSave;
+      } else{
+        resolvedDefaultCategory = defaultCategory.get();
+      }
+
+      Set<Product> optionalProducts = optionalCategory.get().getAllCategoryProducts();
+      for (Product product : optionalProducts) {
+        product.setCategory(resolvedDefaultCategory);
+      }
       Category category = optionalCategory.get();
       categoryRepository.delete(category);
       return mapper.mapToCategoryReadOnlyDTO(category);
     } else {
-      throw new AppObjectNotFoundException("Category", "Category not found with id: " + id);
+      throw new AppObjectNotFoundException("Category", "Category with id: " + id + " not found");
     }
-  }
+    }
+
 }

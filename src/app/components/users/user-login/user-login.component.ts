@@ -19,17 +19,42 @@ import { Location } from '@angular/common';
   styleUrl: './user-login.component.css',
 })
 export class UserLoginComponent {
+  //======================================================
+  //  Inject Services
+  //======================================================
   userService = inject(UsersService);
   location = inject(Location);
+  //======================================================
+  //  Properties
+  //======================================================
   sessionExpired = this.userService.sessionExpired;
-
   loginError = '';
 
+  /**
+   * FormGroup representing the login form.
+   */
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
 
+  /**
+   * Handles the login form submission.
+   *
+   * 1. Retrieves the form values (username and password) from the login form.
+   * 2. Calls the userLogin service to authenticate the user with the provided credentials.
+   * 3. Subscribes to the observable returned by the service:
+   *    - On success:
+   *        - Extracts the access token from the response data.
+   *        - Stores the token in local storage.
+   *        - Decodes the JWT token to obtain user information (subject, role).
+   *        - Updates the user service with the decoded user data.
+   *        - Navigates back to the previous page using the Location service.
+   *    - On error:
+   *        - Logs the error to the console.
+   *        - Sets the login error message to 'Invalid username or password'.
+   *        - Sets an error on the login form for visual feedback.
+   */
   onLogin() {
     const credentials = this.loginForm.value as Creds;
     this.userService.userLogin(credentials).subscribe({

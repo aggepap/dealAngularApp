@@ -88,6 +88,7 @@ public class ProductService implements IProductService {
     ProductUpdateDTO dto,
     MultipartFile image
   ) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException {
+
     // Fetch existing product by ID
     Product product = productRepository.findById(productId)
       .orElseThrow(() -> new AppObjectNotFoundException("Product", "Product with ID " + productId + " not found"));

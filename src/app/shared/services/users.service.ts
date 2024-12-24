@@ -33,6 +33,7 @@ export class UsersService {
   sessionExpired = signal<boolean>(false);
 
   constructor() {
+    //check if user is logged in on page load
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       const decodedTokenData = JSON.parse(
@@ -48,7 +49,12 @@ export class UsersService {
       }
     });
   }
-
+  /**
+   * Retrieves a user by their username from the backend API.
+   *
+   * @param username The username of the user to retrieve.
+   * @returns Observable of a `UserReadOnlyDTO` object containing user data (read-only format).
+   */
   getUserbyUsername(username: string) {
     return this.http.get<UserReadOnlyDTO>(
       `${STORES_API_URL}/find/username?=${username}`,
@@ -60,6 +66,12 @@ export class UsersService {
     );
   }
 
+  /**
+   * Creates a new user on the backend API using FormData containing user data.
+   *
+   * @param formData An object containing user data in `UserInsertDTO` format.
+   * @returns Observable of the newly created user data as `UserInsertDTO`.
+   */
   addUser(formData: UserInsertDTO) {
     console.log(formData);
     return this.http
@@ -71,9 +83,19 @@ export class UsersService {
       );
   }
 
+  /**
+   * Logs in a user using credentials on the backend API.
+   *
+   * @param credentials An object containing user credentials (`Creds` type).
+   * @returns Observable of an `AuthResponse` object containing authentication information (e.g., token).
+   */
   userLogin(credentials: Creds) {
     return this.http.post<AuthResponse>(`${AUTH_API_URL}/login`, credentials);
   }
+
+  /**
+   * Logs out the current user by clearing user data and access token.
+   */
   logout() {
     this.user.set(null);
     localStorage.removeItem('access_token');

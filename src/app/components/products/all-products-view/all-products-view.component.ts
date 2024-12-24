@@ -56,7 +56,7 @@ export class AllProductsViewComponent {
   hasError = false;
 
   //==============================================
-  //  Form
+  //  ViewChild elements
   //==============================================
   @ViewChild('dropdownButton', { static: false }) dropdownButton!: ElementRef;
   @ViewChild('dropdownMainButton', { static: false })
@@ -72,9 +72,11 @@ export class AllProductsViewComponent {
     page: this.pagesNumber,
     size: this.pageSize,
   };
-  //==============================================
-  // ngOnInit
-  //==============================================
+
+  /**
+   * Invoked once when the component is initialized.
+   * Fetches initial data (categories) and retrieves products based on the current search filter.
+   */
   ngOnInit() {
     this.getProductsFromSearch(this.filter);
     this.categoriesService.getCategories().subscribe({
@@ -87,35 +89,43 @@ export class AllProductsViewComponent {
       },
     });
   }
-  //==============================================
-  //  Changes page number on pagination
-  //==============================================
+  /**
+   * Handles the event when the user changes the current page number for pagination.
+   * Updates the page number and retrieves filtered products based on the current filter.
+   *
+   * @param newPage The new page number to navigate to (starting from 0).
+   */
   onPageChange(newPage: number): void {
     if (newPage < 0 || newPage > this.totalPages) {
       return; // Prevent invalid page numbers
     }
-
     this.pagesNumber = newPage;
     this.getProductsFromSearch(this.filter);
   }
-  //==============================================
-  //Search Form
-  //==============================================
+  /**
+   * FormGroup instance representing the search form for filtering products.
+   * Contains controls for selecting a category and entering a search term.
+   */
   searchForm = new FormGroup({
     categoriesSelect: new FormControl('', Validators.required),
     searchField: new FormControl('', [Validators.required]),
   });
 
-  //==============================================
-  //Change category name on select at dropdown list click
-  //==============================================
+  /**
+   * Updates the displayed category name on the dropdown button based on the selected category.
+   *
+   * @param categoryName The selected category object containing the name property.
+   */
   pickCategoryFromDropdown(categoryName: DealCategories) {
     const mainButton: HTMLElement = this.dropdownMainButton.nativeElement;
     mainButton.innerText = categoryName.name;
   }
-  //==============================================
-  //Get products from search form
-  //==============================================
+  /**
+   * Retrieves a filtered and paginated list of deals from the backend using the `productService`.
+   * Updates component state with retrieved data (deals, total pages, and total elements).
+   *
+   * @param filters An object containing search filters (name, category, page, and size).
+   */
   getProductsFromSearch(filters: filterSend) {
     this.productService
       .getProductsPaginatedFiltered(filters, this.pagesNumber, this.pageSize)
@@ -150,13 +160,21 @@ export class AllProductsViewComponent {
       });
   }
 
+  /**
+   * Handles the event when the user changes the number of items displayed per page.
+   * Resets the page number to 0 and retrieves filtered products based on the current filter and updated page size.
+   */
   onPageSizeChange() {
+    this.pagesNumber = 0;
     this.getProductsFromSearch(this.filter);
   }
 
-  //==============================================
-  //  Generates new filter on changes and make a new search
-  //==============================================
+  /**
+   * Handles form value changes in the search form.
+   * Updates the `filter` object with current search criteria and triggers a new product search.
+   *
+   * @param value An object containing the updated search form values.
+   */
   generateSearchFilter(value: any) {
     this.filter = {
       name: value.searchField,

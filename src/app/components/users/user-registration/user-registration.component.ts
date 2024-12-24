@@ -32,9 +32,10 @@ export class UserRegistrationComponent {
   userExists = false;
   errorMessages: any = {};
   showSuccess = false;
-  //==============================================
-  //  Registration Form
-  //==============================================
+
+  /**
+   * FormGroup representing the user registration form.
+   */
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [
@@ -47,9 +48,23 @@ export class UserRegistrationComponent {
     ]),
   });
 
-  //==============================================
-  //  Add a new user
-  //==============================================
+  /**
+   * Handles the user registration form submission.
+   *
+   * 1. Checks if the password and confirm password fields match.
+   *    - If they match, proceeds with user registration.
+   *    - If they don't match, sets the 'passwordMatch' flag to false to indicate an error.
+   * 2. Creates a UserInsertDTO object with the form data (trimmed username and password).
+   * 3. Calls the userService to add the new user.
+   * 4. Subscribes to the observable returned by the service:
+   *    - On success:
+   *        - Clears any existing error messages.
+   *        - Sets 'passwordMatch' to true (for informational purposes).
+   *    - On error:
+   *        - Sets the 'errorMessages' property with the error details received from the service.
+   *    - On completion (regardless of success or error):
+   *        - Sets 'showSuccess' to true to display a success message (potentially conditional based on error state).
+   */
   onNewUserAdd(value: any) {
     this.passwordMatch = true;
     this.showSuccess = false;

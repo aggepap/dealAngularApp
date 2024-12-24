@@ -6,7 +6,7 @@
   <div class="update-form-item mb-5">
     <label
       for="updatedStoreName"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      class="block mb-2 text-sm font-medium text-gray-900"
       >New Store Name</label
     >
     <div class="relative">
@@ -14,7 +14,7 @@
         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          class="w-4 h-4 text-gray-500"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
           viewBox="0 0 448 512"
@@ -29,7 +29,7 @@
         formControlName="updatedStoreName"
         id="updatedStoreName"
         name="updatedStoreName"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
         placeholder="{{ storeInfo?.name }}"
       />
     </div>
@@ -42,7 +42,7 @@
   <div class="update-form-item mb-5">
     <label
       for="updatedStoreUrl"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      class="block mb-2 text-sm font-medium text-gray-900"
       >New Store URL</label
     >
     <div class="relative">
@@ -50,7 +50,7 @@
         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          class="w-4 h-4 text-gray-500"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
         >
@@ -64,7 +64,7 @@
         formControlName="updatedStoreUrl"
         id="updatedStoreUrl"
         name="updatedStoreUrl"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
         placeholder="{{ storeInfo?.siteURL }} "
       />
     </div>
@@ -76,7 +76,7 @@
   <div class="update-form-item">
     <label
       for="updatedStoreLogo"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      class="block mb-2 text-sm font-medium text-gray-900"
       >New Store Logo</label
     >
     <div class="relative">
@@ -88,7 +88,7 @@
         formControlName="updatedStoreLogo"
         (change)="checkFileType($event)"
         id="updatedStoreLogo"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
         placeholder="New store Logo"
       />
       @if(!fileSelected){
@@ -104,14 +104,14 @@
     <button
       (click)="onUpdateConfirm(storeInfo!.id, updateStoreForm.value)"
       type="submit"
-      class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 md:w-5/12"
+      class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12"
     >
       Update
     </button>
     }@else {
     <button
       type="button"
-      class="text-gray-200 bg-gray-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 md:w-5/12 cursor-not-allowed"
+      class="text-gray-200 bg-gray-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12 cursor-not-allowed"
     >
       Update
     </button>
@@ -119,7 +119,7 @@
     <button
       (click)="OnCancelClick()"
       type="button"
-      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 md:w-5/12"
+      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12"
     >
       Cancel
     </button>

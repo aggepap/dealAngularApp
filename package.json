@@ -25,6 +25,7 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.452.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.6.13",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "tslib": "^2.3.0",

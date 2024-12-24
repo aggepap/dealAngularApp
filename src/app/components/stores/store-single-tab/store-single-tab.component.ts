@@ -28,11 +28,19 @@ import { UsersService } from '@/src/app/shared/services/users.service';
   styleUrl: './store-single-tab.component.css',
 })
 export class StoreSingleTabComponent {
-  dealsList: ImportedDeal[] = [];
-  categoriesList: DealCategories[] = [];
+  //==============================================================================
+  // Inputs / Outputs / Service injections
+  //==============================================================================
   storeService = inject(StoresService);
   productService = inject(ProductsService);
   userService = inject(UsersService);
+  @Input() storeInfo!: Store;
+
+  //==============================================================================
+  // Properties
+  //==============================================================================
+  dealsList: ImportedDeal[] = [];
+  categoriesList: DealCategories[] = [];
   user = this.userService.user;
   isLoading = true;
   hasError = false;
@@ -42,8 +50,6 @@ export class StoreSingleTabComponent {
   totalPages = 0;
   pageSize = 9;
 
-  @Input() storeInfo!: Store;
-
   filter = {
     name: '',
     category: '',
@@ -52,48 +58,71 @@ export class StoreSingleTabComponent {
     size: this.pageSize,
   };
 
+  /**
+   * Enables or disables the store edit form.
+   */
   enableStoreEdit() {
     this.editStoreEnabled = !this.editStoreEnabled;
   }
 
+  /**
+   * Handles the click event for deleting a store.
+   * @param id The ID of the store to delete.
+   */
   onDeleteStoreClick(id: number) {
     this.storeService.deleteStore(id);
   }
 
+  /**
+   * Handles the cancel event from the `UpdateStoreFormComponent`.
+   * @param value A boolean indicating whether editing was cancelled.
+   */
   onCancelClick(value: boolean) {
     this.editStoreEnabled = value;
   }
-
+  /**
+   * Lifecycle hook called when input properties change.
+   * Updates the product filter and fetches products when the `storeInfo` input changes.
+   * @param changes Object containing the changed input properties.
+   */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['storeInfo']?.currentValue) {
       this.filter.store = this.storeInfo.id;
       this.pagesNumber = 0; // Reset page number on store change
       this.filter.page = this.pagesNumber; // Update filter
-      console.log('Updated filter with store:', this.filter.store);
       this.getProductsFromSearch(this.filter); // Fetch products for the new store
     }
   }
 
+  /**
+   * Handles pagination changes.
+   * Updates the current page number and fetches products for the new page.
+   * @param newPage The new page number.
+   */
   onPageChange(newPage: number): void {
     if (newPage < 0 || newPage >= this.totalPages) {
       return;
     }
-
     this.pagesNumber = newPage;
     this.filter.page = this.pagesNumber;
-    console.log(`Page changed to: ${this.pagesNumber}`);
     this.getProductsFromSearch(this.filter);
   }
 
-  // Handle page size change
+  /**
+   * Handles page size changes.
+   * Resets the page number and fetches products with the new page size.
+   */
   onPageSizeChange(): void {
     this.filter.size = this.pageSize;
     this.pagesNumber = 0;
     this.filter.page = this.pagesNumber;
-    console.log(`Page size changed to: ${this.pageSize}`);
     this.getProductsFromSearch(this.filter);
   }
 
+  /**
+   * Fetches products from the server based on the provided filter.
+   * @param filters The filter criteria for fetching products.
+   */
   getProductsFromSearch(filters: filterSend) {
     if (this.filter.store === undefined) {
       console.warn('Store is undefined in filter');

@@ -22,9 +22,16 @@ import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading
   styleUrl: './add-product-form.component.css',
 })
 export class AddProductFormComponent {
+  //==============================================
+  //  Service Injections
+  //==============================================
   productService = inject(ProductsService);
   categoriesService = inject(CategoriesService);
   storeService = inject(StoresService);
+
+  //==============================================
+  //  Properties
+  //==============================================
   categoriesList: DealCategories[] = [];
   storesList: Store[] = [];
   fileSelected = false;
@@ -36,19 +43,26 @@ export class AddProductFormComponent {
     'image/jpg',
     'image/webp',
   ];
+  //==============================================
+  //  Boolen Checks for loading spinner
+  //==============================================
   isLoading = true;
-  //==============================================
-  //  ngOnInit
-  //==============================================
+
+  /**
+   * Invoked once when the component is initialized.
+   * Fetches initial data (categories and stores) and sets loading state to false.
+   */
   ngOnInit() {
     this.addProductSuccessMessage = false;
     this.getCategories();
     this.getStores();
     this.isLoading = false;
   }
-  //==============================================
-  //Add Product Form
-  //==============================================
+
+  /**
+   * FormGroup instance representing the form for adding a new product.
+   * Contains controls for product category, name, description, image, store, URL, coupon, and price.
+   */
   addProductForm = new FormGroup({
     addProductCategory: new FormControl(1, Validators.required),
     addProductName: new FormControl('', Validators.required),
@@ -68,8 +82,11 @@ export class AddProductFormComponent {
     AddDealPrice: new FormControl(0, Validators.required),
   });
 
-  //Add Product
-  //==============================================================================
+  /**
+   * Handles the form submission event for adding a new product.
+   *
+   * @param value An object containing the form data.
+   */
   onNewProductAdd(value: any) {
     const product = {
       name: value.addProductName.trim(),
@@ -118,9 +135,12 @@ export class AddProductFormComponent {
     this.addProductSuccessMessage = true;
     this.fileSelected = false;
   }
-  //==============================================================================
-  //Check File Type
-  //==============================================================================
+  /**
+   * Handles the file selection event for the product image upload.
+   * Validates the selected file type against a list of allowed file types.
+   *
+   * @param event The event object triggered by file selection.
+   */
   checkFileType(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -135,9 +155,10 @@ export class AddProductFormComponent {
     }
   }
 
-  //==============================================================================
-  //Get Categories for dropdown
-  //==============================================================================
+  /**
+   * Retrieves the list of categories from the `categoriesService` for use in a dropdown.
+   * Sorts the categories alphabetically by name.
+   */
   getCategories() {
     this.categoriesService.getCategories().subscribe({
       next: (data: DealCategories[]) => {
@@ -158,9 +179,10 @@ export class AddProductFormComponent {
     });
   }
 
-  //==============================================================================
-  //Get Stores for dropdown
-  //==============================================================================
+  /**
+   * Retrieves the list of stores from the `storeService` for use in a dropdown.
+   * Sorts the stores alphabetically by name.
+   */
   getStores() {
     this.storeService.getStores().subscribe({
       next: (data: Store[]) => {
