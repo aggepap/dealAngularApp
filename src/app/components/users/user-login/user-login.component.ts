@@ -21,6 +21,7 @@ import { Location } from '@angular/common';
 export class UserLoginComponent {
   userService = inject(UsersService);
   location = inject(Location);
+  sessionExpired = this.userService.sessionExpired;
 
   loginError = '';
 

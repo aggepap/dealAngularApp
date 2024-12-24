@@ -30,6 +30,7 @@ export class UsersService {
   //  Properties
   //======================================================
   user = signal<LoggedInUser | null>(null);
+  sessionExpired = signal<boolean>(false);
 
   constructor() {
     const access_token = localStorage.getItem('access_token');
@@ -75,7 +76,7 @@ export class UsersService {
   }
   logout() {
     this.user.set(null);
-    localStorage.removeItem('acccess_token');
+    localStorage.removeItem('access_token');
     this.router.navigate(['']);
   }
 }
