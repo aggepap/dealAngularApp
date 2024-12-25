@@ -35,7 +35,9 @@
     </div>
     @if(updateStoreForm.get('updatedStoreName')?.invalid &&
     updateStoreForm.get('updatedStoreName')?.touched){
-    <p class="text-xs text-red-900 mb-2 block">Store name is required.</p>
+    <p class="text-xs text-red-900 mb-2 block">
+      Store name is required, and should be more than 2 characters
+    </p>
     }
   </div>
 
@@ -99,19 +101,20 @@
     </div>
   </div>
   <div class="update-buttons mt-5 flex justify-around">
-    @if (!updateStoreForm.get("updatedStoreName")?.invalid &&
-    !updateStoreForm.get("updatedStoreUrl")?.invalid) {
+    @if (updateStoreForm.get("updatedStoreName")?.invalid ||
+    updateStoreForm.get("updatedStoreUrl")?.invalid ) {
+    <button
+      type="button"
+      class="text-gray-200 bg-gray-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12 cursor-not-allowed"
+    >
+      Update
+    </button>
+
+    }@else {
     <button
       (click)="onUpdateConfirm(storeInfo!.id, updateStoreForm.value)"
       type="submit"
       class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12"
-    >
-      Update
-    </button>
-    }@else {
-    <button
-      type="button"
-      class="text-gray-200 bg-gray-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 md:w-5/12 cursor-not-allowed"
     >
       Update
     </button>

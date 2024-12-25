@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 import { UsersService } from '@/src/app/shared/services/users.service';
 import { RouterLink } from '@angular/router';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 
 @Component({
   selector: 'app-all-categories-view',
@@ -27,6 +28,7 @@ export class AllCategoriesViewComponent {
   //==============================================
   categoriesService = inject(CategoriesService);
   userService = inject(UsersService);
+  errorService = inject(ErrorService);
 
   //==============================================
   //  Properties
@@ -86,22 +88,50 @@ export class AllCategoriesViewComponent {
    * @param value An object containing the updated category data (extracted from the form).
    */
   onUpdateConfirm(id: number, value: any) {
-    console.log(value);
-    const icon = value['cat-update-icon'];
-    const name = value['cat-update-name'].trim();
-    console.log(icon, name);
-    this.categoriesService
-      .updateCategory(id, value['cat-update-icon'], value['cat-update-name'])
-      .subscribe(
-        (response) => {
-          alert(`Category ${value['cat-update-name']} was Updated`);
-          window.location.reload();
-        },
-        (error) => {
-          alert('Error while updating category');
-          console.log('Error while updating category', error);
+    const icon = value['cat-update-icon'] as string;
+    const name = (value['cat-update-name'] as string)?.trim();
+
+    let oldCategoryName = '';
+    this.categoriesService.getCategoryById(id).subscribe({
+      next: (category) => {
+        if (category.name === 'Other') {
+          oldCategoryName = category.name;
         }
-      );
+      },
+      complete: () => {
+        //Check if the old category name is "Other" and if it is, prevent the update
+        if (oldCategoryName === 'Other') {
+          this.errorService.errorMessage.set(
+            'You cannot Update the "Other" category. This is the default Category for deals that do not belong to any other category and cannot be renamed.'
+          );
+          this.errorService.errorColor.set('red');
+          return;
+        }
+
+        if (icon && name) {
+          this.categoriesService.updateCategory(id, icon, name).subscribe(
+            (response) => {
+              this.errorService.errorMessage.set(
+                `Category ${name} was updated`
+              );
+              this.errorService.errorColor.set('green');
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+            },
+            (error) => {
+              this.errorService.errorMessage.set(
+                'Error while updating category'
+              );
+              this.errorService.errorColor.set('red');
+            }
+          );
+        } else {
+          this.errorService.errorMessage.set('Please fill all fields');
+          this.errorService.errorColor.set('red');
+        }
+      },
+    });
   }
 
   /**

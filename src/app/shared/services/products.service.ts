@@ -4,7 +4,7 @@ import type { filterSend, ProductData } from '../interfaces/products';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import type { ImportedDeal } from '../interfaces/deals';
+import { ErrorService } from './error.service';
 
 const apiUrl = environment.apiURL;
 const PRODUCTS_API_URL = `${apiUrl}/products`;
@@ -15,23 +15,8 @@ const PRODUCTS_API_URL = `${apiUrl}/products`;
 export class ProductsService {
   location = inject(Location);
   router = inject(Router);
+  errorService = inject(ErrorService);
   http: HttpClient = inject(HttpClient);
-
-  // Get latest Store products
-  //==============================================================================
-
-  /**
-   * Retrieves a list of the latest products from the backend API.
-   *
-   * @returns Observable of an array of `ImportedDeal` objects.
-   */
-  getLatestProducts() {
-    return this.http.get<ImportedDeal[]>(`${PRODUCTS_API_URL}/all`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-  }
 
   // Add a new product
   //==============================================================================
@@ -67,16 +52,17 @@ export class ProductsService {
       .put(`${PRODUCTS_API_URL}/update/${productId}`, formData)
       .subscribe({
         next: (response) => {
-          console.log('Product update was successful:', response);
+          this.errorService.errorMessage.set('Product updated successfully');
+          this.errorService.errorColor.set('green');
         },
         error: (error) => {
-          console.error('Product update failed:', error);
+          this.errorService.errorMessage.set('Error while updating product');
+          this.errorService.errorColor.set('red');
         },
         complete: () => {
-          console.log('Product update completed.');
           setTimeout(() => {
             location.reload();
-          }, 500);
+          }, 1000);
         },
       });
   }
@@ -162,15 +148,21 @@ export class ProductsService {
     );
     if (deleteConfirmed) {
       this.http.delete(`${PRODUCTS_API_URL}/remove/${id}`).subscribe({
-        next: () => {
-          alert(`Product ${productName} was deleted succesfully`);
+        next: () => {},
+        error: (error) => {
+          this.errorService.errorMessage.set(
+            'Failed to delete this product. Please try again.'
+          );
+          this.errorService.errorColor.set('red');
+        },
+        complete: () => {
+          this.errorService.errorMessage.set(
+            `Product ${productName} was deleted succesfully`
+          );
+          this.errorService.errorColor.set('green');
+
           this.location.back();
         },
-        error: (error) => {
-          console.error('Error deleting Product', error);
-          alert('Failed to delete this product. Please try again.');
-        },
-        complete: () => console.log('ok'),
       });
     } else {
       alert('Deletion canceled');

@@ -1,5 +1,6 @@
 import { Store } from '@/src/app/shared/interfaces/stores';
 import { fileTypeValidator } from '@/src/app/shared/services/customValidators';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import {
@@ -21,6 +22,7 @@ export class UpdateStoreFormComponent {
   // Inputs / Outputs / Service injections
   //==============================================================================
   storeService = inject(StoresService);
+  errorService = inject(ErrorService);
   @Input() storeInfo?: Store;
   @Output() cancelEdit = new EventEmitter<boolean>();
 
@@ -86,14 +88,17 @@ export class UpdateStoreFormComponent {
 
     this.storeService.updateStore(storeId, formData).subscribe({
       next: (data) => {
-        console.log(data);
-        console.log('Store Succefully updates');
+        this.errorService.errorMessage.set('Store updated successfully');
+        this.errorService.errorColor.set('green');
       },
       error: (error) => {
-        console.log('Error  while updating store', error);
+        this.errorService.errorMessage.set('Error  while updating store');
+        this.errorService.errorColor.set('red');
       },
       complete: () => {
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       },
     });
   }
@@ -102,8 +107,16 @@ export class UpdateStoreFormComponent {
    * The reactive form group for the store update form.
    */
   updateStoreForm = new FormGroup({
-    updatedStoreName: new FormControl<string>('', Validators.required),
-    updatedStoreUrl: new FormControl<string>('', Validators.required),
+    updatedStoreName: new FormControl<string>('', [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    updatedStoreUrl: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(
+        '((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)'
+      ),
+    ]),
     updatedStoreLogo: new FormControl<string>(
       '',
       fileTypeValidator(this.allowedFileTypes)

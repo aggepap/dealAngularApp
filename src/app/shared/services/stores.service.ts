@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import type { Store } from '../interfaces/stores';
 import { environment } from '@/src/environments/environment.development';
+import { ErrorService } from './error.service';
 
 const apiUrl = environment.apiURL;
 const STORES_API_URL = `${apiUrl}/stores`;
@@ -14,6 +15,7 @@ export class StoresService {
   //  Inject Services
   //======================================================
   http: HttpClient = inject(HttpClient);
+  errorService = inject(ErrorService);
 
   /**
    * Retrieves a list of all stores from the backend API.
@@ -86,20 +88,30 @@ export class StoresService {
     );
     if (deleteConfirmed) {
       this.http.delete(`${STORES_API_URL}/remove?id=${id}`).subscribe({
-        next: () => {
-          alert(`Store ${storeName} was deleted succesfully`);
-          window.location.reload();
-        },
+        next: () => {},
         error: (error) => {
           if (storeName === 'Other') {
-            alert(
+            this.errorService.errorMessage.set(
               'You cannot delete the "Other" Store. This is the default Store for products that do not have a Store.'
             );
+            this.errorService.errorColor.set('red');
+
             return;
           }
-          alert('Failed to delete the Store. Please try again.');
+          this.errorService.errorMessage.set(
+            'Failed to delete the Store. Please try again.'
+          );
+          this.errorService.errorColor.set('red');
         },
-        complete: () => console.log('ok'),
+        complete: () => {
+          this.errorService.errorMessage.set(
+            `Store ${storeName} was deleted succesfully`
+          );
+          this.errorService.errorColor.set('green');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
       });
     } else {
       alert('Deletion canceled');

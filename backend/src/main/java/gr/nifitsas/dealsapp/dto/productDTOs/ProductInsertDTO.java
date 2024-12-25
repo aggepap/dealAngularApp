@@ -14,11 +14,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductInsertDTO {
 
-  @Column(unique = true)
+
   @NotNull(message = "Product's name cannot be empty")
   private String name;
   private String description;
   private String coupon;
+  @NotNull(message = "Product's url cannot be empty")
   private String url;
   private double price;
 

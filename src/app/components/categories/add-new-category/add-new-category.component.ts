@@ -10,6 +10,7 @@ import {
   CategoriesService,
   fontAwIcons,
 } from '@/src/app/shared/services/categories.service';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 
 @Component({
   selector: 'app-add-new-category',
@@ -23,6 +24,7 @@ export class AddNewCategoryComponent {
   //  Inject Services and Outputs
   //======================================================
   categoriesService = inject(CategoriesService);
+  errorService = inject(ErrorService);
   @Output() addIsEnabledChanged = new EventEmitter<boolean>();
 
   //======================================================
@@ -68,12 +70,15 @@ export class AddNewCategoryComponent {
       .addCategory(value.newCategoryIcon.trim(), value.newCategoryName.trim())
       .subscribe(
         (data) => {
-          console.log(data);
-          console.log('Category Succesfully added');
-          window.location.reload();
+          this.errorService.errorMessage.set('Category Succesfully added');
+          this.errorService.errorColor.set('green');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         },
         (error) => {
-          console.log('Error while adding category', error);
+          this.errorService.errorMessage.set('Error while adding category');
+          this.errorService.errorColor.set('red');
         }
       );
   }

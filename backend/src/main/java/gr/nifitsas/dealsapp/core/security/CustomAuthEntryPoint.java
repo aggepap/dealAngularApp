@@ -10,6 +10,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
+
+  /**
+   * Handles authentication exceptions.
+   *
+   * <p>This method is called when authentication fails. It sets the HTTP status code
+   * to 401 (Unauthorized), sets the content type to JSON, and writes a JSON response
+   * indicating that the user is not authenticated.
+   *
+   * @param request The HTTP request object.
+   * @param response The HTTP response object.
+   * @param authException The AuthenticationException that occurred.
+   * @throws IOException If an I/O error occurs while writing the response.
+   * @throws ServletException If a servlet-specific error occurs.
+   */
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 

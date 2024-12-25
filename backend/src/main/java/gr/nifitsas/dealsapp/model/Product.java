@@ -1,15 +1,10 @@
 package gr.nifitsas.dealsapp.model;
-
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name="products")
@@ -23,6 +18,7 @@ public class Product extends AbstractEntity implements ImageAttachable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
+
     private String name;
     private String description;
     private String coupon;

@@ -1,20 +1,30 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  type AfterViewInit,
+  type ElementRef,
+  ViewChild,
+  Input,
+  inject,
+} from '@angular/core';
 import { Dismiss } from 'flowbite';
 import type { DismissOptions, DismissInterface } from 'flowbite';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-logout-alert',
   standalone: true,
   imports: [],
-  templateUrl: './logout-alert.component.html',
-  styleUrl: './logout-alert.component.css',
+  templateUrl: './alert-header.component.html',
+  styleUrl: './alert-header.component.css',
 })
-export class LogoutAlertComponent implements AfterViewInit {
+export class AlertHeaderComponent implements AfterViewInit {
   @ViewChild('alertBorder', { static: false }) alertBorder!: ElementRef;
   @ViewChild('buttonClose', { static: false }) buttonClose!: ElementRef;
+  @Input() errorMessage = '';
+  @Input() errorColor = '';
+  errorService = inject(ErrorService);
 
-  dismiss: DismissInterface | undefined; // Make dismiss optional
-
+  dismiss: DismissInterface | undefined;
   ngAfterViewInit() {
     if (this.alertBorder && this.buttonClose) {
       const options: DismissOptions = {
@@ -22,8 +32,8 @@ export class LogoutAlertComponent implements AfterViewInit {
         duration: 1000,
         timing: 'ease-out',
         onHide: (context, targetEl) => {
-          console.log('Element has been dismissed');
-          console.log(targetEl);
+          this.errorService.errorMessage.set(null);
+          this.errorService.errorColor.set(null);
         },
       };
 
@@ -32,9 +42,9 @@ export class LogoutAlertComponent implements AfterViewInit {
         this.buttonClose.nativeElement,
         options
       );
-
-      // Programmatically hide if needed (e.g., based on a condition)
-      // this.dismiss.hide();
+      setTimeout(() => {
+        this.hideAlert();
+      }, 3000);
     } else {
       console.error('Alert elements not found in the template.');
     }

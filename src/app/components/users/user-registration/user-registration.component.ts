@@ -1,7 +1,4 @@
-import type {
-  UserInsertDTO,
-  UserRegisterFormData,
-} from '@/src/app/shared/interfaces/users';
+import type { UserInsertDTO } from '@/src/app/shared/interfaces/users';
 import { UsersService } from '@/src/app/shared/services/users.service';
 import { Component, inject } from '@angular/core';
 import {
@@ -11,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-registration',
   standalone: true,
@@ -23,6 +21,8 @@ export class UserRegistrationComponent {
   //  Services injection
   //==============================================
   userService = inject(UsersService);
+  user = this.userService.user;
+  router = inject(Router);
 
   //==============================================
   //  Properties
@@ -33,6 +33,14 @@ export class UserRegistrationComponent {
   errorMessages: any = {};
   showSuccess = false;
 
+  /**
+   * Redirects the user to the home page if they are already logged in.
+   */
+  ngOnInit() {
+    if (this.user()) {
+      this.router.navigate(['/']);
+    }
+  }
   /**
    * FormGroup representing the user registration form.
    */

@@ -24,11 +24,13 @@ export class UserLoginComponent {
   //======================================================
   userService = inject(UsersService);
   location = inject(Location);
+  router = inject(Router);
   //======================================================
   //  Properties
   //======================================================
   sessionExpired = this.userService.sessionExpired;
   loginError = '';
+  user = this.userService.user;
 
   /**
    * FormGroup representing the login form.
@@ -37,6 +39,13 @@ export class UserLoginComponent {
     username: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
+
+  ngOnInit() {
+    // Check if the user is already logged in
+    if (this.user()) {
+      this.router.navigate(['/']);
+    }
+  }
 
   /**
    * Handles the login form submission.

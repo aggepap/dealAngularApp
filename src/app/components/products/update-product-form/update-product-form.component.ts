@@ -136,7 +136,6 @@ export class UpdateProductFormComponent {
       formData.append('image', imageFile);
       console.log(imageFile);
     }
-    console.log('FORMDATA', formData);
 
     this.productService.updateProduct(productId, formData);
     this.updateProductForm.reset();
@@ -179,7 +178,6 @@ export class UpdateProductFormComponent {
             return 0;
           }
         );
-        console.log(this.categoriesList);
       },
       error: (error) => console.error('Error fetching categories', error),
     });
@@ -200,7 +198,6 @@ export class UpdateProductFormComponent {
           }
           return 0;
         });
-        console.log(this.storesList);
       },
       error: (error) => console.error('Error fetching stores', error),
     });

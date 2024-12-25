@@ -34,6 +34,14 @@ public class SecurityConfiguration {
   private final JwtAuthFilter jwtAuthFilter;
   private final UserDetailsService userDetailsService;
 
+  /**
+   * Configures the Spring Security filter chain.
+   *
+   * @param http The HttpSecurity object used to configure security.
+   * @param jwtAuthFilter The JWT authentication filter.
+   * @return The SecurityFilterChain object representing the configured security chain.
+   * @throws Exception If there's an error configuring security.
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
     http
@@ -58,6 +66,11 @@ public class SecurityConfiguration {
     return http.build();
   }
 
+  /**
+   * Creates a CorsConfigurationSource for enabling CORS.
+   *
+   * @return A CorsConfigurationSource object.
+   */
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
@@ -70,26 +83,52 @@ public class SecurityConfiguration {
     return source;
   }
 
+  /**
+   * Creates a DaoAuthenticationProvider bean for user authentication.
+   *
+   * @return A DaoAuthenticationProvider object.
+   */
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
     authenticationProvider.setUserDetailsService(userDetailsService);
     authenticationProvider.setPasswordEncoder(passwordEncoder());
     return authenticationProvider;
   }
+  /**
+   * Creates a BCryptPasswordEncoder bean for password hashing.
+   *
+   * @return A BCryptPasswordEncoder object with a strength of 11.
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(11);
   }
 
+  /**
+   * Retrieves the AuthenticationManager from the AuthenticationConfiguration.
+   *
+   * @param conf The AuthenticationConfiguration object.
+   * @return The AuthenticationManager object.
+   * @throws Exception If there's an error getting the AuthenticationManager.
+   */
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration conf) throws Exception {
     return conf.getAuthenticationManager();
   }
-
+  /**
+   * Creates a custom AuthenticationEntryPoint for handling authentication failures.
+   *
+   * @return A CustomAuthEntryPoint object.
+   */
   @Bean
   public AuthenticationEntryPoint myAuthenticationEntryPoint() {
     return new CustomAuthEntryPoint();
   }
+  /**
+   * Creates a custom AccessDeniedHandler for handling access denied exceptions.
+   *
+   * @return A CustomAccessDeniedHandler object.
+   */
   @Bean
   public AccessDeniedHandler myAccessDeniedHandler() {
     return new CustomAccessDeniedHandler();

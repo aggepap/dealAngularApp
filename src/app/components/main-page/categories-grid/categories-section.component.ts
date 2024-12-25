@@ -37,6 +37,5 @@ export class CategoriesSectionComponent {
       },
       (error) => console.error('Error fetching categories', error)
     );
-    console.log(this.categoriesList);
   }
 }

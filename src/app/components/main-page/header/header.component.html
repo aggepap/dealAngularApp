@@ -112,6 +112,10 @@
     </div>
   </nav>
 </header>
-@if (loggedOut) {
-<app-logout-alert />
-}
+@if (errorMessage()) {
+<app-logout-alert
+  errorMessage=" {{ errorMessage() }}"
+  errorColor="{{ errorColor() }}"
+>
+</app-logout-alert
+>> }

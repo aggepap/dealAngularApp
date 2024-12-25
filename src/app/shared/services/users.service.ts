@@ -11,6 +11,7 @@ import type {
 } from '../interfaces/users';
 import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { ErrorService } from './error.service';
 
 const apiUrl = environment.apiURL;
 const STORES_API_URL = `${apiUrl}/users`;
@@ -25,7 +26,7 @@ export class UsersService {
   //======================================================
   http: HttpClient = inject(HttpClient);
   router = inject(Router);
-
+  errorService = inject(ErrorService);
   //======================================================
   //  Properties
   //======================================================
@@ -78,6 +79,8 @@ export class UsersService {
       .post<UserInsertDTO>(`${STORES_API_URL}/add`, formData)
       .pipe(
         catchError((error: HttpErrorResponse) => {
+          this.errorService.errorMessage.set('Error while creating user');
+          this.errorService.errorColor.set('red');
           return throwError(() => error.error);
         })
       );
@@ -99,6 +102,8 @@ export class UsersService {
   logout() {
     this.user.set(null);
     localStorage.removeItem('access_token');
+    this.errorService.errorMessage.set('You have been logged out succesfully');
+    this.errorService.errorColor.set('green');
     this.router.navigate(['']);
   }
 }

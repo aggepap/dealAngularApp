@@ -1,5 +1,6 @@
 import type { Store } from '@/src/app/shared/interfaces/stores';
 import { fileTypeValidator } from '@/src/app/shared/services/customValidators';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import {
@@ -23,6 +24,7 @@ export class AddStoreFormComponent {
   //==============================================================================
   @Output() cancelAdd = new EventEmitter<boolean>();
   storeService = inject(StoresService);
+  errorService = inject(ErrorService);
 
   //==============================================================================
   // Properties
@@ -93,11 +95,12 @@ export class AddStoreFormComponent {
     }
     this.storeService.addStore(formData).subscribe({
       next: (data: Store) => {
-        console.log(data);
-        console.log(`Store ${data.name} Succesfully added`);
+        this.errorService.errorMessage.set('Store added successfully');
+        this.errorService.errorColor.set('green');
       },
       error: (error) => {
-        console.log('Error while adding Store', error);
+        this.errorService.errorMessage.set('Error while adding Store');
+        this.errorService.errorColor.set('red');
       },
       complete: () => {
         window.location.reload();

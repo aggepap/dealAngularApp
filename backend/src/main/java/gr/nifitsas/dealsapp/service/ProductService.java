@@ -38,16 +38,35 @@ public class ProductService implements IProductService {
   private final StoreService storeService;
   private final Mapper mapper;
 
+  /**
+   * Retrieves all products as ProductReadOnlyDTO objects.
+   *
+   * @return A list of all products.
+   */
   @Override
   public List<ProductReadOnlyDTO> getProducts() {
    return productRepository.findAll().stream().map(mapper::mapToProductReadOnlyDTO).collect(Collectors.toList());
   }
 
+
+  /**
+   * Finds a product by its ID.
+   *
+   * @param id The ID of the product to find.
+   * @return An Optional containing the product as a ProductReadOnlyDTO object if found, or empty if not found.
+   */
   @Override
   public Optional<ProductReadOnlyDTO> findProductById(Long id) {
     return productRepository.findById(id).map(mapper::mapToProductReadOnlyDTO);
   }
 
+  /**
+   * Retrieves a paginated list of products.
+   *
+   * @param page The page number (starting from 0).
+   * @param size The number of products per page.
+   * @return A Page object containing ProductReadOnlyDTO objects for the requested page.
+   */
   @Override
   public Page<ProductReadOnlyDTO> getPaginatedProducts(int page, int size) {
    Pageable pageable = PageRequest.of(page, size);
@@ -55,12 +74,31 @@ public class ProductService implements IProductService {
    return products.map(mapper::mapToProductReadOnlyDTO);
   }
 
+  /**
+   * Retrieves a paginated list of products filtered by the provided criteria.
+   *
+   * @param filters A ProductFilters object containing the filtering criteria.
+   * @return A Paginated object containing filtered ProductReadOnlyDTO objects.
+   * @throws AppObjectInvalidArgumentException If invalid filters are provided.
+   */
   @Override
   public Paginated<ProductReadOnlyDTO> getPaginatedFilteredProducts(ProductFilters filters) throws AppObjectInvalidArgumentException {
     var filtered = productRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
     return new Paginated<>(filtered.map(mapper::mapToProductReadOnlyDTO));
   }
 
+  /**
+   * Saves a new product.
+   *
+   * @param categoryId The ID of the category to associate with the product.
+   * @param storeId The ID of the store to associate with the product.
+   * @param dto A ProductInsertDTO object containing the product information.
+   * @param image A MultipartFile containing the product image (optional).
+   * @return The saved product as a ProductReadOnlyDTO object.
+   * @throws AppObjectAlreadyExistsException If a product with the same name already exists.
+   * @throws AppObjectInvalidArgumentException If invalid product data is provided.
+   * @throws IOException If there's an error saving the product image.
+   */
   @Override
   @Transactional
   public ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException {
@@ -79,6 +117,20 @@ public class ProductService implements IProductService {
    return mapper.mapToProductReadOnlyDTO(savedProduct);
   }
 
+  /**
+   * Updates an existing product.
+   *
+   * @param productId The ID of the product to update.
+   * @param categoryId The ID of the category to associate with the product (optional).
+   * @param storeId The ID of the store to associate with the product (optional).
+   * @param dto A ProductUpdateDTO object containing the updated product information.
+   * @param image A MultipartFile containing the updated product image (optional).
+   * @return The updated product as a ProductReadOnlyDTO object.
+   * @throws AppObjectNotFoundException If the product to update is not found.
+   * @throws AppObjectAlreadyExistsException If a product with the same name already exists (excluding the product being updated).
+   * @throws AppObjectInvalidArgumentException If invalid product data is provided.
+   * @throws IOException If there's an error saving the product image.
+   */
   @Override
   @Transactional
   public ProductReadOnlyDTO updateProduct(
@@ -134,6 +186,13 @@ public class ProductService implements IProductService {
   }
 
 
+  /**
+   * Deletes a product.
+   *
+   * @param id The ID of the product to delete.
+   * @return The deleted product as a ProductReadOnlyDTO object.
+   * @throws AppObjectNotFoundException If the product to delete is not found.
+   */
   @Override
   @Transactional(rollbackOn = Exception.class)
   public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
@@ -147,8 +206,12 @@ public class ProductService implements IProductService {
     }
   }
 
-
-
+  /**
+   * Creates a Specification object for filtering products based on the provided filters.
+   *
+   * @param filters The ProductFilters object containing the filtering criteria.
+   * @return A Specification object for filtering products.
+   */
   private Specification<Product> getSpecsFromFilters(ProductFilters filters) {
     Specification<Product> filter = Specification.where(ProductSpecification.productTitleIsLike("name", filters.getName()));
     if (filters.getCategoryId() != null) {

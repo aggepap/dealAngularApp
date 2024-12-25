@@ -9,6 +9,7 @@ import { CategoriesService } from '@/src/app/shared/services/categories.service'
 import type { filterSend } from '@/src/app/shared/interfaces/products';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 
 @Component({
   selector: 'app-single-category',
@@ -31,6 +32,7 @@ export class SingleCategoryComponent {
   categoryService = inject(CategoriesService);
   location = inject(Location);
   productService = inject(ProductsService);
+  errorService = inject(ErrorService);
   //==============================================
   //  Properties
   //==============================================
@@ -71,7 +73,10 @@ export class SingleCategoryComponent {
             this.getProductsFromSearch(this.filter);
           },
           error: (error) => {
-            console.error('Error fetching category:', error);
+            this.isLoading = false;
+            this.hasError = true;
+            this.errorService.errorMessage.set('Error fetching category');
+            this.errorService.errorColor.set('red');
           },
           complete: () => {
             this.isLoading = false;
@@ -93,7 +98,7 @@ export class SingleCategoryComponent {
 
     this.pagesNumber = newPage;
     this.filter.page = this.pagesNumber;
-    console.log(`Page changed to: ${this.pagesNumber}`);
+
     this.getProductsFromSearch(this.filter);
   }
 
@@ -104,7 +109,7 @@ export class SingleCategoryComponent {
     this.filter.size = this.pageSize;
     this.pagesNumber = 0;
     this.filter.page = this.pagesNumber;
-    console.log(`Page size changed to: ${this.pageSize}`);
+
     this.getProductsFromSearch(this.filter);
   }
 
@@ -134,12 +139,13 @@ export class SingleCategoryComponent {
           this.totalElements = data.totalElements;
         },
         error: (error) => {
-          console.error('Error fetching products:', error);
           this.isLoading = false;
           this.hasError = true;
+          this.errorService.errorMessage.set('Error fetching products');
+          this.errorService.errorColor.set('red');
         },
         complete: () => {
-          console.log('Product fetching completed.');
+          this.isLoading = false;
         },
       });
   }

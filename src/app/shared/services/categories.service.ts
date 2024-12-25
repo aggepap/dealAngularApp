@@ -5,6 +5,7 @@ import type {
   newCategory,
 } from '../interfaces/deal-categories';
 import { environment } from '@/src/environments/environment.development';
+import { ErrorService } from './error.service';
 
 const apiUrl = environment.apiURL;
 const CATEGORIES_API_URL = `${apiUrl}/category`;
@@ -42,6 +43,7 @@ export const fontAwIcons = [
 })
 export class CategoriesService {
   http: HttpClient = inject(HttpClient);
+  errorService = inject(ErrorService);
 
   /**
    * Retrieves a list of all deal categories from the backend API.
@@ -116,22 +118,31 @@ export class CategoriesService {
     if (deleteConfirmed) {
       this.http.delete(`${CATEGORIES_API_URL}/remove?id=${id}`).subscribe({
         next: () => {
-          alert(`Category ${categoryName} was deleted succesfully`);
+          this.errorService.errorMessage.set(
+            `Category ${categoryName} was deleted succesfully`
+          );
+          this.errorService.errorColor.set('green');
+
           window.location.reload();
         },
         error: (error) => {
           console.error('Error deleting category', error);
           if (categoryName === 'Other') {
-            alert(
+            this.errorService.errorMessage.set(
               'You cannot delete the "Other" category. This is the default Category for deals that do not belong to any other category.'
             );
+            this.errorService.errorColor.set('red');
             return;
           }
-          alert('Failed to delete the category. Please try again.');
+          this.errorService.errorMessage.set(
+            'Failed to delete the category. Please try again.'
+          );
+          this.errorService.errorColor.set('red');
         },
       });
     } else {
-      alert('Deletion canceled');
+      this.errorService.errorMessage.set('Deletion canceled');
+      this.errorService.errorColor.set('red');
     }
   }
 

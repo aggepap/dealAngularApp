@@ -1,7 +1,9 @@
 <div
   id="alert-border-3"
   #alertBorder
-  class="flex items-center p-4 text-green-800 border-t-4 border-green-300 bg-green-50 w-2/3 mx-auto"
+  class="flex items-center p-4 text-{{ errorColor }}-800 border-t-4 border-{{
+    errorColor
+  }}-300 bg-{{ errorColor }}-50 w-2/3 mx-auto"
   role="alert"
 >
   <svg
@@ -16,13 +18,17 @@
     />
   </svg>
   <div class="ms-3 text-lg font-medium">
-    You have been logged out Successfully.
+    {{ errorMessage }}
   </div>
   <button
     type="button"
     #buttonClose
     id="button-close"
-    class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+    class="ms-auto -mx-1.5 -my-1.5 bg-{{ errorColor }}-50 text-{{
+      errorColor
+    }}-500 rounded-lg focus:ring-2 focus:ring-{errorColor}-400 p-1.5 hover:bg-{{
+      errorColor
+    }}-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800"
     data-dismiss-target="#alert-border-3"
     aria-label="Close"
   >
