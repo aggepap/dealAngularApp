@@ -75,16 +75,20 @@ public class CategoryService implements ICategoryService {
    * @return The updated category as a CategoryReadOnlyDTO object.
    * @throws AppObjectNotFoundException If the category to update is not found.
    * @throws AppObjectAlreadyExistsException If a category with the same name already exists (excluding the category being updated).
+   * @throws AppObjectInvalidArgumentException if data are not complient with updateDTO or if Category is named "Other"
    */
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public CategoryReadOnlyDTO updateCategory(CategoryUpdateDTO categoryUpdateDTO) throws AppObjectNotFoundException, AppObjectAlreadyExistsException {
+  public CategoryReadOnlyDTO updateCategory(CategoryUpdateDTO categoryUpdateDTO) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
     Optional<Category> existingCategory = categoryRepository.findByName(categoryUpdateDTO.getName());
     if (existingCategory.isPresent() && !existingCategory.get().getId().equals(categoryUpdateDTO.getId())) {
       throw new AppObjectAlreadyExistsException("Category", "Category with name '" + categoryUpdateDTO.getName() + "' already exists.");
     }
     Category selectedCategory = categoryRepository.findById(categoryUpdateDTO.getId())
       .orElseThrow(() -> new AppObjectNotFoundException("Category", "Category with id " + categoryUpdateDTO.getId() + " not found."));
+    if (selectedCategory.getName().trim().equals("Other")) {
+      throw new AppObjectInvalidArgumentException("Category", "Category 'Other' cannot be updated.");
+    }
     selectedCategory.setIcon(categoryUpdateDTO.getIcon());
     selectedCategory.setName(categoryUpdateDTO.getName());
     Category updatedCategory = categoryRepository.save(selectedCategory);
@@ -105,33 +109,31 @@ public class CategoryService implements ICategoryService {
   public CategoryReadOnlyDTO deleteCategory(Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException {
     Optional<Category> optionalCategory = categoryRepository.findById(id);
 
-    if(optionalCategory.orElseThrow().getName().equals("Other")){
-      throw new AppObjectInvalidArgumentException("Category", "Category 'Other' cannot be deleted");
+    Optional<Category> defaultCategory = categoryRepository.findByName("Other");
+
+    Category resolvedDefaultCategory;
+    if (defaultCategory.isEmpty()) {
+      var defaultCategoryDTO = new CategoryInsertDTO("Other", "fa-circle-info");
+      Category defaultCategoryToSave = mapper.mapToCategoryEntity(defaultCategoryDTO);
+      categoryRepository.save(defaultCategoryToSave);
+      resolvedDefaultCategory = defaultCategoryToSave;
+    } else {
+      resolvedDefaultCategory = defaultCategory.get();
     }
-
     if (optionalCategory.isPresent()) {
-      Optional<Category> defaultCategory = categoryRepository.findByName("Other");
-
-      Category resolvedDefaultCategory;
-      if (defaultCategory.isEmpty()) {
-        var defaultCategoryDTO = new CategoryInsertDTO("Other", "fa-circle-info");
-       Category defaultCategoryToSave = mapper.mapToCategoryEntity(defaultCategoryDTO);
-        categoryRepository.save(defaultCategoryToSave);
-        resolvedDefaultCategory = defaultCategoryToSave;
-      } else{
-        resolvedDefaultCategory = defaultCategory.get();
-      }
-
-      Set<Product> optionalProducts = optionalCategory.get().getAllCategoryProducts();
+      Set<Product> optionalProducts = optionalCategory.orElseThrow().getAllCategoryProducts();
       for (Product product : optionalProducts) {
         product.setCategory(resolvedDefaultCategory);
       }
       Category category = optionalCategory.get();
+      if (category.getName().equals("Other")) {
+        throw new AppObjectInvalidArgumentException("Category", "Category 'Other' cannot be deleted");
+      }
       categoryRepository.delete(category);
       return mapper.mapToCategoryReadOnlyDTO(category);
-    } else {
-      throw new AppObjectNotFoundException("Category", "Category with id: " + id + " not found");
+    }else {
+      throw new AppObjectNotFoundException("Category", "Category with id " + id + " not found.");
     }
-    }
+  }
 
 }

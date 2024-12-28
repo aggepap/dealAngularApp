@@ -20,7 +20,7 @@ public interface IStoreService {
   List<Product> findAllStoreDeals(Long id);
   Optional<StoreReadOnlyDTO> findStoreById(Long id);
   Optional<Store> findStoreEntintyById(Long id);
-  StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, IOException;
+  StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, IOException, AppObjectInvalidArgumentException;
   StoreReadOnlyDTO saveStore(StoreInsertDTO dto, MultipartFile logo) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException;
   StoreReadOnlyDTO deleteStore(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
 

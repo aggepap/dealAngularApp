@@ -2,11 +2,18 @@ package gr.nifitsas.dealsapp.controller;
 
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
+import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.UserDTOs.UserInsertDTO;
 import gr.nifitsas.dealsapp.dto.UserDTOs.UserReadOnlyDTO;
+import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.UserRepository;
 import gr.nifitsas.dealsapp.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,8 +30,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-  private final UserRepository userRepository;
-  private final Mapper mapper;
   private final UserService userService;
   private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -34,6 +39,13 @@ public class UserController {
    * @return A ResponseEntity containing a list of UserReadOnlyDTO objects and an HTTP status of OK (200).
    * @throws Exception If an unexpected error occurs during the retrieval process.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves all users" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Users retrieved",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = UserReadOnlyDTO.class)) })})
+  //Controller
   @GetMapping("")
   public ResponseEntity<List<UserReadOnlyDTO>> getAllUsers() {
     List<UserReadOnlyDTO> users = userService.getAllUsers();
@@ -52,9 +64,27 @@ public class UserController {
    * @return A ResponseEntity containing an Optional of UserReadOnlyDTO, or an empty Optional if no user is found.
    * @throws Exception If an unexpected error occurs during the retrieval process.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves a user info by it's username" )
+  @ApiResponses(value = {
+    @ApiResponse(
+      responseCode = "200",
+      description = "Users retrieved",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = UserReadOnlyDTO.class)) }),
+    @ApiResponse(
+      responseCode = "404",
+      description = "User cannot be found",
+      content = @Content(mediaType = "application/json")
+    )
+  })
+  //Controller
   @GetMapping("/find")
-  public ResponseEntity<Optional<UserReadOnlyDTO>> getUserByUsername(@RequestParam("username") String username) {
+  public ResponseEntity<Optional<UserReadOnlyDTO>> getUserByUsername(@RequestParam("username") String username) throws AppObjectNotFoundException {
     Optional<UserReadOnlyDTO> user = userService.findUserByUsername(username);
+    if (user.isEmpty()) {
+      throw new AppObjectNotFoundException("User", "User with username : "+ username + " was not found");
+    }
     try {
       return new ResponseEntity<>(user, HttpStatus.OK);
     } catch (Exception e) {
@@ -71,6 +101,22 @@ public class UserController {
    * @throws AppObjectInvalidArgumentException If the provided user data is invalid.
    * @throws AppObjectAlreadyExistsException If a user with the same username already exists.
    */
+  //OpenAPI Annotations
+
+  @Operation(summary = "Creates a new user with USER role" )
+  @ApiResponses(value = {
+    @ApiResponse(
+      responseCode = "201",
+      description = "Users created",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = UserReadOnlyDTO.class)) }),
+    @ApiResponse(
+      responseCode = "400",
+      description = "Invalid username or Password",
+      content = @Content(mediaType = "application/json")
+    )
+  })
+  //Controller
   @PostMapping("/add")
   public ResponseEntity<UserReadOnlyDTO> addUser(@RequestBody @Valid UserInsertDTO userInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExistsException {
     try{

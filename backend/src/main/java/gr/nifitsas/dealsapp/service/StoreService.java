@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,11 +86,13 @@ public class StoreService implements IStoreService {
    * @return The updated store as a StoreReadOnlyDTO object.
    * @throws AppObjectNotFoundException If the store to update is not found.
    * @throws AppObjectAlreadyExistsException If a store with the same name already exists (excluding the store being updated).
+   * @throws AppObjectInvalidArgumentException if data are not complient with updateDTO or if Store is named "Other"
    * @throws IOException If there's an error saving the store logo.
    */
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, IOException {
+  public StoreReadOnlyDTO updateStore(Long storeId, StoreUpdateDTO storeUpdateDTO , MultipartFile logo) throws AppObjectNotFoundException, AppObjectAlreadyExistsException, IOException, AppObjectInvalidArgumentException {
+
     Optional<Store> existingStore = storeRepository.findByName(storeUpdateDTO.getName());
     if (existingStore.isPresent() && !existingStore.get().getId().equals(storeId)) {
       throw new AppObjectAlreadyExistsException("Store", "Store with name '" + storeUpdateDTO.getName() + "' already exists.");
@@ -97,6 +100,9 @@ public class StoreService implements IStoreService {
 
     Store selectedStore = storeRepository.findById(storeId)
       .orElseThrow(() -> new AppObjectNotFoundException("Store", "Store with id " + storeId + " not found."));
+    if (selectedStore.getName().trim().equals("Other")) {
+      throw new AppObjectInvalidArgumentException("Store", "Store 'Other' cannot be updated.");
+    }
     selectedStore.setName(storeUpdateDTO.getName());
     selectedStore.setSiteURL(storeUpdateDTO.getSiteURL());
     attachmentService.saveImage(selectedStore, logo);
@@ -157,8 +163,9 @@ public class StoreService implements IStoreService {
       } else{
         resolvedDefaultStore = defaultStore.get();
     }
-        optionalStore.get().getAllStoreProducts().forEach(resolvedDefaultStore::addStoreProduct);
+      optionalStore.get().getAllStoreProducts().forEach(resolvedDefaultStore::addStoreProduct);
       Store store = optionalStore.get();
+
       storeRepository.delete(store);
       return mapper.mapToStoreReadOnlyDTO(store);
     } else {

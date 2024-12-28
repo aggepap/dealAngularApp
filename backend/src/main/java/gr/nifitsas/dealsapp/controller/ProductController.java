@@ -7,7 +7,13 @@ import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
+import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +45,27 @@ public class ProductController {
    * @return A ResponseEntity containing an Optional of ProductReadOnlyDTO, or an empty Optional if no product is found.
    * @throws Exception Any other unexpected error that may occur during retrieval.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves product info for a specific product id" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Product found and info fetched",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "404", description = "Product not found",
+      content = @Content)})
+  //Controller
   @GetMapping("/find")
-  public ResponseEntity<Optional<ProductReadOnlyDTO>> getProductById(@RequestParam("id") Long id) {
+  public ResponseEntity<Optional<ProductReadOnlyDTO>> getProductById(@RequestParam("id") Long id) throws AppObjectNotFoundException {
     Optional<ProductReadOnlyDTO> product = productService.findProductById(id);
+    if(product.isPresent()) {
     try {
       return new ResponseEntity<>(product, HttpStatus.OK);
     } catch (Exception e) {
       LOGGER.error("ERROR: Could not get Product with id: {}", id, e);
       throw e;
+    }
+    }else {
+      throw new AppObjectNotFoundException("Product", "Product with id: "+ id + " not found");
     }
   }
 
@@ -59,6 +78,15 @@ public class ProductController {
    * @throws AppObjectInvalidArgumentException If invalid filters are provided.
    * @throws Exception Any other unexpected error that may occur during retrieval.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves a paginated list of products filtered by the provided criteria." )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Products found and info fetched or not found an returns an empty list",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+      content = @Content)})
+  //Controller
   @GetMapping("/results")
   public ResponseEntity<Paginated<ProductReadOnlyDTO>> getProductsFilteredPaginated( @ModelAttribute ProductFilters filters)
     throws AppObjectInvalidArgumentException {
@@ -84,7 +112,20 @@ public class ProductController {
    * @throws AppObjectInvalidArgumentException If invalid product data is provided.
    * @throws IOException If an error occurs while saving the product image.
    */
+  //OpenAPI Annotations
   @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = "Creates a new product." )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "201", description = "Product Created",
+         content = { @Content(mediaType = "application/json",
+         schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+      content = @Content),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+      content = @Content),
+    @ApiResponse(responseCode = "409", description = "Already Exists",
+      content = @Content)})
+  //Controller
   @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})//consumes needed for OpenAPI
   public ResponseEntity<ProductReadOnlyDTO> addProduct(
     @RequestPart(name = "category") Long categoryId,
@@ -93,7 +134,7 @@ public class ProductController {
     @RequestPart("image") MultipartFile image) throws  AppObjectInvalidArgumentException, AppObjectAlreadyExistsException, IOException {
     try {
       ProductReadOnlyDTO productReadOnlyDTO = productService.saveProduct(categoryId, storeId, productInsertDTO, image);
-      return new ResponseEntity<>(productReadOnlyDTO, HttpStatus.OK);
+      return new ResponseEntity<>(productReadOnlyDTO, HttpStatus.CREATED);
     } catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException | IOException e) {
       LOGGER.error("Attachment", "image can not get uploaded", e);
       throw e;
@@ -116,7 +157,22 @@ public class ProductController {
    * @throws AppObjectInvalidArgumentException If invalid product data is provided.
    * @throws IOException If an error occurs while saving the product image.
    */
-  @PutMapping("/update/{productId}")
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = "Updates an existing product" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Product Updated succesfully",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+      content = @Content),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+      content = @Content),
+    @ApiResponse(responseCode = "404", description = "Product Not Found",
+      content = @Content),
+    @ApiResponse(responseCode = "409", description = "Already Exists",
+      content = @Content)})
+  //Controller
+  @PutMapping(value = "/update/{productId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ProductReadOnlyDTO> updateProduct(
     @PathVariable("productId") Long productId,
     @RequestParam(name = "categoryId", required = false) Long categoryId,
@@ -143,6 +199,17 @@ public class ProductController {
    * @throws AppObjectNotFoundException If the product to delete is not found.
    * @throws AppObjectInvalidArgumentException If an error occurs during deletion.
    */
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = " Deletes a product" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Product deleted succesfully",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+      content = @Content),
+    @ApiResponse(responseCode = "404", description = "Product Not Found",
+      content = @Content)})
+  //Controller
   @DeleteMapping("/remove/{productId}")
   public ResponseEntity<ProductReadOnlyDTO>deleteStore(@PathVariable("productId")Long productId) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
     try{

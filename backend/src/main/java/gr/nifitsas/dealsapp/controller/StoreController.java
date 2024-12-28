@@ -15,16 +15,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +48,9 @@ public class StoreController {
   //OpenAPI Annotations
   @Operation(summary = "Retrieves a list of all stores." )
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Stores found and listed, or not found and returns an empty list",
-      content = { @Content(mediaType = "application/json",
+    @ApiResponse(
+        responseCode = "200", description = "Stores found and listed, or not found and returns an empty list",
+        content = { @Content(mediaType = "application/json",
         schema = @Schema(implementation = Store.class)) })})
   //Controller
   @GetMapping("")
@@ -70,18 +74,22 @@ public class StoreController {
   //OpenAPI Annotations
   @Operation(summary = "Retrieves a store by its ID" )
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Store found",
-      content = { @Content(mediaType = "application/json",
-        schema = @Schema(implementation = Store.class)) }),
+    @ApiResponse(
+        responseCode = "200", description = "Store found",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = StoreReadOnlyDTO.class)) }),
     @ApiResponse(responseCode = "404", description = "Store not found",
-      content = @Content)})
+        content = @Content)})
   //Controller
   @GetMapping("/find")
-  public ResponseEntity<Optional<StoreReadOnlyDTO>> getStoreById(@RequestParam("id") Long id) {
+  public ResponseEntity<Optional<StoreReadOnlyDTO>> getStoreById(@RequestParam("id") Long id) throws AppObjectNotFoundException {
     Optional<StoreReadOnlyDTO> store = storeService.findStoreById(id);
+    if (store.isEmpty()) {
+      throw new AppObjectNotFoundException("Store", "Store with id : " + id + " not found");
+    }
     try {
       return new ResponseEntity<>(store, HttpStatus.OK);
-    } catch (Exception e) {
+    } catch (Exception e ) {
       LOGGER.error("ERROR: Could not get Stores.", e);
       throw e;
     }
@@ -96,14 +104,20 @@ public class StoreController {
   //OpenAPI Annotations
   @Operation(summary = "Retrieves all products associated with a specific store" )
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Store found and products fetched",
-      content = { @Content(mediaType = "application/json",
+    @ApiResponse(
+        responseCode = "200", description = "Store found and products fetched",
+        content = { @Content(mediaType = "application/json",
         schema = @Schema(implementation = Store.class)) }),
     @ApiResponse(responseCode = "404", description = "Store not found",
-      content = @Content)})
+        content = @Content)})
   //Controller
   @GetMapping("/{id}/products")
-  public ResponseEntity<List<Product>> getStoreProducts(@PathVariable("id") Long id) {
+  public ResponseEntity<List<Product>> getStoreProducts(@PathVariable("id") Long id) throws AppObjectNotFoundException {
+    if(storeService.findStoreById(id).isEmpty()) {
+      List<Product> emptylist = Collections.emptyList();
+      throw new AppObjectNotFoundException("Store", "Store With id :" + id + " was not found");
+
+    }
     List<Product> storeProducts = storeService.findAllStoreDeals(id);
     try {
       return new ResponseEntity<>(storeProducts, HttpStatus.OK);
@@ -124,17 +138,18 @@ public class StoreController {
    * @throws IOException If an error occurs while saving the store logo.
    */
   //OpenAPI Annotations
+  @SecurityRequirement(name = "Bearer Authentication")
   @Operation(summary = "Creates a new store." )
   @ApiResponses(value = {
     @ApiResponse(responseCode = "201", description = "Store Created",
       content = { @Content(mediaType = "application/json",
-        schema = @Schema(implementation = Store.class)) }),
+        schema = @Schema(implementation = StoreReadOnlyDTO.class)) }),
     @ApiResponse(responseCode = "409", description = "Store Already exists",
       content = @Content),
     @ApiResponse(responseCode = "400", description = "Invalid arguments",
       content = @Content)})
   //Controller
-  @PostMapping("/add")
+  @PostMapping(value ="/add",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<StoreReadOnlyDTO> addStore(
     @RequestPart(name = "store") @Valid StoreInsertDTO storeInsertDTO,
     @RequestPart(name = "logo", required = true) MultipartFile logo
@@ -162,24 +177,28 @@ public class StoreController {
    * @throws IOException If an error occurs while saving the store logo.
    */
   //OpenAPI Annotations
+  @SecurityRequirement(name = "Bearer Authentication")
   @Operation(summary = " Updates an existing store")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Store updated",
-      content = { @Content(mediaType = "application/json",
+    @ApiResponse(
+        responseCode = "200", description = "Store updated",
+        content = { @Content(mediaType = "application/json",
         schema = @Schema(implementation = Store.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Arguments",
+        content = @Content),
     @ApiResponse(responseCode = "404", description = "Store not found",
-      content = @Content) })
+        content = @Content) })
   //Controller
-  @PutMapping("/update/{storeId}")
+  @PutMapping(value="/update/{storeId}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<StoreReadOnlyDTO> updateStore(
     @PathVariable("storeId") Long storeId,
     @RequestPart(name = "store") @Valid StoreUpdateDTO storeUpdateDTO,
     @RequestPart(name = "image", required = false) MultipartFile image
-  ) throws AppObjectAlreadyExistsException, AppObjectNotFoundException, IOException {
+  ) throws AppObjectAlreadyExistsException, AppObjectNotFoundException, IOException, AppObjectInvalidArgumentException {
     try {
       StoreReadOnlyDTO category = storeService.updateStore(storeId,storeUpdateDTO, image);
-      return new ResponseEntity<>(category, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException e) {
+      return new ResponseEntity<>(category, HttpStatus.OK);
+    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException | AppObjectInvalidArgumentException e) {
       LOGGER.error("ERROR: Could not update Store." + storeUpdateDTO.getName(), e);
       throw e;
     }
@@ -195,16 +214,26 @@ public class StoreController {
    * @throws AppObjectNotFoundException If the store with the specified ID is not found.
    */
   //OpenAPI Annotations
-  @Operation(summary = " Deletes a store.")
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = " Deletes the store with the specified id ")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Store Deleted",
-      content = { @Content(mediaType = "application/json",
-        schema = @Schema(implementation = Store.class)) }),
-    @ApiResponse(responseCode = "404", description = "Store not found",
-      content = @Content) })
+    @ApiResponse(
+      responseCode = "200",
+        description = "Store Deleted",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = StoreReadOnlyDTO.class)) }),
+    @ApiResponse(
+        responseCode = "404",
+        description = "Store not found",
+        content = @Content),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+        content = @Content)})
   //Controller
   @DeleteMapping("/remove")
   public ResponseEntity<StoreReadOnlyDTO>deleteStore(@RequestParam("id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+    if(storeService.findStoreById(id).isEmpty()) {
+      throw new AppObjectNotFoundException("Store", "Store With id :" + id + " was not found");
+    }
     try{
       StoreReadOnlyDTO deletedStore = storeService.deleteStore(id);
       return new ResponseEntity<>(deletedStore, HttpStatus.OK);

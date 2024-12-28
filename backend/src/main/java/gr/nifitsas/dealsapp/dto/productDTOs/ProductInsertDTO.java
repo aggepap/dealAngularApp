@@ -3,10 +3,12 @@ package gr.nifitsas.dealsapp.dto.productDTOs;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 @NoArgsConstructor
 @Getter
@@ -20,6 +22,7 @@ public class ProductInsertDTO {
   private String description;
   private String coupon;
   @NotNull(message = "Product's url cannot be empty")
+  @URL(message = "Product's URL field accepts only URLs e.x. https://www.example.com")
   private String url;
   private double price;
 

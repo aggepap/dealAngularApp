@@ -59,4 +59,5 @@ public class Mapper {
     return new StoreReadOnlyDTO(store.getId(), store.getName(), store.getSiteURL(), store.getLogo(), store.getAllStoreProducts());
   }
 
+
 }

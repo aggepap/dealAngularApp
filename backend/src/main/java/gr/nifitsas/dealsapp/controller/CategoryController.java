@@ -7,8 +7,15 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryInsertDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.categoryDTOs.CategoryUpdateDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.static_data.Category;
 import gr.nifitsas.dealsapp.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +38,14 @@ public class CategoryController {
    * @return A ResponseEntity containing a list of CategoryReadOnlyDTO objects and an HTTP status of OK (200).
    * @throws Exception If an unexpected error occurs during retrieval.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves a list of all categories" )
+  @ApiResponses(value = {
+    @ApiResponse(
+        responseCode = "200", description = "categories are found and returned, or not and an empty list is returned",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = CategoryReadOnlyDTO.class)) })})
+  //Controller
   @GetMapping("")
      public ResponseEntity<List<CategoryReadOnlyDTO>> getallCategories(){
      List<CategoryReadOnlyDTO> categoryList = categoryService.findAllCategories();
@@ -49,14 +64,30 @@ public class CategoryController {
    * @return A ResponseEntity containing an Optional of Category object, or an empty Optional if no category is found.
    * @throws Exception Any other unexpected error that may occur during retrieval.
    */
+  //OpenAPI Annotations
+  @Operation(summary = "Retrieves a category by its ID" )
+  @ApiResponses(value = {
+    @ApiResponse(
+        responseCode = "200", description = "Category found and it's info",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = Category.class))}),
+    @ApiResponse(
+        responseCode = "404",
+        description = "Category not found",
+        content = @Content) })
+  //Controller
   @GetMapping("/find")
-  public ResponseEntity<Optional<Category>> getCategoryById(@RequestParam("id") Long id){
+  public ResponseEntity<Optional<Category>> getCategoryById(@RequestParam("id") Long id) throws AppObjectNotFoundException {
     Optional<Category> category = categoryService.findCategoryById(id);
+    if(category.isPresent()){
     try {
       return new ResponseEntity<>(category, HttpStatus.OK);
     }catch (Exception e){
       LOGGER.error("ERROR: Could not get category with id {}.", id, e);
       throw e;
+    }
+    }else {
+      throw new AppObjectNotFoundException("Category", "Category with id: " + id + " not found");
     }
   }
 
@@ -69,12 +100,28 @@ public class CategoryController {
    * @throws AppObjectNotFoundException If the category to be updated is not found.
    * @throws Exception Any other unexpected error that may occur during update.
    */
+  //OpenAPI Annotations
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = "Updates an existing category" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "category Updated succesfully",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+        content = @Content),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+        content = @Content),
+    @ApiResponse(responseCode = "404", description = "category Not Found",
+        content = @Content),
+    @ApiResponse(responseCode = "409", description = "Category Already Exists",
+        content = @Content)})
+  //Controller
   @PatchMapping("/update")
-  public ResponseEntity<CategoryReadOnlyDTO> updateCategory(@RequestBody CategoryUpdateDTO categoryUpdateDTO) throws AppObjectAlreadyExistsException, AppObjectNotFoundException {
+  public ResponseEntity<CategoryReadOnlyDTO> updateCategory(@RequestBody CategoryUpdateDTO categoryUpdateDTO) throws AppObjectAlreadyExistsException, AppObjectNotFoundException, AppObjectInvalidArgumentException {
     try {
       CategoryReadOnlyDTO category = categoryService.updateCategory(categoryUpdateDTO);
-      return new ResponseEntity<>(category, HttpStatus.CREATED);
-    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException e) {
+      return new ResponseEntity<>(category, HttpStatus.OK);
+    } catch (AppObjectAlreadyExistsException | AppObjectNotFoundException | AppObjectInvalidArgumentException e) {
       LOGGER.error("ERROR: Could not update category.{}", categoryUpdateDTO.getName(), e);
       throw e;
     }
@@ -89,8 +136,23 @@ public class CategoryController {
    * @throws AppObjectInvalidArgumentException If the provided category data is invalid.
    * @throws Exception Any other unexpected error that may occur during creation.
    */
+  //OpenAPI Annotations
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = "Creates a new category" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "201", description = "category created succesfully",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+        content = @Content),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+        content = @Content),
+    @ApiResponse(responseCode = "409", description = "Category Already Exists",
+        content = @Content)})
+  //Controller
    @PostMapping("/add")
-   public ResponseEntity<CategoryReadOnlyDTO> addCategory(@RequestBody CategoryInsertDTO categoryInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExistsException {
+   public ResponseEntity<CategoryReadOnlyDTO> addCategory(@RequestBody CategoryInsertDTO categoryInsertDTO) throws AppObjectInvalidArgumentException,
+    AppObjectAlreadyExistsException {
      try {
         CategoryReadOnlyDTO category = categoryService.saveCategory(categoryInsertDTO);
        return new ResponseEntity<>(category, HttpStatus.CREATED);
@@ -110,8 +172,23 @@ public class CategoryController {
    * @throws AppObjectInvalidArgumentException If the category to be deleted is the "Other" category.
    * @throws Exception Any other unexpected error that may occur during deletion.
    */
+  //OpenAPI Annotations
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = "Deletes a category." )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "category deleted succesfully",
+        content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = ProductReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "404", description = "Category Not found",
+        content = @Content),
+    @ApiResponse(responseCode = "400", description = "Invalid Parameters",
+        content = @Content),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+        content = @Content)})
+  //Controller
   @DeleteMapping("/remove")
-   public ResponseEntity<CategoryReadOnlyDTO> deleteCategory (@RequestParam("id") Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
+   public ResponseEntity<CategoryReadOnlyDTO> deleteCategory (@RequestParam("id") Long id) throws AppObjectNotFoundException,
+    AppObjectInvalidArgumentException {
 
     try {
       CategoryReadOnlyDTO deletedCategory = categoryService.deleteCategory(id);
