@@ -32,11 +32,20 @@
     </div>
     <div class="w-9/12 h-[200px] overflow-hidden mx-auto">
       <a class="w-full object-cover h-full" routerLink="/deals/{{ deal.id }}">
+        @if (deal.image) {
         <img
           class="p-8 rounded-t-lg pb-5"
           [src]="apiUrl + '/uploads/' + deal.image.savedName"
           alt="product image"
         />
+      }
+      @else {
+        <img
+        class="p-8 rounded-t-lg pb-5"
+        src="product.webp"
+        alt="product image"
+      />
+      }
       </a>
       <!-- <div class="ribbon absolute top-16 left-0">
         <span

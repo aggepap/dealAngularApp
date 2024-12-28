@@ -1,9 +1,8 @@
 -- Create a table for categories (if it doesn't exist)
 
-INSERT INTO attachements(id, filepath, extension, content_type, filename, saved_name) VALUES
-           (1, 'uploads\stores.png','.png','image/png','store.png','store.png'),
-           (2, 'uploads\product.jpg','.jpg','image/jpg','product.jpg','store.jpg');
-ALTER SEQUENCE attachements_id_seq RESTART WITH 3;
+INSERT INTO users(username,uuid, password, role, created_at) VALUES
+  ('admin@email.com','randomuuid','$2a$11$PBnrkfuCMYhdm.sw2F5mS.WrjBjlHKNVxKWs/i2R0WJ7NTOZQZzAG','ADMIN',current_timestamp );
+ALTER SEQUENCE users_id_seq RESTART WITH 2;
 
 
 INSERT INTO categories (id, name,icon) VALUES
@@ -29,20 +28,20 @@ INSERT INTO categories (id, name,icon) VALUES
                                          (20, 'Books/E-Books', 'fa-book'),
                                          (21, 'Home/Garden', 'fa-house-chimney');
 
-
-
 ALTER SEQUENCE categories_id_seq RESTART WITH 22;
 
 
 
+
 INSERT INTO stores (id,name,siteurl,image_id) VALUES
-                                               (1,'Amazon','https://www.amazon.de/',1),
-                                               (2,'Banggood','https://www.banggood.com/',1),
-                                               (3,'Kotsovolos','https://www.kotsovolos.gr/',1),
-                                               (4,'Ebay','https://www.ebay.com/',1),
-                                               (5,'Geekbuying','https://www.geekbuying.com/',1),
-                                               (6,'Temu','https://www.temu.com/',1),
-                                               (7,'Aliexpress','https://www.aliexpress.com/',1);
+                                                (1,'Amazon','https://www.amazon.de/',null),
+                                                (2,'Banggood','https://www.banggood.com/',null),
+                                                (3,'Kotsovolos','https://www.kotsovolos.gr/',null),
+                                                (4,'Ebay','https://www.ebay.com/',null),
+                                                (5,'Geekbuying','https://www.geekbuying.com/',null),
+                                                (6,'Temu','https://www.temu.com/',null),
+                                                (7,'Aliexpress','https://www.aliexpress.com/',null),
+                                                (8,'Eshop.gr','https://www.www.eshop.gr/',null);
 
 ALTER SEQUENCE stores_id_seq RESTART WITH 8;
 
@@ -53,32 +52,18 @@ ALTER SEQUENCE stores_id_seq RESTART WITH 8;
 DO $$
   BEGIN
     FOR i IN 1..100 LOOP
-        INSERT INTO products (name, description, coupon, url, price, category_id, store_id, attachment_id)
+        INSERT INTO products (name, description, coupon, url, price, category_id, store_id, created_at)
         VALUES (
                  'Product ' || i, -- Name
                  'Description of product ' || i || '. This is a longer description to provide some context.', -- Description
-                 "Exclusive Coupon", -- Coupon (30% chance of having a coupon)
+                 'Exclusive Coupon',
                  'https://example.com/product/' || i, -- URL
                  round((random() * 1000)::numeric, 2), -- Price (random between 0 and 1000, rounded to 2 decimal places)
-                 (SELECT category_id FROM categories ORDER BY random() LIMIT 1), -- Random category_id
-                 (SELECT store_id FROM stores ORDER BY random() LIMIT 1),
-                2
+                 (SELECT id FROM categories ORDER BY random() LIMIT 1),
+                 (SELECT id FROM stores ORDER BY random() LIMIT 1),
+                 current_timestamp
 
                );
       END LOOP;
   END $$;
 
-
--- Example of the products table schema (adapt as needed)
-CREATE TABLE IF NOT EXISTS products (
-                                      product_id SERIAL PRIMARY KEY,
-                                      name VARCHAR(255) NOT NULL,
-                                      description TEXT,
-                                      coupon VARCHAR(255),
-                                      url VARCHAR(255),
-                                      price DECIMAL(10, 2) NOT NULL,
-                                      category_id INTEGER REFERENCES categories(category_id),
-                                      store_id INTEGER REFERENCES stores(store_id),
-                                      attachment_id INTEGER REFERENCES attachments(attachment_id);
-
-);

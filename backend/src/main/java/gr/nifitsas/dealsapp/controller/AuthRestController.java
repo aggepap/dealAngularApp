@@ -2,7 +2,6 @@ package gr.nifitsas.dealsapp.controller;
 
 import gr.nifitsas.dealsapp.core.authentication.AuthService;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotAuthorizedException;
-import gr.nifitsas.dealsapp.core.exceptions.ValidationException;
 import gr.nifitsas.dealsapp.dto.AuthRequestDTO;
 import gr.nifitsas.dealsapp.dto.AuthResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;

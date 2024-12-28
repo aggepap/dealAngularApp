@@ -2,7 +2,6 @@ package gr.nifitsas.dealsapp.core;
 
 import gr.nifitsas.dealsapp.core.exceptions.*;
 import gr.nifitsas.dealsapp.dto.ResponseDTO;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,7 +25,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
       String bodyOfResponse = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-      return new ResponseEntity(new ResponseDTO(ex.getStatusCode().toString(), bodyOfResponse), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ResponseDTO(ex.getStatusCode().toString(), bodyOfResponse), HttpStatus.BAD_REQUEST);
     }
 
 

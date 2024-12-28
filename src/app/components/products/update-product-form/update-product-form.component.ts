@@ -59,13 +59,16 @@ export class UpdateProductFormComponent {
 
     //Pre-fill form with product data
     if (this.product) {
+      const productImage = this.product.image
+        ? this.product.image.savedName
+        : null;
       this.updateProductForm.patchValue({
         updateProductCategory: this.product.category.id,
         updateProductName: this.product.name,
         updateProductDescription: this.product.description,
         updateDealStore: this.product.store.id,
         updateDealURL: this.product.url,
-        updateProductImage: this.product.image.savedName,
+        updateProductImage: productImage,
         updateDealPrice: this.product.price,
         updateDealCoupon: this.product.coupon,
       });
