@@ -4,7 +4,13 @@
 
 <h2>🚀 Demo</h2>
 
-[demourl](demourl)
+<h2>Project Screenshots:</h2>
+
+<img src="https://i.ibb.co/C2qZsZC/000178-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="200" height="500/">
+
+<img src="https://i.ibb.co/GWXFp5X/000179-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="200" height="500/">
+
+<img src="https://i.ibb.co/RcLdH46/000180.jpg" alt="project-screenshot" width="200" height="500/">
 
 <h2>🧐 Features</h2>
 
@@ -28,27 +34,31 @@ git clone git@github.com:aggepap/dealAngularApp.git
 npm install
 ```
 
-<p>3. open "backend" folder and start Server</p>
+<p>3. create a Postgres SQL database with db-name: "dealsAppDB" db-user: "postgres" and db-password: "Changeme123!"</p>
+
+<p>4. If you are unable to create a db with these connection details please create a postgres SQL Database in your local machine and replace your own details on backend/src/main/java/gr/nifitsas/dealsapp/resources/templates/application-test.properties</p>
+
+<p>5. open "backend" folder and start Server</p>
 
 ```
  ./gradlew bootrun
 ```
 
-<p>4. after the first successful server start stop it once</p>
+<p>6. after the first successful server start stop it once</p>
 
 ```
 CTRL+ C
 ```
 
-<p>5. Uncomment the commented part on backend/src/main/java/gr/nifitsas/dealsapp/resources/templates/application-test.properties and run server again</p>
+<p>7. Uncomment the commented part on backend/src/main/java/gr/nifitsas/dealsapp/resources/templates/application-test.properties and run server again</p>
 
 ```
  ./gradlew bootrun
 ```
 
-<p>6. Visit http://localhost:4200/ on your browser</p>
+<p>8. Visit http://localhost:4200/ on your browser</p>
 
-<p>7. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+<p>9. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 
 <h2>🛡️ License:</h2>
 

@@ -53,7 +53,6 @@ export class AddProductFormComponent {
    * Fetches initial data (categories and stores) and sets loading state to false.
    */
   ngOnInit() {
-    this.addProductSuccessMessage = false;
     this.getCategories();
     this.getStores();
     this.isLoading = false;
@@ -95,8 +94,8 @@ export class AddProductFormComponent {
       coupon: value.AddDealCoupon.trim(),
       price: value.AddDealPrice,
     };
-    const category = value.addProductCategory.trim();
-    const store = value.addDealStore.trim();
+    const category = value.addProductCategory;
+    const store = value.addDealStore;
 
     const imageInput = document.getElementById(
       'addProductImage'
@@ -129,10 +128,8 @@ export class AddProductFormComponent {
       const imageFile = imageInput.files[0];
       formData.append('image', imageFile);
     }
-
     this.productService.addProduct(formData);
     this.addProductForm.reset();
-    this.addProductSuccessMessage = true;
     this.fileSelected = false;
   }
   /**

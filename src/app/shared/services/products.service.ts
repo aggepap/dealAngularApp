@@ -31,10 +31,17 @@ export class ProductsService {
   addProduct(formData: FormData) {
     return this.http.post(`${PRODUCTS_API_URL}/add`, formData).subscribe({
       next: (response) => {
-        console.log('Product addition was successful:', response);
+        this.errorService.errorMessage.set('Product added successfully');
+        this.errorService.errorColor.set('green');
       },
       error: (error) => {
-        console.error('Product addition  failed:', error);
+        this.errorService.errorMessage.set('Error while adding product');
+        this.errorService.errorColor.set('red');
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.router.navigate(['/deals']);
+        }, 1000);
       },
     });
   }

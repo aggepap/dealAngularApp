@@ -10,16 +10,7 @@
   }"
 >
   <form [formGroup]="addProductForm" class="max-w-sm mx-auto my-10">
-    @if (addProductSuccessMessage &&
-    !addProductForm.get('addProductName')?.touched) {
-    <div class="mx-auto max-w-sm container mt-4 p-6 bg-green-700 rounded-md">
-      <h3 class="text-center font-bold text-3xl text-white">
-        Product was inserted succesfully
-      </h3>
-    </div>
-    }@else {
     <h1 class="font-bold text-3xl mx-auto mb-10">Add New Deal</h1>
-    }
 
     <fieldset class="border-2 border-gray-300 p-4 rounded-lg">
       <legend

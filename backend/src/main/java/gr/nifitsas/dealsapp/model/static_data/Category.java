@@ -1,7 +1,6 @@
 package gr.nifitsas.dealsapp.model.static_data;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import gr.nifitsas.dealsapp.model.AbstractEntity;
 import gr.nifitsas.dealsapp.model.Product;
 import jakarta.persistence.*;
 import lombok.*;

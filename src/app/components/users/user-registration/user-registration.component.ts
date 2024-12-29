@@ -91,6 +91,9 @@ export class UserRegistrationComponent {
         },
         complete: () => {
           this.showSuccess = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1000);
         },
       });
     } else {
