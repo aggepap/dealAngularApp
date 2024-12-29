@@ -1,6 +1,7 @@
 export interface UserInsertDTO {
   username: string;
   password: string;
+  role?: string;
 }
 export interface UserReadOnlyDTO {
   uuid: string;

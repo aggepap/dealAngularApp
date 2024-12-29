@@ -80,6 +80,7 @@ export class UserRegistrationComponent {
       const userInsertDTO: UserInsertDTO = {
         username: value.username.trim(),
         password: value.password.trim(),
+        role: 'USER',
       };
       this.userService.addUser(userInsertDTO).subscribe({
         next: (data) => {

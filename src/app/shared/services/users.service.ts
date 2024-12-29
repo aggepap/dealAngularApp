@@ -119,7 +119,7 @@ export class UsersService {
         next: () => {},
         error: (error) => {
           this.errorService.errorMessage.set(
-            'There was a problem deleting this user, OR you tried to delete a User with Admin rights'
+            'There was a problem deleting this user, OR you tried to delete the last remaining user with Admin rights'
           );
           this.errorService.errorColor.set('red');
         },

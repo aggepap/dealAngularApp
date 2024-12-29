@@ -1,5 +1,6 @@
 package gr.nifitsas.dealsapp.controller;
 
+import gr.nifitsas.dealsapp.core.enums.Role;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
@@ -105,7 +106,6 @@ public class UserController {
    * @throws AppObjectAlreadyExistsException If a user with the same username already exists.
    */
   //OpenAPI Annotations
-
   @Operation(summary = "Creates a new user with USER role" )
   @ApiResponses(value = {
     @ApiResponse(
@@ -149,9 +149,10 @@ public class UserController {
   public ResponseEntity<UserReadOnlyDTO>deleteUser(@PathVariable("uuid")String uuid) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
     try{
       var usernameToDelete = userService.findUserByUuid(uuid);
-      if(usernameToDelete.orElseThrow().getRole().toString().equals("ADMIN")){
-        throw new AppObjectInvalidArgumentException("User", "You cannot delete an administrator");
+      if(userService.countAdminUsers() <= 1 && usernameToDelete.orElseThrow().getRole().equals(Role.ADMIN)){
+        throw new AppObjectInvalidArgumentException("User", "You cannot delete the last administrator account");
       }
+
       UserReadOnlyDTO deletedUser = userService.deleteUser(uuid);
       return new ResponseEntity<>(deletedUser, HttpStatus.OK);
     }catch (AppObjectInvalidArgumentException | AppObjectNotFoundException e){

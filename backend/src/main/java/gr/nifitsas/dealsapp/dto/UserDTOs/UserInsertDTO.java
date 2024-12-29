@@ -20,4 +20,5 @@ public class UserInsertDTO {
   private String username;
   @Pattern(regexp = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\\d)(?=.*?[@#$!%&*]).{8,}$", message = "Invalid password")
   private String password;
+  private Role role;
 }

@@ -68,8 +68,10 @@ public class UserService {
     }
     User user = mapper.mapToUserEntity(userInsertDTO);
     user.setPassword(passwordEncoder.encode(userInsertDTO.getPassword()));
-    if(user.getRole() == null){
+    if(userInsertDTO.getRole() == null){
       user.setRole(Role.USER);
+    }else{
+      user.setRole(userInsertDTO.getRole());
     }
     if(user.getIsActive() == null){
       user.setIsActive(true);
@@ -87,6 +89,9 @@ public class UserService {
     return userRepository.findAll().stream().map(mapper::mapToUserReadOnlyDTO).collect(Collectors.toList());
   }
 
+  public Long countAdminUsers() {
+    return userRepository.countByRole(Role.ADMIN);
+  }
 
 
   /**

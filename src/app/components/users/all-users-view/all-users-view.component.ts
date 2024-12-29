@@ -1,12 +1,13 @@
-import { UserReadOnlyDTO } from '@/src/app/shared/interfaces/users';
+import type { UserReadOnlyDTO } from '@/src/app/shared/interfaces/users';
 import { ErrorService } from '@/src/app/shared/services/error.service';
 import { UsersService } from '@/src/app/shared/services/users.service';
 import { Component, inject } from '@angular/core';
+import { AddNewUserAdminComponent } from './add-new-user-admin/add-new-user-admin.component';
 
 @Component({
   selector: 'app-all-users-view',
   standalone: true,
-  imports: [],
+  imports: [AddNewUserAdminComponent],
   templateUrl: './all-users-view.component.html',
   styleUrl: './all-users-view.component.css',
 })
@@ -18,7 +19,9 @@ export class AllUsersViewComponent {
   ngOnInit() {
     this.getUsers();
   }
-
+  ngOnChange() {
+    this.getUsers();
+  }
   getUsers() {
     this.userService.getAllUsers().subscribe({
       next: (data: UserReadOnlyDTO[]) => {

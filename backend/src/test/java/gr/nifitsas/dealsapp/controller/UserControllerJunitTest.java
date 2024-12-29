@@ -1,6 +1,6 @@
 package gr.nifitsas.dealsapp.controller;
 
-import gr.nifitsas.dealsapp.controller.UserController;
+import gr.nifitsas.dealsapp.core.enums.Role;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectAlreadyExistsException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
@@ -96,6 +96,9 @@ public class UserControllerJunitTest {
   @Test
   public void testAddUser_success() throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
     UserInsertDTO userInsertDTO = new UserInsertDTO();
+    userInsertDTO.setUsername("test@example.com"); // Valid email
+    userInsertDTO.setPassword("P@$$wOrd123"); // Valid password
+    userInsertDTO.setRole(Role.USER); // Set the role
     UserReadOnlyDTO createdUser = new UserReadOnlyDTO();
     when(userService.saveUser(userInsertDTO)).thenReturn(createdUser);
 
@@ -103,7 +106,7 @@ public class UserControllerJunitTest {
 
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
     assertEquals(createdUser, response.getBody());
-    verify(userService, times(1)).saveUser(userInsertDTO);
+    verify(userService, times(1)).saveUser(argThat(dto -> dto.getRole() == Role.USER));
   }
 
   // Test addUser - Service throws AppObjectAlreadyExistsException

@@ -35,7 +35,6 @@ export class StoreTabbedMenuComponent {
     this.storeService.getStores().subscribe(
       (data: Store[]) => {
         this.storeList = data;
-        console.log(this.storeList);
       },
       (error) => {
         this.isError = true;

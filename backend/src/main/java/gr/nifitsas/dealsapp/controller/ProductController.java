@@ -90,7 +90,7 @@ public class ProductController {
   @GetMapping("/results")
   public ResponseEntity<Paginated<ProductReadOnlyDTO>> getProductsFilteredPaginated( @ModelAttribute ProductFilters filters)
     throws AppObjectInvalidArgumentException {
-    System.out.println("requested filters: " + filters);
+
     try {
       if (filters == null) filters = ProductFilters.builder().build();
       return ResponseEntity.ok( productService.getPaginatedFilteredProducts(filters));

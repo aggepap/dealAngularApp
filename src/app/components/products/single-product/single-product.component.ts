@@ -53,7 +53,6 @@ export class SingleProductComponent {
     } else {
       console.error('No product ID found in route parameters!');
     }
-    console.log(this.productId);
 
     //gets the product by the id that was stored in productId
     this.getProductById(this.productId);
@@ -91,7 +90,6 @@ export class SingleProductComponent {
       next: (data: ProductData) => {
         this.product = data;
         this.isLoading = false;
-        console.log(this.product);
       },
       error: (error) => {
         console.error('Error fetching product', error);

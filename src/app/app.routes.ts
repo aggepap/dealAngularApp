@@ -14,19 +14,44 @@ import { adminGuard } from './shared/guards/admin.guard';
 AddProductFormComponent;
 
 export const routes: Routes = [
-  { path: '', component: MainPageComponent },
-  { path: 'categories', component: AllCategoriesViewComponent },
-  { path: 'categories/:id', component: SingleCategoryComponent },
-  { path: 'stores', component: AllStoreViewComponent },
-  { path: 'deals', component: AllProductsViewComponent },
+  { path: '', component: MainPageComponent, title: 'Deals Site Home Page' },
+  {
+    path: 'categories',
+    component: AllCategoriesViewComponent,
+    title: 'Deals Site Categories',
+  },
+  {
+    path: 'categories/:id',
+    component: SingleCategoryComponent,
+    title: 'Deals Site Category',
+  },
+  {
+    path: 'stores',
+    component: AllStoreViewComponent,
+    title: 'Deals Site Stores',
+  },
+  {
+    path: 'deals',
+    component: AllProductsViewComponent,
+    title: 'Deals Site Deals',
+  },
   {
     path: 'deals/add',
     component: AddProductFormComponent,
     canActivate: [authGuard],
+    title: 'Add a new deal',
   },
-  { path: 'deals/:id', component: SingleProductComponent },
-  { path: 'register', component: UserRegistrationComponent },
-  { path: 'login', component: UserLoginComponent },
+  {
+    path: 'deals/:id',
+    component: SingleProductComponent,
+    title: 'Deals Site Deal',
+  },
+  {
+    path: 'register',
+    component: UserRegistrationComponent,
+    title: 'Create an account',
+  },
+  { path: 'login', component: UserLoginComponent, title: 'Deals Site Login' },
   {
     path: 'users',
     component: AllUsersViewComponent,
