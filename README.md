@@ -60,6 +60,16 @@ CTRL+ C
 
 <p>9. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+- Angular
+- Tailwind CSS
+- Java
+- Spring Boot
+- Javascript
+
 <h2>🛡️ License:</h2>
 
 This project is licensed under the MIT
