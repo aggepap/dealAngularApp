@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURL: 'https://coding-factory-api.ddns.net',
+  apiURL: 'http://127.0.0.1:8080',
 };
