@@ -9,6 +9,8 @@ import { SingleCategoryComponent } from './components/categories/single-category
 import { UserRegistrationComponent } from './components/users/user-registration/user-registration.component';
 import { UserLoginComponent } from './components/users/user-login/user-login.component';
 import { authGuard } from './shared/guards/auth.guard';
+import { AllUsersViewComponent } from './components/users/all-users-view/all-users-view.component';
+import { adminGuard } from './shared/guards/admin.guard';
 AddProductFormComponent;
 
 export const routes: Routes = [
@@ -25,4 +27,9 @@ export const routes: Routes = [
   { path: 'deals/:id', component: SingleProductComponent },
   { path: 'register', component: UserRegistrationComponent },
   { path: 'login', component: UserLoginComponent },
+  {
+    path: 'users',
+    component: AllUsersViewComponent,
+    canActivate: [adminGuard],
+  },
 ];

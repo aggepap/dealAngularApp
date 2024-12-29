@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import type { DealCategories } from '@/src/app/shared/interfaces/deal-categories';
 import { CategoriesService } from '@/src/app/shared/services/categories.service';
 import { RouterLink } from '@angular/router';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 
 @Component({
   selector: 'app-categories-section',
@@ -16,6 +17,7 @@ export class CategoriesSectionComponent {
   //======================================================================
   @Input() dealCategory: DealCategories | undefined;
   categoriesService = inject(CategoriesService);
+  errorService = inject(ErrorService);
 
   //======================================================================
   //  Properties
@@ -27,7 +29,6 @@ export class CategoriesSectionComponent {
     let count = 0;
     this.categoriesService.getCategories().subscribe(
       (data: DealCategories[]) => {
-        console.log(data);
         for (const item of data) {
           if (count < 12) {
             this.categoriesList.push(item);
@@ -35,7 +36,10 @@ export class CategoriesSectionComponent {
           }
         }
       },
-      (error) => console.error('Error fetching categories', error)
+      (error) => {
+        this.errorService.errorMessage.set('Error while fetching categories');
+        this.errorService.errorColor.set('red');
+      }
     );
   }
 }

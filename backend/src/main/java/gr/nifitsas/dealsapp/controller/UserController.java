@@ -6,6 +6,7 @@ import gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException;
 import gr.nifitsas.dealsapp.core.mapper.Mapper;
 import gr.nifitsas.dealsapp.dto.UserDTOs.UserInsertDTO;
 import gr.nifitsas.dealsapp.dto.UserDTOs.UserReadOnlyDTO;
+import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.repository.UserRepository;
 import gr.nifitsas.dealsapp.service.UserService;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -42,8 +44,9 @@ public class UserController {
   //OpenAPI Annotations
   @Operation(summary = "Retrieves all users" )
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Users retrieved",
-      content = { @Content(mediaType = "application/json",
+    @ApiResponse(
+        responseCode = "200", description = "Users retrieved",
+        content = { @Content(mediaType = "application/json",
         schema = @Schema(implementation = UserReadOnlyDTO.class)) })})
   //Controller
   @GetMapping("")
@@ -125,6 +128,35 @@ public class UserController {
     }catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException e){
     LOGGER.error("ERROR: Couldn't add user", e);
     throw e;
+    }
+  }
+
+
+  @SecurityRequirement(name = "Bearer Authentication")
+  @Operation(summary = " Deletes a User" )
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "User deleted succesfully",
+      content = { @Content(mediaType = "application/json",
+        schema = @Schema(implementation = UserReadOnlyDTO.class)) }),
+    @ApiResponse(responseCode = "401", description = "Authentication Error",
+      content = @Content),
+    @ApiResponse(responseCode = "404", description = "User Not Found",
+      content = @Content),
+    @ApiResponse(responseCode = "400", description = "You tried to delete an Admin user",
+      content = @Content)})
+  //Controller
+  @DeleteMapping("/remove/{uuid}")
+  public ResponseEntity<UserReadOnlyDTO>deleteUser(@PathVariable("uuid")String uuid) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+    try{
+      var usernameToDelete = userService.findUserByUuid(uuid);
+      if(usernameToDelete.orElseThrow().getRole().toString().equals("ADMIN")){
+        throw new AppObjectInvalidArgumentException("User", "You cannot delete an administrator");
+      }
+      UserReadOnlyDTO deletedUser = userService.deleteUser(uuid);
+      return new ResponseEntity<>(deletedUser, HttpStatus.OK);
+    }catch (AppObjectInvalidArgumentException | AppObjectNotFoundException e){
+      LOGGER.error("ERROR: Could not delete user.", e);
+      throw e;
     }
   }
 }

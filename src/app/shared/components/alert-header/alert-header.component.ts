@@ -44,7 +44,7 @@ export class AlertHeaderComponent implements AfterViewInit {
       );
       setTimeout(() => {
         this.hideAlert();
-      }, 3000);
+      }, 5000);
     } else {
       console.error('Alert elements not found in the template.');
     }

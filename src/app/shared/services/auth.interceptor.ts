@@ -46,7 +46,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       const authRequest = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${authToken}`),
       });
-      console.log('AUTH REQUEST', authRequest);
+
       return next.handle(authRequest).pipe(
         catchError((error: HttpErrorResponse) => {
           //checks if access_token has expired and redirects user to

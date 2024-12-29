@@ -117,8 +117,6 @@ export class ProductsService {
       .set('page', page)
       .set('storeId', storeId);
 
-    console.log(params);
-
     return this.http.get(`${PRODUCTS_API_URL}/results`, { params });
   }
 
@@ -143,8 +141,6 @@ export class ProductsService {
     let productName = '';
     this.getProductById(id).subscribe({
       next: (data: ProductData) => {
-        console.log(data);
-
         productName = data.name;
       },
       error: (error) => console.error('Error fetching product', error),

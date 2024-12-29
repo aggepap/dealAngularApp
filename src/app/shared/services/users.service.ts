@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { ErrorService } from './error.service';
 
 const apiUrl = environment.apiURL;
-const STORES_API_URL = `${apiUrl}/users`;
+const USERS_API_URL = `${apiUrl}/users`;
 const AUTH_API_URL = `${apiUrl}/auth`;
 
 @Injectable({
@@ -44,9 +44,7 @@ export class UsersService {
     }
     effect(() => {
       if (this.user()) {
-        console.log('User Loggen in: ', this.user()?.sub);
       } else {
-        console.log('No user logged in');
       }
     });
   }
@@ -58,7 +56,7 @@ export class UsersService {
    */
   getUserbyUsername(username: string) {
     return this.http.get<UserReadOnlyDTO>(
-      `${STORES_API_URL}/find/username?=${username}`,
+      `${USERS_API_URL}/find/username?=${username}`,
       {
         headers: {
           Accept: 'application/json',
@@ -74,16 +72,13 @@ export class UsersService {
    * @returns Observable of the newly created user data as `UserInsertDTO`.
    */
   addUser(formData: UserInsertDTO) {
-    console.log(formData);
-    return this.http
-      .post<UserInsertDTO>(`${STORES_API_URL}/add`, formData)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage.set('Error while creating user');
-          this.errorService.errorColor.set('red');
-          return throwError(() => error.error);
-        })
-      );
+    return this.http.post<UserInsertDTO>(`${USERS_API_URL}/add`, formData).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorService.errorMessage.set('Error while creating user');
+        this.errorService.errorColor.set('red');
+        return throwError(() => error.error);
+      })
+    );
   }
 
   /**
@@ -105,5 +100,42 @@ export class UsersService {
     this.errorService.errorMessage.set('You have been logged out succesfully');
     this.errorService.errorColor.set('green');
     this.router.navigate(['']);
+  }
+
+  getAllUsers() {
+    return this.http.get<UserReadOnlyDTO[]>(`${USERS_API_URL}`);
+  }
+
+  /**
+   * Deletes a product by its ID.
+   * @param id The ID of the product to delete.
+   */
+  deleteUser(uuid: string, username: string) {
+    const deleteConfirmed = confirm(
+      `Are you sure you want to delete product ${username}`
+    );
+    if (deleteConfirmed) {
+      this.http.delete(`${USERS_API_URL}/remove/${uuid}`).subscribe({
+        next: () => {},
+        error: (error) => {
+          this.errorService.errorMessage.set(
+            'There was a problem deleting this user, OR you tried to delete a User with Admin rights'
+          );
+          this.errorService.errorColor.set('red');
+        },
+        complete: () => {
+          this.errorService.errorMessage.set(
+            `User ${username} was deleted succesfully`
+          );
+          this.errorService.errorColor.set('green');
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
+      });
+    } else {
+      alert('Deletion canceled');
+    }
   }
 }
