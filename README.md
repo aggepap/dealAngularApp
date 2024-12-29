@@ -6,11 +6,11 @@
 
 <h2>Project Screenshots:</h2>
 
-<img src="https://i.ibb.co/C2qZsZC/000178-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="200" height="500/">
+<img src="https://i.ibb.co/C2qZsZC/000178-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="100" height="200/">
 
-<img src="https://i.ibb.co/GWXFp5X/000179-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="200" height="500/">
+<img src="https://i.ibb.co/GWXFp5X/000179-Deals-App-Mozilla-Firefox.jpg" alt="project-screenshot" width="100" height="200/">
 
-<img src="https://i.ibb.co/RcLdH46/000180.jpg" alt="project-screenshot" width="200" height="500/">
+<img src="https://i.ibb.co/RcLdH46/000180.jpg" alt="project-screenshot" width="100" height="200/">
 
 <h2>🧐 Features</h2>
 
@@ -59,6 +59,11 @@ CTRL+ C
 <p>8. Visit http://localhost:4200/ on your browser</p>
 
 <p>9. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+
+<h2>🍰 OpenAPI </h2>
+
+<p> You can find the OpenAPI documentation on the following link: http://localhost:8080/swagger-ui/index.html#/
+after you have started the backend server</p>
 
 <h2>💻 Built with</h2>
 

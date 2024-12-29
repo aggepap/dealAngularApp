@@ -91,6 +91,7 @@ export class StoreSingleTabComponent {
       this.pagesNumber = 0; // Reset page number on store change
       this.filter.page = this.pagesNumber; // Update filter
       this.getProductsFromSearch(this.filter); // Fetch products for the new store
+      this.editStoreEnabled = false;
     }
   }
 

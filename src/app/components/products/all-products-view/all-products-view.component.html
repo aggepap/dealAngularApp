@@ -11,7 +11,7 @@
         id="categoriesSelect"
         class="select-dropdown"
       >
-        <option value="" selected>Category</option>
+        <option value="" selected>All Categories</option>
         @for (category of categoriesList; track category.id) {
         <option value="{{ category.id }}">
           {{ category.name }}
