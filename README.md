@@ -45,23 +45,11 @@ npm install
 
 ```
  ./gradlew bootrun
-```
+``
 
-<p>6. after the first successful server start stop it once</p>
+<p>6. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
 
-```
-CTRL+ C
-```
-
-<p>7. Uncomment the commented part on backend/src/main/java/gr/nifitsas/dealsapp/resources/templates/application-test.properties and run server again</p>
-
-```
- ./gradlew bootrun
-```
-
-<p>8. Visit http://localhost:4200/ on your browser</p>
-
-<p>9. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+<p>7. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 
 <h2>🍰 OpenAPI </h2>
 
@@ -81,3 +69,4 @@ Technologies used in the project:
 <h2>🛡️ License:</h2>
 
 This project is licensed under the MIT
+```

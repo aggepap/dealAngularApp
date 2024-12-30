@@ -11,6 +11,7 @@ import { UserLoginComponent } from './components/users/user-login/user-login.com
 import { authGuard } from './shared/guards/auth.guard';
 import { AllUsersViewComponent } from './components/users/all-users-view/all-users-view.component';
 import { adminGuard } from './shared/guards/admin.guard';
+import { InitializeDbComponent } from './shared/components/initialize-db/initialize-db.component';
 AddProductFormComponent;
 
 export const routes: Routes = [
@@ -56,5 +57,10 @@ export const routes: Routes = [
     path: 'users',
     component: AllUsersViewComponent,
     canActivate: [adminGuard],
+  },
+  {
+    path: 'initialize',
+    component: InitializeDbComponent,
+    title: 'Initializing database...',
   },
 ];

@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build: / # Path to your Angular project
+    ports:
+      - "4200:80" # Map host port 4200 to container port 80
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend # Path to your Spring Boot project
+    ports:
+      - "8080:8080" # Map host port 8080 to container port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/dealsAppDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Changeme123!
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16 # Use the official Postgres image
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Changeme123!
+      POSTGRES_DB: dealsAppDB
+    ports:
+      - "5432:5432" # Only needed for external access (e.g., pgAdmin) - usually not needed for production
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persist data even if the container is stopped
+
+volumes:
+  db_data:

@@ -18,6 +18,10 @@ export class ProductsService {
   errorService = inject(ErrorService);
   http: HttpClient = inject(HttpClient);
 
+  initializeDB() {
+    return this.http.get(`${apiUrl}/initialize`);
+  }
+
   // Add a new product
   //==============================================================================
 
