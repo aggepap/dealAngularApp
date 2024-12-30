@@ -45,12 +45,28 @@ npm install
 
 ```
  ./gradlew bootrun
-``
+```
 
-<p>6. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
+<p>6. return to root folder and start Angular Server</p>
 
-<p>7. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+```
+ npm start
+```
 
+<p>7. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
+
+<p>8. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+
+<h2>🛠️ Docker Image</h2>
+
+<p>1. You can run the build command in root folder </p>
+<i>There are some minor issues with image loading  on docker image that are being worked on</i>
+```
+docker-compose up -d --build
+```
+<p>2. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
+
+<p>3. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 <h2>🍰 OpenAPI </h2>
 
 <p> You can find the OpenAPI documentation on the following link: http://localhost:8080/swagger-ui/index.html#/
@@ -69,4 +85,7 @@ Technologies used in the project:
 <h2>🛡️ License:</h2>
 
 This project is licensed under the MIT
+
+```
+
 ```
