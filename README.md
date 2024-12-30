@@ -61,9 +61,11 @@ npm install
 
 <p>1. You can run the build command in root folder </p>
 <i>There are some minor issues with image loading  on docker image that are being worked on</i>
+
 ```
 docker-compose up -d --build
 ```
+
 <p>2. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
 
 <p>3. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
