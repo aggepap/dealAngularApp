@@ -33,7 +33,7 @@ export class SingleProductComponent {
   //==============================================================================
   //  Properties
   //==============================================================================
-  editProductIsEnabled: boolean = false;
+  editProductIsEnabled = false;
   user = this.userService.user;
   productId!: number;
   apiUrl = environment.apiURL;
