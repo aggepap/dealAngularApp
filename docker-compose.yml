@@ -15,9 +15,11 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Changeme123!
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      spring.resources.static-locations: file:./uploads/
     depends_on:
       - db
-
+    volumes:
+      - ./backend/uploads:/uploads # Map host directory to container directory
   db:
     image: postgres:16 # Use the official Postgres image
     environment:

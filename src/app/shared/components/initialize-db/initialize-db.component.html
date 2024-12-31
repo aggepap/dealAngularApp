@@ -1,1 +1,55 @@
-<p>initialize-db works!</p>
+<section class="bg-gray-100 h-screen flex items-center justify-center">
+  @if (initializeSuccess) {
+
+  <div class="bg-white p-8 rounded-lg shadow-md text-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-24 h-24 text-green-500 mx-auto mb-4"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Database Initialized!</h1>
+    <p class="text-gray-600 mb-6">
+      The database has been successfully initialized and populated.
+    </p>
+
+    <a
+      routerLink="/"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out"
+    >
+      Return to Home
+    </a>
+  </div>
+  } @else {
+  <div class="bg-white p-8 rounded-lg shadow-md text-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-24 h-24 text-green-500 mx-auto mb-4"
+      stroke="currentColor"
+      viewBox="0 0 512 512"
+    >
+      <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+      />
+    </svg>
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Initialize</h1>
+    <p class="text-gray-600 mb-6">Populate the database with dummy data.</p>
+
+    <button
+      (click)="onInitializeDB()"
+      class="bg-green-500 hover:bg-green-700 text-white text-3xl font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out"
+    >
+      Initialize Database
+    </button>
+  </div>
+  }
+</section>

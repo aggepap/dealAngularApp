@@ -7,7 +7,10 @@ import { Location } from '@angular/common';
   templateUrl: './error-message.component.html',
 })
 export class ErrorMessageComponent {
-  @Input() message: string = 'An error occurred. Please try again.';
+  //==============================================================================
+  //Service injections / Inputs
+  //==============================================================================
+  @Input() message = 'An error occurred. Please try again.';
   private location = inject(Location);
 
   goBack() {

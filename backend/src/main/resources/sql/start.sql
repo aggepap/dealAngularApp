@@ -1,7 +1,7 @@
 
 INSERT INTO users(username,uuid, password, role, created_at) VALUES
   ('admin@email.com','randomuuid','$2a$11$PBnrkfuCMYhdm.sw2F5mS.WrjBjlHKNVxKWs/i2R0WJ7NTOZQZzAG','ADMIN',current_timestamp );
-ALTER SEQUENCE users_id_seq RESTART WITH 2;
+
 
 
 INSERT INTO categories (id, name,icon) VALUES
@@ -110,7 +110,7 @@ INSERT INTO stores (id,name,siteurl,image_id) VALUES
                                                 (7,'Aliexpress','https://www.aliexpress.com/',62),
                                                 (8,'Eshop.gr','https://www.www.eshop.gr/',61);
 
-ALTER SEQUENCE stores_id_seq RESTART WITH 8;
+ALTER SEQUENCE stores_id_seq RESTART WITH 9;
 
 CREATE INDEX idx_product_categories_category_id ON products (category_id);
 CREATE INDEX idx_product_store_store_id ON products (store_id);
@@ -186,5 +186,3 @@ VALUES
   (55, 'DeWalt DCD796D2 20V Max Drill/Driver', 'Powerful and versatile cordless drill.', 'DEWALT10', 'https://www.dewalt.com/products/power-tools/drills/dcd796d2-20v-max-xr-lithium-ion-drill-driver-kit', 149.00, 13, 3, current_timestamp,56),
   (56, 'Makita XGT 40V Max Brushless Cordless Impact Driver', 'High-performance impact driver for demanding tasks.', 'MAKITA15', 'https://www.makitatools.com/products/xgt-40v-max-brushless-cordless-impact-driver-xdt11z', 249.00, 13, 6, current_timestamp,57),
   (57, 'Sony Alpha 7 IV', 'Professional mirrorless camera with excellent video capabilities.', 'A7IV10', 'https://www.sony.com/electronics/cameras/alpha-7-iv', 2499.00, 14, 2, current_timestamp,58);
-
-ALTER SEQUENCE products_id_seq RESTART WITH 58;

@@ -18,13 +18,19 @@ import { ErrorService } from '../../services/error.service';
   styleUrl: './alert-header.component.css',
 })
 export class AlertHeaderComponent implements AfterViewInit {
-  @ViewChild('alertBorder', { static: false }) alertBorder!: ElementRef;
-  @ViewChild('buttonClose', { static: false }) buttonClose!: ElementRef;
+  //==============================================================================
+  //Service injections / Inputs
+  //==============================================================================
+  errorService = inject(ErrorService);
   @Input() errorMessage = '';
   @Input() errorColor = '';
-  errorService = inject(ErrorService);
-
+  //==============================================================================
+  // Properties
+  //==============================================================================
+  @ViewChild('alertBorder', { static: false }) alertBorder!: ElementRef;
+  @ViewChild('buttonClose', { static: false }) buttonClose!: ElementRef;
   dismiss: DismissInterface | undefined;
+
   ngAfterViewInit() {
     if (this.alertBorder && this.buttonClose) {
       const options: DismissOptions = {
@@ -49,7 +55,9 @@ export class AlertHeaderComponent implements AfterViewInit {
       console.error('Alert elements not found in the template.');
     }
   }
-
+  /**
+   * hides the alert panel
+   */
   hideAlert() {
     if (this.dismiss) {
       this.dismiss.hide();

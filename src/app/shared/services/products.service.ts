@@ -19,7 +19,7 @@ export class ProductsService {
   http: HttpClient = inject(HttpClient);
 
   initializeDB() {
-    return this.http.get(`${apiUrl}/initialize`);
+    return this.http.get(`${apiUrl}/initialize`, { responseType: 'text' });
   }
 
   // Add a new product

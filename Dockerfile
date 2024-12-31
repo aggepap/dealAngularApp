@@ -23,6 +23,7 @@ FROM nginx:alpine
 COPY --from=builder /app/dist/deals-app/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+
 # Expose port 80 (the default HTTP port)
 EXPOSE 80
 

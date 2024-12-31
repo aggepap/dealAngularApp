@@ -3,12 +3,7 @@ import type { ImportedDeal } from '@/src/app/shared/interfaces/deals';
 import { ProductsService } from '@/src/app/shared/services/products.service';
 import { StoresService } from '@/src/app/shared/services/stores.service';
 import { environment } from '@/src/environments/environment.development';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '@/src/app/shared/components/error-message/error-message.component';
 import { RouterLink } from '@angular/router';

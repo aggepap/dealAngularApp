@@ -60,7 +60,6 @@ npm install
 <h2>🛠️ Docker Image</h2>
 
 <p>1. You can run the build command in root folder </p>
-<i>There are some minor issues with image loading  on docker image that are being worked on</i>
 
 ```
 docker-compose up -d --build
