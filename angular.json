@@ -32,7 +32,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.development.ts",
-                  "with": "src/environments/enviroment.ts"
+                  "with": "src/environments/environment.ts"
                 }
               ],
               "budgets": [
@@ -55,7 +55,7 @@
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/enviroment.ts",
+                  "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.development.ts"
                 }
               ]
