@@ -163,7 +163,6 @@ export class StoreSingleTabComponent {
           this.hasError = true;
         },
         complete: () => {
-          console.log('Product fetching completed.');
           this.isLoading = false;
         },
       });

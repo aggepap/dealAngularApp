@@ -1,12 +1,17 @@
-# Use a Java image as a base
+#Build gradle
+FROM gradle:7.6-jdk17 AS builder
+
+WORKDIR /app
+
+COPY . /app
+
+RUN ./gradlew bootJar
+
+# Runtime stage
 FROM openjdk:17-jdk-alpine
 
+COPY --from=builder /app/build/libs/dealsApp-1.0-SNAPSHOT.jar app.jar
 
-# Copy the Spring Boot JAR file
-COPY build/libs/dealsApp-1.0-SNAPSHOT.jar app.jar
-
-# Expose port 8080 (Spring Boot's default port)
 EXPOSE 8080
 
-# Start the Spring Boot app
 CMD ["java", "-jar", "app.jar"]

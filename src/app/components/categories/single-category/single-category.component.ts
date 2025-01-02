@@ -73,6 +73,8 @@ export class SingleCategoryComponent {
             this.getProductsFromSearch(this.filter);
           },
           error: (error) => {
+            console.log('Error fetching category', error);
+
             this.isLoading = false;
             this.hasError = true;
             this.errorService.errorMessage.set('Error fetching category');
@@ -139,6 +141,7 @@ export class SingleCategoryComponent {
           this.totalElements = data.totalElements;
         },
         error: (error) => {
+          console.log('Error fetching products', error);
           this.isLoading = false;
           this.hasError = true;
           this.errorService.errorMessage.set('Error fetching products');
