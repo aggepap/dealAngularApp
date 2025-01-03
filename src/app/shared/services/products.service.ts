@@ -163,9 +163,7 @@ export class ProductsService {
         next: () => {},
         error: (error) => {
           console.log('error while deleting product', error);
-          this.errorService.errorMessage.set(
-            'Failed to delete this product. Please try again.'
-          );
+          this.errorService.errorMessage.set(error.error.description);
           this.errorService.errorColor.set('red');
           console.log(error);
         },

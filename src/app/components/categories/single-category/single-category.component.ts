@@ -120,7 +120,7 @@ export class SingleCategoryComponent {
    *
    * @param filters An object containing search filters to be applied.
    */
-  getProductsFromSearch(filters: filterSend) {
+  getProductsFromSearch(filters: filterSend, resetPage = false): void {
     this.productService
       .getProductsPaginatedFiltered(filters, this.filter.page, this.filter.size)
       .subscribe({
@@ -144,7 +144,7 @@ export class SingleCategoryComponent {
           console.log('Error fetching products', error);
           this.isLoading = false;
           this.hasError = true;
-          this.errorService.errorMessage.set('Error fetching products');
+          this.errorService.errorMessage.set(error.error.description);
           this.errorService.errorColor.set('red');
         },
         complete: () => {

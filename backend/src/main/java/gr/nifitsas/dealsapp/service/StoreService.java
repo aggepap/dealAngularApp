@@ -100,6 +100,7 @@ public class StoreService implements IStoreService {
 
     Store selectedStore = storeRepository.findById(storeId)
       .orElseThrow(() -> new AppObjectNotFoundException("Store", "Store with id " + storeId + " not found."));
+    String otherStore = "Other";
     if (selectedStore.getName().trim().equals("Other")) {
       throw new AppObjectInvalidArgumentException("Store", "Store 'Other' cannot be updated.");
     }

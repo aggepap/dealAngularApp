@@ -37,8 +37,12 @@ export class AddNewCategoryComponent {
    * FormGroup instance containing form controls for new category name and icon.
    */
   insertNewForm = new FormGroup({
-    newCategoryIcon: new FormControl('', Validators.required),
-    newCategoryName: new FormControl('', Validators.required),
+    newCategoryIcon: new FormControl('fa-star', Validators.required),
+    newCategoryName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(25),
+    ]),
   });
 
   /**
@@ -77,7 +81,7 @@ export class AddNewCategoryComponent {
           }, 1000);
         },
         (error) => {
-          this.errorService.errorMessage.set('Error while adding category');
+          this.errorService.errorMessage.set(error.error.description);
           this.errorService.errorColor.set('red');
         }
       );

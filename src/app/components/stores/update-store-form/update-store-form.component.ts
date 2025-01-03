@@ -92,7 +92,7 @@ export class UpdateStoreFormComponent {
         this.errorService.errorColor.set('green');
       },
       error: (error) => {
-        this.errorService.errorMessage.set('Error  while updating store');
+        this.errorService.errorMessage.set(error.error.description);
         this.errorService.errorColor.set('red');
       },
       complete: () => {
@@ -109,7 +109,8 @@ export class UpdateStoreFormComponent {
   updateStoreForm = new FormGroup({
     updatedStoreName: new FormControl<string>('', [
       Validators.required,
-      Validators.minLength(2),
+      Validators.minLength(3),
+      Validators.maxLength(20),
     ]),
     updatedStoreUrl: new FormControl<string>('', [
       Validators.required,

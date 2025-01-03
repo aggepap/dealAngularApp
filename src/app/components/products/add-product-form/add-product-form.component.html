@@ -61,10 +61,15 @@
           placeholder="Product Title"
           required
         />
-        @if(addProductForm.get('addProductName')?.invalid &&
+        @if(addProductForm.get('addProductName')?.hasError('required') &&
         addProductForm.get('addProductName')?.touched){
         <p class="text-xs text-red-900 mb-2 block">
           Product title is required.
+        </p>
+        }@else if (addProductForm.get('addProductName')?.hasError('maxlength'))
+        {
+        <p class="text-xs text-red-900 mb-2 block">
+          Product title cannot excceed 100 characters.
         </p>
         }
       </div>
@@ -82,11 +87,16 @@
           placeholder="Product description"
           required
         ></textarea>
-        @if(addProductForm.get('addProductDescription')?.invalid &&
+        @if(addProductForm.get('addProductDescription')?.hasError('required') &&
         addProductForm.get('addProductDescription')?.touched){
         <p class="text-xs text-red-900 mb-2 block">
           Product description is required, please enter some info for the
-          product
+          product.
+        </p>
+        }
+        @if(addProductForm.get('addProductDescription')?.hasError('maxlength')){
+        <p class="text-xs text-red-900 mb-2 block">
+          Product Description Cannot exceeed 1000 characters.
         </p>
         }
       </div>
@@ -167,9 +177,13 @@
           placeholder="URL Link for deal"
           required
         />
-        @if(addProductForm.get('AddDealURL')?.invalid &&
+        @if(addProductForm.get('AddDealURL')?.hasError('required') &&
         addProductForm.get('AddDealURL')?.touched){
         <p class="text-xs text-red-900 mb-2 block">Deal URL is required.</p>
+        }@else if (addProductForm.get('AddDealURL')?.hasError('pattern')) {
+        <p class="text-xs text-red-900 mb-2 block">
+          Deal URL is not valid. Please use full url (http://www.example.com)
+        </p>
         }
       </div>
       <div class="flex">
@@ -198,7 +212,7 @@
           <input
             required
             type="number"
-            min="1"
+            min="0"
             step="any"
             id="AddDealPrice"
             formControlName="AddDealPrice"
@@ -216,7 +230,9 @@
     </fieldset>
     <div class="mt-5">
       @if (addProductForm.get("addProductDescription")?.invalid ||
-      addProductForm.get("addProductName")?.invalid || !fileSelected) {
+      addProductForm.get("addProductName")?.invalid || !fileSelected ||
+      addProductForm.get("addDealStore")?.invalid ||
+      addProductForm.get("AddDealURL")?.invalid) {
 
       <button
         type="submit"

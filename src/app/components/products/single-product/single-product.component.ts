@@ -89,12 +89,12 @@ export class SingleProductComponent {
   getProductById(id: number) {
     this.productService.getProductById(id).subscribe({
       next: (data: ProductData) => {
+        console.log(data.description);
         this.product = data;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching product', error);
-
         this.isLoading = false;
         this.hasError = true;
       },

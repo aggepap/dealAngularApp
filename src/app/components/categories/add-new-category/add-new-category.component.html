@@ -75,15 +75,18 @@
           />
         </div>
 
-        @if(insertNewForm.get('newCategoryName')?.invalid &&
+        @if(insertNewForm.get('newCategoryName')?.hasError("required") &&
         insertNewForm.get('newCategoryName')?.touched){
-        <span class="text-xs text-red-900 mb-2 block"
-          >Category Name is required</span
-        >
+        <p class="text-xs text-red-900 mb-2 block">Category Name is required</p>
+        }@else if(insertNewForm.get('newCategoryName')?.hasError("minlength") ||
+        insertNewForm.get('newCategoryName')?.hasError('maxlength')){
+        <p class="text-xs text-red-900 mb-2 block">
+          Category Name must be between 3 and 20 characters
+        </p>
         }
       </div>
     </div>
-    <div class="add-category-buttons px-40 flex justify-around py-6">
+    <div class="add-category-buttons px-40 flex justify-around my-6">
       @if(insertNewForm.invalid){
       <button
         type="button"

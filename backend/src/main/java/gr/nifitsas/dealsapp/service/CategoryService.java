@@ -86,8 +86,9 @@ public class CategoryService implements ICategoryService {
     }
     Category selectedCategory = categoryRepository.findById(categoryUpdateDTO.getId())
       .orElseThrow(() -> new AppObjectNotFoundException("Category", "Category with id " + categoryUpdateDTO.getId() + " not found."));
-    if (selectedCategory.getName().trim().equals("Other")) {
-      throw new AppObjectInvalidArgumentException("Category", "Category 'Other' cannot be updated.");
+    String OtherCat = "Other";
+    if (selectedCategory.getName().toLowerCase().trim().equals(OtherCat.toLowerCase())) {
+      selectedCategory.setName("Other");
     }
     selectedCategory.setIcon(categoryUpdateDTO.getIcon());
     selectedCategory.setName(categoryUpdateDTO.getName());

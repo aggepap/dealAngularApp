@@ -122,9 +122,7 @@ export class AllCategoriesViewComponent {
             (error) => {
               console.log('Error while updating category', error);
 
-              this.errorService.errorMessage.set(
-                'Error while updating category'
-              );
+              this.errorService.errorMessage.set(error.error.description);
               this.errorService.errorColor.set('red');
             }
           );

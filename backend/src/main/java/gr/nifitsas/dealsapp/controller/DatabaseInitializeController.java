@@ -54,7 +54,6 @@ public class DatabaseInitializeController {
     try {
       String sql = loadSqlFromFile("sql/start.sql");
       jdbcTemplate.execute(sql);
-
       Map<String, String> response = new HashMap<>();
       response.put("message", "Database initialized successfully");
       return ResponseEntity.ok(response);

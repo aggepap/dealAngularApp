@@ -126,7 +126,10 @@ export class AllProductsViewComponent {
    *
    * @param filters An object containing search filters (name, category, page, and size).
    */
-  getProductsFromSearch(filters: filterSend) {
+  getProductsFromSearch(filters: filterSend, resetPage = false) {
+    if (resetPage) {
+      this.pagesNumber = 0;
+    }
     this.productService
       .getProductsPaginatedFiltered(filters, this.pagesNumber, this.pageSize)
       .subscribe({
@@ -144,17 +147,16 @@ export class AllProductsViewComponent {
             price: deal.price,
             image: deal.image,
             lowestPrice: deal.lowestPrice,
+            updatedAt: deal.updatedAt,
           }));
-          console.log(this.dealsList);
 
-          this.pagesNumber = 0;
+          console.log(this.dealsList);
           this.totalPages = data.totalPages;
           this.pageSize = data.pageSize;
           this.totalElements = data.totalElements;
         },
         error: (error) => {
           console.log('Error fetching products:', error);
-
           this.isLoading = false;
           this.hasError = true;
           this.errorMessage = 'Failed to load products';
@@ -171,7 +173,7 @@ export class AllProductsViewComponent {
    */
   onPageSizeChange() {
     this.pagesNumber = 0;
-    this.getProductsFromSearch(this.filter);
+    this.getProductsFromSearch(this.filter, true);
   }
 
   /**
@@ -187,6 +189,6 @@ export class AllProductsViewComponent {
       page: this.pagesNumber,
       size: this.pageSize,
     };
-    this.getProductsFromSearch(this.filter);
+    this.getProductsFromSearch(this.filter, true);
   }
 }

@@ -30,6 +30,16 @@
               placeholder="name@company.com"
               required
             />
+            @if(loginForm.get('username')?.hasError('required') &&
+            loginForm.get('username')?.touched){
+            <span class="text-xs text-red-900 mb-2 block"
+              >Username is required</span
+            >
+            }@else if (loginForm.get('username')?.hasError('email')) {
+            <span class="text-xs text-red-900 mb-2 block"
+              >Username must be an email account</span
+            >
+            }
           </div>
           <div>
             <label
@@ -46,6 +56,12 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               required
             />
+            @if(loginForm.get('password')?.hasError('required') &&
+            loginForm.get('password')?.touched){
+            <span class="text-xs text-red-900 mb-2 block"
+              >password is required</span
+            >
+            }
           </div>
           @if (loginError) {
           <p class="mt-2 mb-4 text-red-900 font-light italic">

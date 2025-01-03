@@ -53,6 +53,7 @@ export class AddStoreFormComponent {
     addStoreName: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(3),
+      Validators.maxLength(20),
     ]),
     addStoreUrl: new FormControl<string>(
       '',

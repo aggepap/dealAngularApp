@@ -36,7 +36,7 @@ public class AuthRestController {
       AuthResponseDTO authResponseDTO = authService.authenticate(authRequest);
       LOGGER.info("User Authenticated: {}", authResponseDTO);
       return ResponseEntity.ok(authResponseDTO);
-    }catch (AppObjectNotAuthorizedException e){
+    }catch (AppObjectNotAuthorizedException  e){
       LOGGER.error("ERROR: Could not find User.", e);
       throw e;
     }

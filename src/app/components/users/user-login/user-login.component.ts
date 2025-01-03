@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Location } from '@angular/common';
+import { ErrorService } from '@/src/app/shared/services/error.service';
 
 @Component({
   selector: 'app-user-login',
@@ -23,6 +24,7 @@ export class UserLoginComponent {
   //  Inject Services
   //======================================================
   userService = inject(UsersService);
+  errorService = inject(ErrorService);
   location = inject(Location);
   router = inject(Router);
   //======================================================
@@ -70,16 +72,11 @@ export class UserLoginComponent {
       next: (data) => {
         const token = data.token;
         localStorage.setItem('access_token', token);
-
         const decodedTokenData = jwtDecode(token) as unknown as LoggedInUser;
-
-        console.log(decodedTokenData);
-
         this.userService.user.set({
           sub: decodedTokenData.sub,
           role: decodedTokenData.role,
         });
-
         this.location.back();
       },
       error: (error) => {
@@ -88,6 +85,9 @@ export class UserLoginComponent {
         this.loginForm.setErrors({
           loginError: true,
         });
+
+        this.errorService.errorMessage.set(error.error.description);
+        this.errorService.errorColor.set('red');
       },
     });
   }

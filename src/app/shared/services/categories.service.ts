@@ -127,6 +127,7 @@ export class CategoriesService {
         },
         error: (error) => {
           console.error('Error deleting category', error);
+
           if (categoryName === 'Other') {
             this.errorService.errorMessage.set(
               'You cannot delete the "Other" category. This is the default Category for deals that do not belong to any other category.'

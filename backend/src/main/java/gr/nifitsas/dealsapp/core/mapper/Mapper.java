@@ -35,7 +35,7 @@ public class Mapper {
   }
   public ProductReadOnlyDTO mapToProductReadOnlyDTO(Product product){
     return new ProductReadOnlyDTO(product.getId(),  product.getName(), product.getDescription(),
-      product.getCategory(),product.getStore(), product.getCoupon(), product.getURL(), product.getPrice(), product.getImage(), product.getLowestPrice());
+      product.getCategory(),product.getStore(), product.getCoupon(), product.getURL(), product.getPrice(), product.getImage(), product.getLowestPrice(),product.getUpdatedAt());
   }
 
 //  Category Mappers

@@ -20,6 +20,7 @@ public class Product extends AbstractEntity implements ImageAttachable {
     @Column(unique = true)
 
     private String name;
+    @Column(length = 2000)
     private String description;
     private String coupon;
     private String URL;

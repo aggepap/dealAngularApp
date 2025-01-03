@@ -64,8 +64,14 @@ export class AddProductFormComponent {
    */
   addProductForm = new FormGroup({
     addProductCategory: new FormControl(1, Validators.required),
-    addProductName: new FormControl('', Validators.required),
-    addProductDescription: new FormControl('', Validators.required),
+    addProductName: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100),
+    ]),
+    addProductDescription: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(1000),
+    ]),
     addProductImage: new FormControl('', [
       Validators.required,
       fileTypeValidator(this.allowedFileTypes),

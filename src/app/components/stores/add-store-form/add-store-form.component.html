@@ -31,10 +31,13 @@
           required
         />
       </div>
-      @if(addStoreForm.get('addStoreName')?.invalid &&
+      @if(addStoreForm.get('addStoreName')?.hasError("required") &&
       addStoreForm.get('addStoreName')?.touched){
+      <p class="text-xs text-red-900 mb-2 block">Store name is required.</p>
+      }@else if ( addStoreForm.get('addStoreName')?.hasError("minlength") ||
+      addStoreForm.get('addStoreName')?.hasError("maxlength") ) {
       <p class="text-xs text-red-900 mb-2 block">
-        Store name is required, and must be at least 3 characters
+        Store name must be between 3 and 20 characters long.
       </p>
       }
     </div>
@@ -69,8 +72,10 @@
           required
         />
       </div>
-      @if(addStoreForm.get('addStoreUrl')?.invalid &&
+      @if(addStoreForm.get('addStoreUrl')?.hasError("required") &&
       addStoreForm.get('addStoreUrl')?.touched){
+      <p class="text-xs text-red-900 mb-2 block">Store URL is required.</p>
+      }@else if ( addStoreForm.get('addStoreUrl')?.hasError("pattern") ) {
       <p class="text-xs text-red-900 mb-2 block">
         Valid store URL format: "https://www.example.com"
       </p>
@@ -107,7 +112,7 @@
   </div>
   <div class="add-buttons mt-5 flex justify-around">
     @if(addStoreForm.get("addStoreName")?.invalid ||
-    addStoreForm.get("addStoreUrl")?.invalid ) {
+    addStoreForm.get("addStoreUrl")?.invalid || !fileSelected ) {
     <button
       type="submit"
       class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"

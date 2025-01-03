@@ -33,10 +33,13 @@
         placeholder="{{ storeInfo?.name }}"
       />
     </div>
-    @if(updateStoreForm.get('updatedStoreName')?.invalid &&
+    @if(updateStoreForm.get('updatedStoreName')?.hasError("required") &&
     updateStoreForm.get('updatedStoreName')?.touched){
+    <p class="text-xs text-red-900 mb-2 block">Store name is required.</p>
+    }@else if (updateStoreForm.get('updatedStoreName')?.hasError("minlength") ||
+    updateStoreForm.get('updatedStoreName')?.hasError("maxlength") ) {
     <p class="text-xs text-red-900 mb-2 block">
-      Store name is required, and should be more than 2 characters
+      Store name must be between 3 and 20 characters long.
     </p>
     }
   </div>
@@ -70,9 +73,13 @@
         placeholder="{{ storeInfo?.siteURL }} "
       />
     </div>
-    @if(updateStoreForm.get('updatedStoreUrl')?.invalid &&
+    @if(updateStoreForm.get('updatedStoreUrl')?.hasError("required") &&
     updateStoreForm.get('updatedStoreUrl')?.touched){
     <p class="text-xs text-red-900 mb-2 block">Store URL is required.</p>
+    }@else if (updateStoreForm.get('updatedStoreUrl')?.hasError("pattern") ) {
+    <p class="text-xs text-red-900 mb-2 block">
+      Valid store URL format: "https://www.example.com"
+    </p>
     }
   </div>
   <div class="update-form-item">

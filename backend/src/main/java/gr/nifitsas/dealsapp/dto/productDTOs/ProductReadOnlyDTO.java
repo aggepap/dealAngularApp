@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,6 +27,7 @@ public class ProductReadOnlyDTO {
   private Double price;
   private Attachment image;
   private Double lowestPrice;
+  private LocalDateTime updatedAt;
 
 
 }
