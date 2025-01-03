@@ -90,6 +90,8 @@ export class StoresService {
       this.http.delete(`${STORES_API_URL}/remove?id=${id}`).subscribe({
         next: () => {},
         error: (error) => {
+          console.log('error deleting store', error);
+
           if (storeName === 'Other') {
             this.errorService.errorMessage.set(
               'You cannot delete the "Other" Store. This is the default Store for products that do not have a Store.'

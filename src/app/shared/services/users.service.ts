@@ -74,6 +74,8 @@ export class UsersService {
   addUser(formData: UserInsertDTO) {
     return this.http.post<UserInsertDTO>(`${USERS_API_URL}/add`, formData).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.log(error);
+
         this.errorService.errorMessage.set('Error while creating user');
         this.errorService.errorColor.set('red');
         return throwError(() => error.error);
@@ -107,7 +109,7 @@ export class UsersService {
   }
 
   /**
-   * Deletes a product by its ID.
+   * Deletes a user by its ID.
    * @param id The ID of the product to delete.
    */
   deleteUser(uuid: string, username: string) {
@@ -118,6 +120,8 @@ export class UsersService {
       this.http.delete(`${USERS_API_URL}/remove/${uuid}`).subscribe({
         next: () => {},
         error: (error) => {
+          console.log('Error deleting user', error);
+
           this.errorService.errorMessage.set(
             'There was a problem deleting this user, OR you tried to delete the last remaining user with Admin rights'
           );

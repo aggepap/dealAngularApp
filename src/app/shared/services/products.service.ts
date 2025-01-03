@@ -41,7 +41,7 @@ export class ProductsService {
         this.errorService.errorColor.set('green');
       },
       error: (error) => {
-        console.log(error);
+        console.log('error while adding product', error);
 
         this.errorService.errorMessage.set('Error while adding product');
         this.errorService.errorColor.set('red');
@@ -71,6 +71,7 @@ export class ProductsService {
           this.errorService.errorColor.set('green');
         },
         error: (error) => {
+          console.log('error while updating product', error);
           this.errorService.errorMessage.set('Error while updating product');
           this.errorService.errorColor.set('red');
         },
@@ -161,6 +162,7 @@ export class ProductsService {
       this.http.delete(`${PRODUCTS_API_URL}/remove/${id}`).subscribe({
         next: () => {},
         error: (error) => {
+          console.log('error while deleting product', error);
           this.errorService.errorMessage.set(
             'Failed to delete this product. Please try again.'
           );

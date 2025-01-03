@@ -153,6 +153,8 @@ export class AllProductsViewComponent {
           this.totalElements = data.totalElements;
         },
         error: (error) => {
+          console.log('Error fetching products:', error);
+
           this.isLoading = false;
           this.hasError = true;
           this.errorMessage = 'Failed to load products';

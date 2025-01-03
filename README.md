@@ -23,7 +23,19 @@ Here're some of the project's best features:
 - Displays Deals that users can add and sorts them by store or category
 - Authentication/Authorization
 
-<h2>🛠️ Installation Steps:</h2>
+<h2>🛠️ Docker Image</h2>
+
+<p>1. You can run the build command in root folder </p>
+
+```
+docker-compose up
+```
+
+<p>2. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
+
+<p>4. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
+
+<h2>🛠️ Manual Installation Steps:</h2>
 
 <p>1. Git clone this project in a folder</p>
 
@@ -57,25 +69,7 @@ npm install
 
 <p>8. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 
-<h2>🛠️ Docker Image</h2>
-
-<p>1. open "backend" folder and built jar file</p>
-
-```
- ./gradlew bootJar
-```
-
-<p>2. You can run the build command in root folder </p>
-
-```
-docker-compose up -d --build
-```
-
-<p>3. Visit http://localhost:4200/initialize on your browser to prefill database with dummy data</p>
-
-<p>4. Create a new user or use user: "admin@email.com" and password: "Changeme123!" for admin access</p>
 <h2>🍰 OpenAPI </h2>
-
 <p> You can find the OpenAPI documentation on the following link: http://localhost:8080/swagger-ui/index.html#/
 after you have started the backend server</p>
 

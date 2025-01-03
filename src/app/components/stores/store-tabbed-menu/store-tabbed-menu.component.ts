@@ -37,6 +37,8 @@ export class StoreTabbedMenuComponent {
         this.storeList = data;
       },
       (error) => {
+        console.log('Error while fetching Stores data', error);
+
         this.isError = true;
         this.errorMessage = 'Error while fetching Stores data';
         console.log('Error while fetching Stores data');
