@@ -217,7 +217,7 @@ public class ProductControllerJunitTest {
     ProductReadOnlyDTO deletedProduct = new ProductReadOnlyDTO();
     when(productService.deleteProduct(productId)).thenReturn(deletedProduct);
 
-    ResponseEntity<ProductReadOnlyDTO> response = productController.deleteStore(productId);
+    ResponseEntity<ProductReadOnlyDTO> response = productController.deleteProduct(productId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(deletedProduct, response.getBody());
@@ -230,7 +230,7 @@ public class ProductControllerJunitTest {
     Long productId = 1L;
     when(productService.deleteProduct(productId)).thenThrow(new AppObjectNotFoundException("Product", "Product not found"));
 
-    assertThrows(AppObjectNotFoundException.class, () -> productController.deleteStore(productId));
+    assertThrows(AppObjectNotFoundException.class, () -> productController.deleteProduct(productId));
     verify(productService, times(1)).deleteProduct(productId);
   }
 
@@ -240,7 +240,7 @@ public class ProductControllerJunitTest {
     Long productId = 1L;
     when(productService.deleteProduct(productId)).thenThrow(new AppObjectInvalidArgumentException("Product", "Invalid product data"));
 
-    assertThrows(AppObjectInvalidArgumentException.class, () -> productController.deleteStore(productId));
+    assertThrows(AppObjectInvalidArgumentException.class, () -> productController.deleteProduct(productId));
     verify(productService, times(1)).deleteProduct(productId);
   }
 }

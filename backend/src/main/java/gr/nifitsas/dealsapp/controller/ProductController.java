@@ -205,7 +205,7 @@ public class ProductController {
     @ApiResponse(responseCode = "404", description = "Product Not Found",
       content = @Content)})
   //Controller
-  @DeleteMapping("/remove/{id}/")
+  @DeleteMapping("/remove/{id}")
   public ResponseEntity<ProductReadOnlyDTO>deleteProduct(@PathVariable("id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
     System.out.println(id);
     if(productService.findProductById(id).isEmpty()) {
