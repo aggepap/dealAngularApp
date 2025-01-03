@@ -186,3 +186,4 @@ VALUES
   (55, 'DeWalt DCD796D2 20V Max Drill/Driver', 'Powerful and versatile cordless drill.', 'DEWALT10', 'https://www.dewalt.com/products/power-tools/drills/dcd796d2-20v-max-xr-lithium-ion-drill-driver-kit', 149.00, 13, 3, current_timestamp,56),
   (56, 'Makita XGT 40V Max Brushless Cordless Impact Driver', 'High-performance impact driver for demanding tasks.', 'MAKITA15', 'https://www.makitatools.com/products/xgt-40v-max-brushless-cordless-impact-driver-xdt11z', 249.00, 13, 6, current_timestamp,57),
   (57, 'Sony Alpha 7 IV', 'Professional mirrorless camera with excellent video capabilities.', 'A7IV10', 'https://www.sony.com/electronics/cameras/alpha-7-iv', 2499.00, 14, 2, current_timestamp,58);
+ALTER SEQUENCE products_id_seq RESTART WITH 58;

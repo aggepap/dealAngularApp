@@ -37,7 +37,7 @@ public class Store implements ImageAttachable {
   }
 
 
-    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "store")
     @JsonManagedReference
       private Set<Product> products = new HashSet<>();
 

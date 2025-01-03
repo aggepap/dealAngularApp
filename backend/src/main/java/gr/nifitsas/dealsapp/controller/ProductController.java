@@ -211,7 +211,12 @@ public class ProductController {
       content = @Content)})
   //Controller
   @DeleteMapping("/remove/{productId}")
-  public ResponseEntity<ProductReadOnlyDTO>deleteStore(@PathVariable("productId")Long productId) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+  public ResponseEntity<ProductReadOnlyDTO>deleteProduct(@PathVariable("productId")Long productId) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+    LOGGER.info("Deleting product: {}", productId);
+
+    if(productService.findProductById(productId).isEmpty()) {
+      throw new AppObjectNotFoundException("Product", "Product With id :" + productId + " was not found");
+    }
     try{
       ProductReadOnlyDTO deletedProduct = productService.deleteProduct(productId);
       return new ResponseEntity<>(deletedProduct, HttpStatus.OK);

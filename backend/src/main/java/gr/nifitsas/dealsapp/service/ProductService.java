@@ -17,6 +17,8 @@ import gr.nifitsas.dealsapp.repository.ProductRepository;
 import gr.nifitsas.dealsapp.service.specifications.ProductSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ public class ProductService implements IProductService {
   private final AttachmentService attachmentService;
   private final StoreService storeService;
   private final Mapper mapper;
+  private final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
   /**
    * Retrieves all products as ProductReadOnlyDTO objects.
@@ -197,13 +200,15 @@ public class ProductService implements IProductService {
   @Transactional(rollbackOn = Exception.class)
   public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
     Optional<Product> optionalProduct = productRepository.findById(id);
-    if (optionalProduct.isPresent()) {
-      Product product = optionalProduct.get();
-      productRepository.delete(product);
-      return mapper.mapToProductReadOnlyDTO(product);
-    } else {
+
+    if (optionalProduct.isEmpty()) {
       throw new AppObjectNotFoundException("Product", "Product with id: " + id + " not found");
     }
+    Product product = optionalProduct.get();
+    LOGGER.info(product.getName(), product.getId());
+
+    productRepository.delete(product);
+    return mapper.mapToProductReadOnlyDTO(product);
   }
 
   /**

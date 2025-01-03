@@ -27,7 +27,7 @@ public class Category {
 
   private String icon;
 
-  @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "category")
   @JsonManagedReference
   private Set<Product> products = new HashSet<>();
 

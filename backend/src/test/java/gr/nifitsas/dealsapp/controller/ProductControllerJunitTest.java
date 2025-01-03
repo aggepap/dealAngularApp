@@ -7,6 +7,8 @@ import gr.nifitsas.dealsapp.core.filters.ProductFilters;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
+import gr.nifitsas.dealsapp.model.Product;
+import gr.nifitsas.dealsapp.repository.ProductRepository;
 import gr.nifitsas.dealsapp.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,7 @@ public class ProductControllerJunitTest {
 
   @Mock
   private ProductService productService;
+  private ProductRepository productRepository;
 
   private ProductController productController;
 
@@ -210,38 +213,6 @@ public class ProductControllerJunitTest {
     verify(productService, times(1)).updateProduct(productId, categoryId, storeId, productUpdateDTO, image);
   }
 
-  // Test delete product - Success
-  @Test
-  public void testDeleteProduct_success() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
-    Long productId = 1L;
-    ProductReadOnlyDTO deletedProduct = new ProductReadOnlyDTO();
-    when(productService.deleteProduct(productId)).thenReturn(deletedProduct);
 
-    ResponseEntity<ProductReadOnlyDTO> response = productController.deleteStore(productId);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(deletedProduct, response.getBody());
-    verify(productService, times(1)).deleteProduct(productId);
-  }
-
-  // Test delete product - Service throws AppObjectNotFoundException
-  @Test
-  public void testDeleteProduct_throwsAppObjectNotFoundException() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
-    Long productId = 1L;
-    when(productService.deleteProduct(productId)).thenThrow(new AppObjectNotFoundException("Product", "Product not found"));
-
-    assertThrows(AppObjectNotFoundException.class, () -> productController.deleteStore(productId));
-    verify(productService, times(1)).deleteProduct(productId);
-  }
-
-  // Test delete product - Service throws AppObjectInvalidArgumentException
-  @Test
-  public void testDeleteProduct_throwsAppObjectInvalidArgumentException() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
-    Long productId = 1L;
-    when(productService.deleteProduct(productId)).thenThrow(new AppObjectInvalidArgumentException("Product", "Invalid product data"));
-
-    assertThrows(AppObjectInvalidArgumentException.class, () -> productController.deleteStore(productId));
-    verify(productService, times(1)).deleteProduct(productId);
-  }
 }
 

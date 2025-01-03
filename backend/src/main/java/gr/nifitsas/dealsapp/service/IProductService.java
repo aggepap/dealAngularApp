@@ -18,12 +18,12 @@ import java.util.Optional;
 
 
 public interface IProductService {
-public List<ProductReadOnlyDTO> getProducts();
+List<ProductReadOnlyDTO> getProducts();
 Optional<ProductReadOnlyDTO> findProductById(Long id);
-public Page<ProductReadOnlyDTO> getPaginatedProducts(int page, int size);
+Page<ProductReadOnlyDTO> getPaginatedProducts(int page, int size);
 ProductReadOnlyDTO saveProduct( Long categoryId, Long storeId, ProductInsertDTO dto, MultipartFile image) throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException, IOException;
-public ProductReadOnlyDTO updateProduct(Long productId, Long categoryId, Long storeId, ProductUpdateDTO dto, MultipartFile image
+ProductReadOnlyDTO updateProduct(Long productId, Long categoryId, Long storeId, ProductUpdateDTO dto, MultipartFile image
 ) throws AppObjectNotFoundException, AppObjectInvalidArgumentException, IOException, AppObjectAlreadyExistsException;
-public Paginated<ProductReadOnlyDTO> getPaginatedFilteredProducts(ProductFilters filters) throws AppObjectInvalidArgumentException;
-public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
+Paginated<ProductReadOnlyDTO> getPaginatedFilteredProducts(ProductFilters filters) throws AppObjectInvalidArgumentException;
+ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException;
 }

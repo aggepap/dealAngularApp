@@ -171,8 +171,6 @@ export class ProductsService {
             `Product ${productName} was deleted succesfully`
           );
           this.errorService.errorColor.set('green');
-
-          this.location.back();
         },
       });
     } else {

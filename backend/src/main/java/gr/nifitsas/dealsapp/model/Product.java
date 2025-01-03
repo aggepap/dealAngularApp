@@ -27,8 +27,8 @@ public class Product extends AbstractEntity implements ImageAttachable {
     private double price;
     private Double lowestPrice;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
+  @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
+  @JoinColumn(name = "image_id")
     private Attachment image;
 
   @Override
@@ -43,7 +43,7 @@ public class Product extends AbstractEntity implements ImageAttachable {
 
   @ManyToOne
   @JsonBackReference
-  @JoinColumn(name="store_id", nullable = false)
+  @JoinColumn(name="store_id")
   private Store store;
 
 
