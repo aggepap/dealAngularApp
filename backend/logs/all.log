@@ -24429,3 +24429,7 @@ org.springframework.security.core.userdetails.UsernameNotFoundException: User wi
 2025-01-03 23:12:55 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]
 2025-01-03 23:14:12 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]
 2025-01-03 23:20:34 INFO  - User Authenticated: AuthResponseDTO(username=admin@email.com, token=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3MzU5MzkyMzQsImV4cCI6MTczNTk0MjgzNH0.ieNV1-umz8w6CAOcyImNTWh7koe-ZVDDTLtDCnRpU3w)
+2025-01-03 23:21:01 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]
+2025-01-03 23:24:57 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]
+2025-01-03 23:25:59 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]
+2025-01-03 23:26:14 WARN  - Resolved [gr.nifitsas.dealsapp.core.exceptions.AppObjectNotFoundException: Product with id: 59 not found]

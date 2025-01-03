@@ -66,10 +66,10 @@
         <p class="text-xs text-red-900 mb-2 block">
           Product title is required.
         </p>
-        }@else if (addProductForm.get('addProductName')?.hasError('maxlength'))
-        {
+        }@else if (addProductForm.get('addProductName')?.hasError('maxlength')
+        || addProductForm.get('addProductName')?.hasError('minlength') ) {
         <p class="text-xs text-red-900 mb-2 block">
-          Product title cannot excceed 100 characters.
+          Product title must be between 5 and 100 characters.
         </p>
         }
       </div>

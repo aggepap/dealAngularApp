@@ -66,6 +66,7 @@ export class AddProductFormComponent {
     addProductCategory: new FormControl(1, Validators.required),
     addProductName: new FormControl('', [
       Validators.required,
+      Validators.minLength(5),
       Validators.maxLength(100),
     ]),
     addProductDescription: new FormControl('', [
