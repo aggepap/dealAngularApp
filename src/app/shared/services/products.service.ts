@@ -33,6 +33,8 @@ export class ProductsService {
    * @returns Subscription object (for advanced error handling if needed).
    */
   addProduct(formData: FormData) {
+    console.log(formData);
+
     return this.http.post(`${PRODUCTS_API_URL}/add`, formData).subscribe({
       next: (response) => {
         this.errorService.errorMessage.set('Product added successfully');
@@ -165,12 +167,16 @@ export class ProductsService {
             'Failed to delete this product. Please try again.'
           );
           this.errorService.errorColor.set('red');
+          console.log(error);
         },
         complete: () => {
           this.errorService.errorMessage.set(
             `Product ${productName} was deleted succesfully`
           );
           this.errorService.errorColor.set('green');
+          setTimeout(() => {
+            this.router.navigate(['/deals']);
+          }, 1000);
         },
       });
     } else {

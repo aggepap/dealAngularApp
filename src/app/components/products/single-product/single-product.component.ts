@@ -63,6 +63,7 @@ export class SingleProductComponent {
    */
   onDeleteProductClick() {
     this.productService.deleteProduct(this.productId);
+    console.log(this.productId);
   }
 
   /**

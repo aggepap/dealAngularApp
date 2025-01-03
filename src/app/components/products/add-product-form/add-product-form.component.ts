@@ -96,6 +96,7 @@ export class AddProductFormComponent {
     };
     const category = value.addProductCategory;
     const store = value.addDealStore;
+    console.log(category);
 
     const imageInput = document.getElementById(
       'addProductImage'
@@ -113,14 +114,12 @@ export class AddProductFormComponent {
     //Send category part of formdata
     //==============================================================================
     if (category) {
-      formData.append(
-        'category',
-        new Blob([category], { type: 'application/json' })
-      );
+      formData.append('category', category);
     }
     //Send store part of formdata
+    console.log('Store:', store);
     if (store) {
-      formData.append('store', new Blob([store], { type: 'application/json' }));
+      formData.append('store', store);
     }
     // Check if an image was selected and send it
     //==============================================================================
@@ -128,8 +127,8 @@ export class AddProductFormComponent {
       const imageFile = imageInput.files[0];
       formData.append('image', imageFile);
     }
+
     this.productService.addProduct(formData);
-    this.addProductForm.reset();
     this.fileSelected = false;
   }
   /**

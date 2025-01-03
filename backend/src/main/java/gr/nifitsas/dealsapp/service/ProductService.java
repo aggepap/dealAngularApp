@@ -108,6 +108,7 @@ public class ProductService implements IProductService {
    if(productRepository.findByName(dto.getName()).isPresent()){
      throw new AppObjectAlreadyExistsException("Product","Product with Name " +dto.getName() + " already exists");
    }
+
    Product product = mapper.mapToProductEntity(dto);
    attachmentService.saveImage(product, image);
 
@@ -199,14 +200,25 @@ public class ProductService implements IProductService {
   @Override
   @Transactional(rollbackOn = Exception.class)
   public ProductReadOnlyDTO deleteProduct(Long id) throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
+    System.out.println("/////////////////////////////////////////////////////////");
+    System.out.println("/////////////////////////////////////////////////////////");
+    System.out.println("/////////////////////////////////////////////////////////");
+    System.out.println("/////////////////////////////////////////////////////////");
+    System.out.println(id);
     Optional<Product> optionalProduct = productRepository.findById(id);
 
     if (optionalProduct.isEmpty()) {
+    System.out.println(optionalProduct.isPresent());
+    if (optionalProduct.isPresent()) {
+      Product product = optionalProduct.get();
+
+      productRepository.delete(product);
+      return mapper.mapToProductReadOnlyDTO(product);
+    } else {
       throw new AppObjectNotFoundException("Product", "Product with id: " + id + " not found");
     }
     Product product = optionalProduct.get();
     LOGGER.info(product.getName(), product.getId());
-
     productRepository.delete(product);
     return mapper.mapToProductReadOnlyDTO(product);
   }

@@ -17,7 +17,9 @@ import { UsersService } from './users.service';
  * if a token is present in local storage. Handles 401 (Unauthorized) and 403 (Forbidden)
  * errors by removing the token, setting sessionExpired flag and redirecting the user to the login page.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root', // This is the missing part!
+})
 export class AuthInterceptorService implements HttpInterceptor {
   //======================================================
   //  Inject Services

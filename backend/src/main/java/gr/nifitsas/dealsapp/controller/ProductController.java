@@ -7,7 +7,6 @@ import gr.nifitsas.dealsapp.dto.productDTOs.ProductInsertDTO;
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductReadOnlyDTO;
 
 import gr.nifitsas.dealsapp.dto.productDTOs.ProductUpdateDTO;
-import gr.nifitsas.dealsapp.model.static_data.Store;
 import gr.nifitsas.dealsapp.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,9 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -130,16 +127,15 @@ public class ProductController {
   public ResponseEntity<ProductReadOnlyDTO> addProduct(
     @RequestPart(name = "category") Long categoryId,
     @RequestPart(name = "store") Long storeId,
-    @Valid @RequestPart(name = "product") ProductInsertDTO productInsertDTO,
+    @RequestPart(name = "product") ProductInsertDTO productInsertDTO,
     @RequestPart("image") MultipartFile image) throws  AppObjectInvalidArgumentException, AppObjectAlreadyExistsException, IOException {
+    LOGGER.info("Store ID: {}", storeId);
     try {
       ProductReadOnlyDTO productReadOnlyDTO = productService.saveProduct(categoryId, storeId, productInsertDTO, image);
       return new ResponseEntity<>(productReadOnlyDTO, HttpStatus.CREATED);
     } catch (AppObjectAlreadyExistsException | AppObjectInvalidArgumentException | IOException e) {
       LOGGER.error("Attachment", "image can not get uploaded", e);
       throw e;
-
-
     }
   }
 
@@ -190,16 +186,15 @@ public class ProductController {
       throw e;
     }
   }
-
   /**
    * Deletes a product.
    *
-   * @param productId The ID of the product to delete.
+   * @param id The ID of the product to delete.
    * @return A ResponseEntity containing the deleted ProductReadOnlyDTO object and an HTTP status of OK (200).
    * @throws AppObjectNotFoundException If the product to delete is not found.
    * @throws AppObjectInvalidArgumentException If an error occurs during deletion.
    */
-  @SecurityRequirement(name = "Bearer Authentication")
+
   @Operation(summary = " Deletes a product" )
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "Product deleted succesfully",
@@ -210,15 +205,14 @@ public class ProductController {
     @ApiResponse(responseCode = "404", description = "Product Not Found",
       content = @Content)})
   //Controller
-  @DeleteMapping("/remove/{productId}")
-  public ResponseEntity<ProductReadOnlyDTO>deleteProduct(@PathVariable("productId")Long productId) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
-    LOGGER.info("Deleting product: {}", productId);
-
-    if(productService.findProductById(productId).isEmpty()) {
-      throw new AppObjectNotFoundException("Product", "Product With id :" + productId + " was not found");
+  @DeleteMapping("/remove/{id}/")
+  public ResponseEntity<ProductReadOnlyDTO>deleteProduct(@PathVariable("id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException  {
+    System.out.println(id);
+    if(productService.findProductById(id).isEmpty()) {
+      throw new AppObjectNotFoundException("Store", "Store With id :" + id + " was not found");
     }
     try{
-      ProductReadOnlyDTO deletedProduct = productService.deleteProduct(productId);
+      ProductReadOnlyDTO deletedProduct = productService.deleteProduct(id);
       return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
     }catch (AppObjectInvalidArgumentException | AppObjectNotFoundException e){
       LOGGER.error("ERROR: Could not delete Store.", e);
