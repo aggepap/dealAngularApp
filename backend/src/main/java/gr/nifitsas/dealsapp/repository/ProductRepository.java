@@ -15,8 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
   List<Product> findByCategory(Category category);
   Optional<Product> findByName(String name);
-  List<ProductReadOnlyDTO> findByNameContaining(String name);
-  List<ProductReadOnlyDTO> findByNameLike(String name);
-  List<ProductReadOnlyDTO> findByStore_Id(Long storeId);
+
   List<Product> findByStoreId(Long id);
 }

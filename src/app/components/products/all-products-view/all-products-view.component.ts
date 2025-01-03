@@ -145,6 +145,8 @@ export class AllProductsViewComponent {
             image: deal.image,
             lowestPrice: deal.lowestPrice,
           }));
+          console.log(this.dealsList);
+
           this.pagesNumber = 0;
           this.totalPages = data.totalPages;
           this.pageSize = data.pageSize;

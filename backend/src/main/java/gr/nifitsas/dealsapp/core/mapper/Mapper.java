@@ -31,7 +31,7 @@ public class Mapper {
 //***************************
   public Product mapToProductEntity(ProductInsertDTO productInsertDTO){
     return new Product(null,productInsertDTO.getName(), productInsertDTO.getDescription(),productInsertDTO.getCoupon(), productInsertDTO.getUrl(), productInsertDTO.getPrice(),
-      null, null, null,null);
+      null,null, null, null);
   }
   public ProductReadOnlyDTO mapToProductReadOnlyDTO(Product product){
     return new ProductReadOnlyDTO(product.getId(),  product.getName(), product.getDescription(),

@@ -173,7 +173,7 @@ public class CategoryController {
    * @throws Exception Any other unexpected error that may occur during deletion.
    */
   //OpenAPI Annotations
-  @SecurityRequirement(name = "Bearer Authentication")
+
   @Operation(summary = "Deletes a category." )
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "category deleted succesfully",
@@ -189,6 +189,7 @@ public class CategoryController {
   @DeleteMapping("/remove")
    public ResponseEntity<CategoryReadOnlyDTO> deleteCategory (@RequestParam("id") Long id) throws AppObjectNotFoundException,
     AppObjectInvalidArgumentException {
+    System.out.println(id);
 
     try {
       CategoryReadOnlyDTO deletedCategory = categoryService.deleteCategory(id);

@@ -43,7 +43,7 @@ public class Product extends AbstractEntity implements ImageAttachable {
 
   @ManyToOne
   @JsonBackReference
-  @JoinColumn(name="store_id", nullable = false)
+  @JoinColumn(name="store_id")
   private Store store;
 
 

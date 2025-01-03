@@ -56,7 +56,6 @@ public class SecurityConfiguration {
         .requestMatchers("/category/update/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/stores/update/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/category/remove/**").hasAnyAuthority(Role.ADMIN.name())
-        .requestMatchers("/products/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/stores/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/users/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/products/add/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
@@ -78,7 +77,7 @@ public class SecurityConfiguration {
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowCredentials(true);
-    configuration.setAllowedOrigins(List.of("http://localhost:4200","https://dealangularapp.onrender.com"));
+    configuration.setAllowedOrigins(List.of("http://localhost:4200"));
     configuration.setAllowedMethods(List.of("*"));
     configuration.setAllowedHeaders(List.of("*"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
