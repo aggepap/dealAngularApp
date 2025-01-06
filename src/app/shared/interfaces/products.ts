@@ -1,16 +1,12 @@
-export interface productAddData {
-  name: string;
-  description: string;
-}
 export interface ProductUpdate {
-  updateProductCategory: number; // Category ID (required as number)
-  updateProductName: string; // Product Name (required)
-  updateProductDescription: string; // Product Description (required)
-  updateProductImage: string; // File path or name (validated separately, required for form but handled as file)
-  updateDealStore: number; // Store ID (required as number)
-  updateDealURL: string; // Validated URL (required)
-  updateDealCoupon: string; // Optional coupon code
-  updateDealPrice: number; // Price in number format (required)
+  updateProductCategory: number;
+  updateProductName: string;
+  updateProductDescription: string;
+  updateProductImage: string;
+  updateDealStore: number;
+  updateDealURL: string;
+  updateDealCoupon: string;
+  updateDealPrice: number;
 }
 export interface productFilteredPaginated {
   page: number;

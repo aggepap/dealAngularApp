@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './product-not-found.component.html',
-  styleUrl: './product-not-found.component.css'
+  styleUrl: './product-not-found.component.css',
 })
-export class ProductNotFoundComponent {
-
-}
+export class ProductNotFoundComponent {}

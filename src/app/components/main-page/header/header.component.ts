@@ -4,11 +4,12 @@ import { initFlowbite } from 'flowbite';
 import { AlertHeaderComponent } from '@/src/app/shared/components/alert-header/alert-header.component';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ErrorService } from '@/src/app/shared/services/error.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [AlertHeaderComponent, RouterLink, RouterLinkActive],
+  imports: [AlertHeaderComponent, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -30,6 +31,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     initFlowbite();
   }
+
   //logs out user and reloads page
   onLogout() {
     this.userService.logout();

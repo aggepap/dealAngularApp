@@ -1,4 +1,4 @@
-<form [formGroup]="addStoreForm" class="max-w-lg mx-auto py-2">
+<form [formGroup]="addStoreForm" class="max-w-lg mx-auto py-2 px-10 md:px-0">
   <div class="flex md:flex-row justify-between flex-col gap-1">
     <div class="update-form-item mb-5 w-full">
       <label
@@ -115,7 +115,7 @@
     addStoreForm.get("addStoreUrl")?.invalid || !fileSelected ) {
     <button
       type="submit"
-      class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"
+      class="text-gray-200 bg-gray-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 w-1/3 md:w-[200px]"
     >
       Add
     </button>
@@ -132,7 +132,7 @@
     <button
       (click)="OnCancelClick()"
       type="button"
-      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 md:w-[200px]"
+      class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-md px-5 py-2.5 text-center me-2 mb-2 w-1/3 md:w-[200px]"
     >
       Cancel
     </button>

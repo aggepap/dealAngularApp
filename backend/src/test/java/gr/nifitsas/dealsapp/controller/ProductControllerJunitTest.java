@@ -215,32 +215,53 @@ public class ProductControllerJunitTest {
   public void testDeleteProduct_success() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
     Long productId = 1L;
     ProductReadOnlyDTO deletedProduct = new ProductReadOnlyDTO();
+    deletedProduct.setId(productId);
+    when(productService.findProductById(productId)).thenReturn(Optional.of(deletedProduct));
     when(productService.deleteProduct(productId)).thenReturn(deletedProduct);
-
     ResponseEntity<ProductReadOnlyDTO> response = productController.deleteProduct(productId);
-
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(deletedProduct, response.getBody());
+
+    verify(productService, times(1)).findProductById(productId);
     verify(productService, times(1)).deleteProduct(productId);
   }
 
-  // Test delete product - Service throws AppObjectNotFoundException
   @Test
   public void testDeleteProduct_throwsAppObjectNotFoundException() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
     Long productId = 1L;
-    when(productService.deleteProduct(productId)).thenThrow(new AppObjectNotFoundException("Product", "Product not found"));
 
-    assertThrows(AppObjectNotFoundException.class, () -> productController.deleteProduct(productId));
-    verify(productService, times(1)).deleteProduct(productId);
+    // Mock behavior for findProductById and deleteProduct
+    when(productService.findProductById(productId)).thenReturn(Optional.empty());
+
+    // Perform the test
+    AppObjectNotFoundException exception = assertThrows(AppObjectNotFoundException.class,
+      () -> productController.deleteProduct(productId));
+
+    // Verify exception message
+    assertEquals("Store With id :1 was not found", exception.getMessage());
+
+    // Verify interactions
+    verify(productService, never()).deleteProduct(productId); // Ensure deleteProduct is not called
   }
 
   // Test delete product - Service throws AppObjectInvalidArgumentException
   @Test
   public void testDeleteProduct_throwsAppObjectInvalidArgumentException() throws AppObjectNotFoundException, AppObjectInvalidArgumentException {
     Long productId = 1L;
+
+    // Mock behavior for findProductById and deleteProduct
+    when(productService.findProductById(productId)).thenReturn(Optional.of(mock(ProductReadOnlyDTO.class)));
     when(productService.deleteProduct(productId)).thenThrow(new AppObjectInvalidArgumentException("Product", "Invalid product data"));
 
-    assertThrows(AppObjectInvalidArgumentException.class, () -> productController.deleteProduct(productId));
+    // Perform the test
+    AppObjectInvalidArgumentException exception = assertThrows(AppObjectInvalidArgumentException.class,
+      () -> productController.deleteProduct(productId));
+
+    // Verify exception message
+    assertEquals("Invalid product data", exception.getMessage());
+
+    // Verify interactions
+    verify(productService, times(1)).findProductById(productId);
     verify(productService, times(1)).deleteProduct(productId);
   }
 }

@@ -64,10 +64,16 @@
             placeholder="{{ product?.name }}"
             required
           />
-          @if(updateProductForm.get('updateProductName')?.invalid &&
-          updateProductForm.get('updateProductName')?.touched){
+          @if(updateProductForm.get('updateProductName')?.hasError('required')
+          && updateProductForm.get('updateProductName')?.touched){
           <p class="text-xs text-red-900 mb-2 block">
             Product title is required.
+          </p>
+          }@else if
+          (updateProductForm.get('updateProductName')?.hasError('minlength') ||
+          updateProductForm.get('updateProductName')?.hasError('maxlength')) {
+          <p class="text-xs text-red-900 mb-2 block">
+            Product title must be between 5 and 100 characters.
           </p>
           }
         </div>
@@ -85,11 +91,19 @@
             placeholder="Product description"
             required
           ></textarea>
-          @if(updateProductForm.get('updateProductDescription')?.invalid &&
-          updateProductForm.get('updateProductDescription')?.touched){
+          @if(updateProductForm.get('updateProductDescription')?.hasError('required')
+          && updateProductForm.get('updateProductDescription')?.touched){
           <p class="text-xs text-red-900 mb-2 block">
             Product description is required, please enter some info for the
             product
+          </p>
+          }@else if
+          (updateProductForm.get('updateProductDescription')?.hasError('minlength')
+          ||
+          updateProductForm.get('updateProductDescription')?.hasError('maxlength'))
+          {
+          <p class="text-xs text-red-900 mb-2 block">
+            Product description must be between 5 and 1000 characters.
           </p>
           }
         </div>
@@ -156,9 +170,14 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="URL Link for deal"
           />
-          @if(updateProductForm.get('updateDealURL')?.invalid &&
+          @if(updateProductForm.get('updateDealURL')?.hasError('required') &&
           updateProductForm.get('updateDealURL')?.touched){
           <p class="text-xs text-red-900 mb-2 block">Deal URL is required.</p>
+          }@else if
+          (updateProductForm.get('updateDealURL')?.hasError('pattern')) {
+          <p class="text-xs text-red-900 mb-2 block">
+            Deal URL is not valid. (Valid URL: http://www.example.com)
+          </p>
           }
         </div>
         <div class="flex">
@@ -196,10 +215,10 @@
               required
             />
 
-            @if(updateProductForm.get('updateDealPrice')?.invalid &&
-            updateProductForm.get('updateDealPrice')?.touched){
+            @if(updateProductForm.get('updateDealPrice')?.hasError('required')
+            && updateProductForm.get('updateDealPrice')?.touched){
             <p class="text-xs text-red-900 mb-2 block">
-              Deal Price is required.
+              Deal Price is required. Add 0 if its free.
             </p>
             }
           </div>
@@ -210,7 +229,6 @@
       @if (updateProductForm.get("updateProductDescription")?.invalid ||
       updateProductForm.get("updateProductName")?.invalid ||
       updateProductForm.get("updateDealPrice")?.invalid) {
-
       <button
         type="submit"
         class="text-gray-200 bg-gray-500 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center cursor-not-allowed"

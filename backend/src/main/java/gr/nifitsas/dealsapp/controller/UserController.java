@@ -122,6 +122,7 @@ public class UserController {
   //Controller
   @PostMapping("/add")
   public ResponseEntity<UserReadOnlyDTO> addUser(@RequestBody @Valid UserInsertDTO userInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExistsException {
+    userInsertDTO.setUsername(userInsertDTO.getUsername().trim().toLowerCase());
     try{
       UserReadOnlyDTO user = userService.saveUser(userInsertDTO);
       return new ResponseEntity<>(user, HttpStatus.CREATED);

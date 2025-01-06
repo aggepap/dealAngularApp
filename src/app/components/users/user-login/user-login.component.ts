@@ -11,11 +11,12 @@ import {
 import { jwtDecode } from 'jwt-decode';
 import { Location } from '@angular/common';
 import { ErrorService } from '@/src/app/shared/services/error.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css',
 })
@@ -68,6 +69,9 @@ export class UserLoginComponent {
    */
   onLogin() {
     const credentials = this.loginForm.value as Creds;
+    if (credentials.email) {
+      credentials.email = credentials.email.trim().toLowerCase();
+    }
     this.userService.userLogin(credentials).subscribe({
       next: (data) => {
         const token = data.token;

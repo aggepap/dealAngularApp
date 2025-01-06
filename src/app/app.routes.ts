@@ -12,6 +12,7 @@ import { authGuard } from './shared/guards/auth.guard';
 import { AllUsersViewComponent } from './components/users/all-users-view/all-users-view.component';
 import { adminGuard } from './shared/guards/admin.guard';
 import { InitializeDbComponent } from './shared/components/initialize-db/initialize-db.component';
+import { StoreTabbedMenuComponent } from './components/stores/store-tabbed-menu/store-tabbed-menu.component';
 AddProductFormComponent;
 
 export const routes: Routes = [
@@ -30,6 +31,10 @@ export const routes: Routes = [
     path: 'stores',
     component: AllStoreViewComponent,
     title: 'Deals Site Stores',
+  },
+  {
+    path: 'stores/:storeId',
+    component: AllStoreViewComponent,
   },
   {
     path: 'deals',

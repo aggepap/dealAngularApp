@@ -3,3 +3,8 @@
   color: blue;
   border-bottom: 2px solid blue;
 }
+@media (max-width: 768px) {
+  .active {
+    border-bottom: 0;
+  }
+}

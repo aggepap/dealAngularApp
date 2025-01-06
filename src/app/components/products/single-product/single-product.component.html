@@ -1,13 +1,13 @@
 @if (isLoading) {
 <app-loading-spinner />
 }@else { @if(hasError) {
-<app-error-message message="Failed to load product details" />
+<app-product-not-found (productId)="(productId)" />
 }@else{ @if (product) {
 
 <!-- Breadcrumbs -->
 
 <nav
-  class="flex max-w-screen-xl px-20 mx-auto 2xl:px-0 bg-white py-6"
+  class="flex max-w-screen-xl px-3 md:px-20 mx-auto 2xl:px-0 bg-white py-6"
   aria-label="Breadcrumb"
 >
   <ol
@@ -53,6 +53,30 @@
           routerLink="/deals"
           class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
           >Deals</a
+        >
+      </div>
+    </li>
+    <li>
+      <div class="flex items-center">
+        <svg
+          class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 9 4-4-4-4"
+          />
+        </svg>
+        <a
+          routerLink="/categories/{{ product.category.id }}"
+          class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+          >{{ product.category.name }}</a
         >
       </div>
     </li>
@@ -139,7 +163,10 @@
           >
             {{ product.category.name }}
           </a>
-          <a routerLink="/stores">
+          <a
+            (click)="onStoreClick(product.store.id)"
+            [routerLink]="['/stores', product.store.id]"
+          >
             <p
               class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors duration-300"
             >

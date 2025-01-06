@@ -78,7 +78,7 @@ export class UserRegistrationComponent {
     this.showSuccess = false;
     if (value.password === value.confirmPassword) {
       const userInsertDTO: UserInsertDTO = {
-        username: value.username.trim(),
+        username: value.username.trim().toLowerCase(),
         password: value.password.trim(),
         role: 'USER',
       };

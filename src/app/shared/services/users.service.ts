@@ -75,8 +75,7 @@ export class UsersService {
     return this.http.post<UserInsertDTO>(`${USERS_API_URL}/add`, formData).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log(error);
-
-        this.errorService.errorMessage.set('Error while creating user');
+        this.errorService.errorMessage.set(error.error.description);
         this.errorService.errorColor.set('red');
         return throwError(() => error.error);
       })

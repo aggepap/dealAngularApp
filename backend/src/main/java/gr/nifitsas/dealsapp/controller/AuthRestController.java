@@ -32,6 +32,7 @@ public class AuthRestController {
       content = @Content) })
   @PostMapping("/login")
   public ResponseEntity<AuthResponseDTO> authenticate(@RequestBody AuthRequestDTO authRequest) throws AppObjectNotAuthorizedException {
+    authRequest.setUsername(authRequest.getUsername().trim().toLowerCase());
     try {
       AuthResponseDTO authResponseDTO = authService.authenticate(authRequest);
       LOGGER.info("User Authenticated: {}", authResponseDTO);

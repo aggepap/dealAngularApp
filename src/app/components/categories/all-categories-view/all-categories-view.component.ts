@@ -43,12 +43,14 @@ export class AllCategoriesViewComponent {
   //  Get Categories from DB on init
   //==============================================
   ngOnInit() {
-    this.categoriesService.getCategories().subscribe(
-      (data: DealCategories[]) => {
-        this.categoriesList = data;
+    this.categoriesService.getCategories().subscribe({
+      next: (data: DealCategories[]) => {
+        this.categoriesList = data.sort((a, b) => a.name.localeCompare(b.name));
       },
-      (error) => console.error('Error fetching categories', error)
-    );
+      error: (error) => {
+        console.error('Error fetching categories', error);
+      },
+    });
   }
 
   /**

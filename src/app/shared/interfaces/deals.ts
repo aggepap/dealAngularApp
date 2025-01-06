@@ -1,19 +1,3 @@
-import type { DealCategories } from './deal-categories';
-
-export interface Deals {
-  id: number;
-  name: string;
-  storeId: number;
-  categoryId: number;
-  coupon: string;
-  url: string;
-  price: number;
-  img: string;
-  createdAt: Date;
-  updatedAt: Date;
-  lowestPrice?: number;
-  priceHistory?: [Date, number][];
-}
 export interface Image {
   createdAt: string;
   updatedAt: string;
@@ -38,12 +22,4 @@ export interface ImportedDeal {
   price: number;
   image: Image;
   lowestPrice: number | null;
-}
-
-export interface requestData {
-  data: ImportedDeal;
-  totalPages: number;
-  totalElements: number;
-  currentPage: number;
-  pageSize: number;
 }

@@ -56,6 +56,7 @@ public class SecurityConfiguration {
         .requestMatchers("/category/update/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/stores/update/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/category/remove/**").hasAnyAuthority(Role.ADMIN.name())
+        .requestMatchers("/products/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/stores/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/users/remove/**").hasAnyAuthority(Role.ADMIN.name())
         .requestMatchers("/products/add/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())

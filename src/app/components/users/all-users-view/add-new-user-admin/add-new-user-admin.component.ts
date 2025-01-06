@@ -44,7 +44,7 @@ export class AddNewUserAdminComponent {
     this.userService.addUser(userInsertDTO).subscribe({
       next: (data) => {},
       error: (error) => {
-        this.errorMessages = error.error;
+        this.errorMessages = error.error.message;
         this.errorService.errorMessage.set(this.errorMessages);
         this.errorService.errorColor.set('red');
       },

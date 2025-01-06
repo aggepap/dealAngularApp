@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import type { Store } from '../interfaces/stores';
 import { environment } from '@/src/environments/environment.development';
 import { ErrorService } from './error.service';
+import { Router } from '@angular/router';
 
 const apiUrl = environment.apiURL;
 const STORES_API_URL = `${apiUrl}/stores`;
@@ -16,6 +17,7 @@ export class StoresService {
   //======================================================
   http: HttpClient = inject(HttpClient);
   errorService = inject(ErrorService);
+  router = inject(Router);
 
   /**
    * Retrieves a list of all stores from the backend API.
@@ -113,7 +115,7 @@ export class StoresService {
           );
           this.errorService.errorColor.set('green');
           setTimeout(() => {
-            window.location.reload();
+            this.router.navigate(['/stores']);
           }, 1000);
         },
       });

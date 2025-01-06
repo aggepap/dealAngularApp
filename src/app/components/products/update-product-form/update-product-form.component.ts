@@ -79,8 +79,16 @@ export class UpdateProductFormComponent {
   //==============================================================================
   updateProductForm = new FormGroup({
     updateProductCategory: new FormControl<number>(1, Validators.required),
-    updateProductName: new FormControl<string>('', Validators.required),
-    updateProductDescription: new FormControl<string>('', Validators.required),
+    updateProductName: new FormControl<string>('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(50),
+    ]),
+    updateProductDescription: new FormControl<string>('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(1000),
+    ]),
     updateProductImage: new FormControl<string>(
       '',
       fileTypeValidator(this.allowedFileTypes)

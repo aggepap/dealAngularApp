@@ -1,7 +1,7 @@
 import { ProductsService } from '@/src/app/shared/services/products.service';
 import { environment } from '@/src/environments/environment.development';
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '@/src/app/shared/loading-spinner/loading-spinner.component';
 import { ProductNotFoundComponent } from './product-not-found/product-not-found.component';
 import { UpdateProductFormComponent } from '../update-product-form/update-product-form.component';
@@ -9,6 +9,8 @@ import type { ProductData } from '@/src/app/shared/interfaces/products';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { UsersService } from '@/src/app/shared/services/users.service';
 import { RouterLink } from '@angular/router';
+import { Store } from '@/src/app/shared/interfaces/stores';
+import { StoresService } from '@/src/app/shared/services/stores.service';
 
 @Component({
   selector: 'app-single-product',
@@ -30,9 +32,12 @@ export class SingleProductComponent {
   productService = inject(ProductsService);
   userService = inject(UsersService);
   route = inject(ActivatedRoute);
+  storeService = inject(StoresService);
+  router = inject(Router);
   //==============================================================================
   //  Properties
   //==============================================================================
+
   editProductIsEnabled = false;
   user = this.userService.user;
   productId!: number;
@@ -41,6 +46,7 @@ export class SingleProductComponent {
   hasError = false;
   product?: ProductData;
   couponClicked = false;
+  @Output() pickedStore = new EventEmitter<any>();
 
   //==============================================================================
   //  ngOnInit
@@ -71,6 +77,15 @@ export class SingleProductComponent {
    */
   enableProductEdit() {
     this.editProductIsEnabled = !this.editProductIsEnabled;
+  }
+
+  onStoreClick(id: number) {
+    console.log('STORE ID ', id);
+
+    const store = this.storeService.getStoreById(id).subscribe((store) => {
+      this.pickedStore.emit(store);
+    });
+    this.router.navigate(['/stores', id], { replaceUrl: true });
   }
 
   /**
