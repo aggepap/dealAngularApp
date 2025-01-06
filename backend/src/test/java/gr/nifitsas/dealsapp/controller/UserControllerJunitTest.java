@@ -113,20 +113,35 @@ public class UserControllerJunitTest {
   @Test
   public void testAddUser_throwsAppObjectAlreadyExistsException() throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
     UserInsertDTO userInsertDTO = new UserInsertDTO();
-    when(userService.saveUser(userInsertDTO)).thenThrow(new AppObjectAlreadyExistsException("User", "User already exists"));
+    userInsertDTO.setUsername("TestUser"); // Set a username
+    when(userService.saveUser(any(UserInsertDTO.class))).thenThrow(new AppObjectAlreadyExistsException("User", "User already exists"));
 
     assertThrows(AppObjectAlreadyExistsException.class, () -> userController.addUser(userInsertDTO));
-    verify(userService, times(1)).saveUser(userInsertDTO);
+    verify(userService, times(1)).saveUser(any(UserInsertDTO.class));
   }
 
   // Test addUser - Service throws AppObjectInvalidArgumentException
   @Test
   public void testAddUser_throwsAppObjectInvalidArgumentException() throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
     UserInsertDTO userInsertDTO = new UserInsertDTO();
-    when(userService.saveUser(userInsertDTO)).thenThrow(new AppObjectInvalidArgumentException("User", "Invalid user data"));
+    userInsertDTO.setUsername("TestUser"); // Set a username
+    when(userService.saveUser(any(UserInsertDTO.class))).thenThrow(new AppObjectInvalidArgumentException("User", "Invalid user data"));
 
     assertThrows(AppObjectInvalidArgumentException.class, () -> userController.addUser(userInsertDTO));
-    verify(userService, times(1)).saveUser(userInsertDTO);
+    verify(userService, times(1)).saveUser(any(UserInsertDTO.class));
+  }
+
+  // Test AddUser - User enters lowercase and uppercase or leaves empty spaces on username
+  @Test
+  public void testAddUser_TrimsAndLowercasesUsername() throws AppObjectAlreadyExistsException, AppObjectInvalidArgumentException {
+    UserInsertDTO userInsertDTO = new UserInsertDTO();
+    userInsertDTO.setUsername("  TestUser   ");
+    UserReadOnlyDTO userReadOnlyDTO = new UserReadOnlyDTO();
+    when(userService.saveUser(any(UserInsertDTO.class))).thenReturn(userReadOnlyDTO);
+
+    userController.addUser(userInsertDTO);
+
+    verify(userService).saveUser(argThat(dto -> dto.getUsername().equals("testuser")));
+
   }
 }
-
